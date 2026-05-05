@@ -1,0 +1,19 @@
+<app-table
+  [columns]="columns"
+  [sortParams]="null"
+  [isEmpty]="donors().length === 0"
+  emptyMessage="No donors found."
+  ariaLabel="Donors table"
+>
+  @for (d of donors(); track d.id) {
+    <tr>
+      <td>{{ d.firstName }} {{ d.lastName }}</td>
+      <td>{{ d.email ?? '—' }}</td>
+      <td>{{ d.phone ?? '—' }}</td>
+      <td>{{ d.city ?? '—' }}</td>
+      <td>{{ d.totalDonated | currency:'EUR':'symbol':'1.2-2' }}</td>
+      <td>{{ d.donationCount }}</td>
+      <td>{{ d.lastDonationAt ? (d.lastDonationAt | date:'mediumDate') : '—' }}</td>
+    </tr>
+  }
+</app-table>

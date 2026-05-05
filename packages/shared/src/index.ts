@@ -146,6 +146,26 @@ export interface FilterParams {
   campaignId?: number;
 }
 
+export interface DonorFilterParams {
+  search?: string;
+  country?: string;
+}
+
+export interface FundraiserFilterParams {
+  search?: string;
+  isActive?: boolean;
+}
+
+export interface CampaignFilterParams {
+  search?: string;
+  status?: CampaignStatus;
+}
+
+export interface OrganizationFilterParams {
+  search?: string;
+  type?: OrgType;
+}
+
 export interface CampaignSummary extends Campaign {
   organizationName: string;
 }
@@ -198,6 +218,13 @@ export interface MockDataParams {
   maxAmount: number;
   startDate: string;
   endDate: string;
+}
+
+export interface StreamStatus {
+  running: boolean;
+  config: { campaignId: number; intervalMs: number; minAmount: number; maxAmount: number } | null;
+  totalGenerated: number;
+  startedAt: string | null;
 }
 
 export interface ChatResponse {

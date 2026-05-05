@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { httpResource } from '@angular/common/http';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { CampaignService } from '../../core/services/campaign';
 import { FundraiserService } from '../../core/services/fundraiser';
 import { CampaignCard } from './components/campaign-card/campaign-card';
@@ -17,7 +18,7 @@ import type { DonationChartData } from '@formunauts/shared';
   imports: [
     CampaignCard, DonationsChart, ChannelChart, PaymentMethodChart,
     FundraiserLeaderboard, CampaignSelector,
-    LoadingSpinner, ErrorBanner,
+    LoadingSpinner, ErrorBanner, TranslocoPipe,
   ],
   templateUrl: './dashboard.html',
   styleUrl: './dashboard.css',

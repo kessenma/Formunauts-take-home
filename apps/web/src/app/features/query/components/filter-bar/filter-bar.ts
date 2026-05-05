@@ -1,55 +1,66 @@
-import { ChangeDetectionStrategy, Component, computed, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, input, output, signal } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
-import type { PaginatedResponse, Donation, FilterParams, PaymentMethod, DonationChannel } from '@formunauts/shared';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import type { FilterParams, PaymentMethod, DonationChannel } from '@formunauts/shared';
 import type { ViewMode } from '../../../../core/services/donation';
+import { LanguageService } from '../../../../core/services/language';
+import { Dropdown } from '../../../../shared/components/dropdown/dropdown';
 
 @Component({
   selector: 'app-donation-filter-bar',
-  imports: [NgIcon],
+  imports: [NgIcon, Dropdown, TranslocoPipe],
   templateUrl: './filter-bar.html',
   styleUrl: './filter-bar.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  host: { '[class.is-sticky]': 'viewMode() === "infinite"' },
 })
 export class DonationFilterBar {
-  readonly pagination = input<PaginatedResponse<Donation> | undefined>();
-  readonly limit = input(10);
-  readonly viewMode = input<ViewMode>('pagination');
+  readonly #lang = inject(LanguageService);
+  readonly #transloco = inject(TranslocoService);
+
   readonly filter = input<FilterParams>({});
   readonly isLoading = input(false);
+  readonly viewMode = input<ViewMode>('pagination');
 
-  readonly pageChange = output<number>();
-  readonly limitChange = output<number>();
-  readonly viewModeChange = output<ViewMode>();
   readonly filterChange = output<FilterParams>();
+  readonly viewModeChange = output<ViewMode>();
 
-  readonly LIMIT_OPTIONS = [10, 25, 50, 100, 0];
-  readonly PAYMENT_METHODS: Array<{ value: PaymentMethod | ''; label: string }> = [
-    { value: '', label: 'All methods' },
-    { value: 'sepa_direct_debit', label: 'SEPA Direct Debit' },
-    { value: 'credit_card', label: 'Credit Card' },
-    { value: 'google_pay', label: 'Google Pay' },
-    { value: 'apple_pay', label: 'Apple Pay' },
-    { value: 'paypal', label: 'PayPal' },
-    { value: 'bank_transfer', label: 'Bank Transfer' },
-    { value: 'cash', label: 'Cash' },
-  ];
-  readonly CHANNELS: Array<{ value: DonationChannel | ''; label: string }> = [
-    { value: '', label: 'All channels' },
-    { value: 'street', label: 'Street' },
-    { value: 'door_to_door', label: 'Door to Door' },
-    { value: 'event', label: 'Event' },
-    { value: 'phone', label: 'Phone' },
-    { value: 'email', label: 'Email' },
-    { value: 'social_media', label: 'Social Media' },
-  ];
+  readonly PAYMENT_METHODS = computed<Array<{ value: PaymentMethod | ''; label: string }>>(() => {
+    this.#lang.lang();
+    const t = (k: string) => this.#transloco.translate(k);
+    return [
+      { value: '', label: t('paymentMethods.allMethods') },
+      { value: 'sepa_direct_debit', label: t('paymentMethods.sepaDirectDebit') },
+      { value: 'credit_card', label: t('paymentMethods.creditCard') },
+      { value: 'google_pay', label: t('paymentMethods.googlePay') },
+      { value: 'apple_pay', label: t('paymentMethods.applePay') },
+      { value: 'paypal', label: t('paymentMethods.paypal') },
+      { value: 'bank_transfer', label: t('paymentMethods.bankTransfer') },
+      { value: 'cash', label: t('paymentMethods.cash') },
+    ];
+  });
+
+  readonly CHANNELS = computed<Array<{ value: DonationChannel | ''; label: string }>>(() => {
+    this.#lang.lang();
+    const t = (k: string) => this.#transloco.translate(k);
+    return [
+      { value: '', label: t('channels.allChannels') },
+      { value: 'street', label: t('channels.street') },
+      { value: 'door_to_door', label: t('channels.doorToDoor') },
+      { value: 'event', label: t('channels.event') },
+      { value: 'phone', label: t('channels.phone') },
+      { value: 'email', label: t('channels.email') },
+      { value: 'social_media', label: t('channels.socialMedia') },
+    ];
+  });
+
+  readonly filtersOpen = signal(false);
 
   readonly hasActiveFilters = computed(() => {
     const f = this.filter();
     return !!(f.search || f.paymentMethod || f.channel || f.minAmount != null || f.maxAmount != null || f.dateFrom || f.dateTo);
   });
 
-  // Chips summarise active filters so users can see what's applied at a glance
-  // and remove individual filters without hunting through the inputs.
   readonly activeChips = computed(() => {
     const f = this.filter();
     const chips: Array<{ label: string; clear: () => void }> = [];
@@ -83,26 +94,15 @@ export class DonationFilterBar {
     return chips;
   });
 
-  readonly pages = computed(() => {
-    const p = this.pagination();
-    if (!p) return [];
-    const range: number[] = [];
-    const delta = 2;
-    for (let i = Math.max(1, p.page - delta); i <= Math.min(p.totalPages, p.page + delta); i++) {
-      range.push(i);
-    }
-    return range;
-  });
+  readonly activeFilterCount = computed(() => this.activeChips().length);
 
-  readonly rangeStart = computed(() => {
-    const p = this.pagination();
-    return p ? (p.page - 1) * this.limit() + 1 : 0;
-  });
+  toggleFilters(): void {
+    this.filtersOpen.update(v => !v);
+  }
 
-  readonly rangeEnd = computed(() => {
-    const p = this.pagination();
-    return p ? (this.limit() === 0 ? p.total : Math.min(p.page * this.limit(), p.total)) : 0;
-  });
+  switchToPagination(): void {
+    this.viewModeChange.emit('pagination');
+  }
 
   private searchTimer?: ReturnType<typeof setTimeout>;
 
@@ -166,36 +166,15 @@ export class DonationFilterBar {
   }
 
   getMethodLabel(method: string): string {
-    return this.PAYMENT_METHODS.find((m) => m.value === method)?.label ?? method;
+    return this.PAYMENT_METHODS().find((m) => m.value === method)?.label ?? method;
   }
 
   getChannelLabel(channel: string): string {
-    return this.CHANNELS.find((c) => c.value === channel)?.label ?? channel;
+    return this.CHANNELS().find((c) => c.value === channel)?.label ?? channel;
   }
 
   formatDate(dateStr: string): string {
     const d = new Date(dateStr + 'T00:00:00');
     return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
-  }
-
-  go(page: number): void {
-    const p = this.pagination();
-    if (!p || page < 1 || page > p.totalPages) return;
-    this.pageChange.emit(page);
-  }
-
-  goToPage(input: HTMLInputElement): void {
-    const page = parseInt(input.value, 10);
-    input.value = '';
-    this.go(page);
-  }
-
-  selectLimit(opt: number): void {
-    if (opt === 0) {
-      this.viewModeChange.emit(this.viewMode() === 'infinite' ? 'pagination' : 'infinite');
-    } else {
-      if (this.viewMode() === 'infinite') this.viewModeChange.emit('pagination');
-      this.limitChange.emit(opt);
-    }
   }
 }

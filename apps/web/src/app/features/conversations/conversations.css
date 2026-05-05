@@ -34,60 +34,54 @@
   border: 1px solid var(--border-color);
 }
 
-.conversations-list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+.conversations-shared {
+  padding: var(--spacing-16);
+  border: 1px solid color-mix(in srgb, var(--color-lochmara) 40%, transparent);
+  border-radius: var(--radius-general);
+  background: color-mix(in srgb, var(--color-lochmara) 4%, transparent);
+}
+
+.conversations-shared__heading {
+  margin: 0 0 var(--spacing-12);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-lochmara);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.conversations-shared__by {
+  margin: 0 0 var(--spacing-8);
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.conversations-messages {
   display: flex;
   flex-direction: column;
   gap: var(--spacing-8);
+  padding: var(--spacing-4) 0;
 }
 
-.conversations-item {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-16);
-  width: 100%;
-  padding: var(--spacing-16) var(--spacing-20);
-  background: var(--surface-1);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-cards);
-  text-align: left;
-  font-family: var(--font-family-base);
-  cursor: pointer;
-  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+.conversations-loading,
+.conversations-model-notice {
+  margin: 0;
+  padding: var(--spacing-8) 0;
+  font-size: var(--text-caption);
+  color: var(--text-muted);
 }
 
-.conversations-item:hover {
-  background: var(--surface-0);
-  border-color: var(--color-lochmara);
-  box-shadow: 0 0 0 1px var(--color-lochmara);
-}
-
-.conversations-item__content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-2);
-  min-width: 0;
-}
-
-.conversations-item__title {
-  font-size: var(--text-body-sm);
-  font-weight: var(--font-weight-semibold);
-  color: var(--text-primary);
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
 
 .conversations-item__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  margin: 0 0 var(--spacing-8);
   font-size: var(--text-caption);
   color: var(--text-muted);
 }
 
 .conversations-item__shared-badge {
-  flex-shrink: 0;
   padding: var(--spacing-2) var(--spacing-8);
   font-size: var(--text-caption);
   font-weight: var(--font-weight-semibold);

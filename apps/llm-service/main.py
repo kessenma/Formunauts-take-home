@@ -6,6 +6,7 @@ import time
 from contextlib import asynccontextmanager
 from dataclasses import dataclass
 from enum import Enum
+from typing import cast
 
 import requests
 from fastapi import FastAPI, HTTPException
@@ -359,16 +360,21 @@ def generate_sql(req: SqlRequest):
     if llm is None:
         raise HTTPException(status_code=503, detail="Model not loaded yet")
 
-    output = llm.create_chat_completion(
-        messages=[
-            {"role": "system", "content": SYSTEM_PROMPT},
-            {"role": "user", "content": req.question},
-        ],
-        max_tokens=256,
-        temperature=0.1,
+    from llama_cpp.llama_types import CreateChatCompletionResponse
+
+    output = cast(
+        CreateChatCompletionResponse,
+        llm.create_chat_completion(
+            messages=[
+                {"role": "system", "content": SYSTEM_PROMPT},
+                {"role": "user", "content": req.question},
+            ],
+            max_tokens=256,
+            temperature=0.1,
+        ),
     )
 
-    raw = output["choices"][0]["message"]["content"].strip()
+    raw = cast(str, output["choices"][0]["message"]["content"]).strip()
 
     # Strip markdown code fences if the model adds them despite instructions
     sql = re.sub(r"^```(?:sql)?\s*\n?", "", raw, flags=re.IGNORECASE)

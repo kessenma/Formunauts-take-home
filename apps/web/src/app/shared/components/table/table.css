@@ -1,9 +1,12 @@
 :host {
   display: block;
+  min-width: 0;
+  max-width: 100%;
 }
 
 .table-wrap {
   overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
   border: var(--table-wrap-border, none);
   border-radius: var(--table-wrap-radius, 0);
 }

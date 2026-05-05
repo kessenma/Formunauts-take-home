@@ -1,0 +1,203 @@
+/* ── Section wrapper ── */
+
+.settings-section {
+  margin-top: var(--spacing-40);
+}
+
+.settings-section__header {
+  margin-bottom: var(--spacing-16);
+}
+
+.settings-section__title {
+  font-size: var(--text-heading-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-heading-sm);
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-4);
+}
+
+.settings-section__desc {
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+/* ── Card — no overflow:hidden so the dropdown panel isn't clipped ── */
+
+.mock-card {
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-cards);
+  box-shadow: var(--shadow-sm);
+}
+
+.mock-tool {
+  padding: var(--spacing-20) var(--spacing-24);
+}
+
+.mock-tool__meta {
+  margin-bottom: var(--spacing-16);
+}
+
+.mock-tool__title {
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0 0 var(--spacing-4);
+}
+
+.mock-tool__desc {
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+  margin: 0;
+  line-height: 1.5;
+}
+
+/* ── Stream header ── */
+
+.stream-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-16);
+  margin-bottom: var(--spacing-16);
+}
+
+.stream-status-badge {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  flex-shrink: 0;
+  padding-top: 2px;
+}
+
+.stream-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-full);
+  background: var(--color-cool-gray);
+  flex-shrink: 0;
+}
+
+.stream-dot--live {
+  background: var(--color-forest-green);
+  animation: stream-pulse 1.5s ease-in-out infinite;
+}
+
+@keyframes stream-pulse {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 transparent; }
+  50% { opacity: 0.75; box-shadow: 0 0 0 4px var(--color-success-bg); }
+}
+
+.stream-status-label {
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+}
+
+.stream-dot--live ~ .stream-status-label {
+  color: var(--color-forest-green);
+}
+
+.stream-count {
+  font-size: var(--text-caption);
+  font-family: var(--font-family-mono);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+  background: var(--surface-2);
+  padding: 2px var(--spacing-8);
+  border-radius: var(--radius-badges);
+}
+
+/* ── Form row ── */
+
+.mock-form__row {
+  display: flex;
+  gap: var(--spacing-12);
+  flex-wrap: wrap;
+  align-items: flex-end;
+}
+
+.mock-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+  min-width: 80px;
+  flex: 1;
+}
+
+.mock-field span {
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+}
+
+.mock-field--wide {
+  flex: 2;
+  min-width: 140px;
+}
+
+/* ── Form input ── */
+
+.form-input {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-inputs);
+  padding: var(--spacing-8);
+  font-size: var(--text-body-sm);
+  background: var(--surface-2);
+  color: var(--text-primary);
+  font-family: var(--font-family-base);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  width: 100%;
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-lochmara);
+  box-shadow: 0 0 0 3px rgba(0, 116, 200, 0.14);
+}
+
+/* ── Action buttons ── */
+
+.action-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8) var(--spacing-16);
+  border-radius: var(--radius-buttons);
+  border: none;
+  cursor: pointer;
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family-base);
+  transition: opacity 0.15s, background 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.action-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.action-btn--primary {
+  background: var(--color-lochmara);
+  color: var(--color-paper-white);
+}
+
+.action-btn--primary:hover:not(:disabled) {
+  background: var(--color-prussian-blue);
+}
+
+.action-btn--danger {
+  background: var(--color-danger);
+  color: var(--color-paper-white);
+}
+
+.action-btn--danger:hover:not(:disabled) {
+  opacity: 0.85;
+}
+
+.action-btn--self-end {
+  align-self: flex-end;
+}

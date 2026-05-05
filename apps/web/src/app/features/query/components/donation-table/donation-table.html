@@ -1,9 +1,9 @@
 <app-table
-  [columns]="columns"
+  [columns]="columns()"
   [sortParams]="sortParams()"
   [isEmpty]="donations().length === 0"
-  emptyMessage="No donations found."
-  ariaLabel="Donations table"
+  [emptyMessage]="'donationTable.empty' | transloco"
+  [ariaLabel]="'donationTable.ariaLabel' | transloco"
   (sortChange)="onSort($event)"
 >
   @for (d of donations(); track d.id) {

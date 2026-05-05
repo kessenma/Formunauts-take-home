@@ -1,0 +1,191 @@
+<div class="donations-header">
+  <h1 class="page-title">{{ 'query.title' | transloco }}</h1>
+  @if (isDonationsTab()) {
+    <button
+      class="live-btn"
+      [class.live-btn--active]="liveEnabled()"
+      type="button"
+      (click)="toggleLive()"
+      [attr.aria-label]="liveEnabled() ? ('query.aria.pauseLive' | transloco) : ('query.aria.resumeLive' | transloco)"
+    >
+      <span class="live-dot" [class.live-dot--active]="liveEnabled()"></span>
+      {{ liveEnabled() ? ('query.live' | transloco) : ('query.paused' | transloco) }}
+    </button>
+  }
+</div>
+
+<div class="query-tab-bar" role="tablist" [attr.aria-label]="'query.aria.selectTable' | transloco">
+  @for (tab of QUERY_TABS(); track tab.value) {
+    <button
+      class="query-tab"
+      [class.query-tab--active]="activeTab() === tab.value"
+      type="button"
+      role="tab"
+      [attr.aria-selected]="activeTab() === tab.value"
+      (click)="selectTab(tab.value)"
+    >{{ tab.label }}</button>
+  }
+</div>
+
+<div class="donations-layout">
+  <div class="donations-main">
+
+    @if (activeTab() === 'donations') {
+      @if (isLoading() && donations().length === 0) {
+        <app-loading-spinner />
+      }
+
+      @if (error()) {
+        <app-error-banner [message]="error()?.message ?? ('query.loadError.donations' | transloco)" />
+      }
+
+      <app-donation-filter-bar
+        [viewMode]="viewMode()"
+        [filter]="filterParams()"
+        [isLoading]="isLoading()"
+        (filterChange)="onFilterChange($event)"
+        (viewModeChange)="onViewModeChange($event)"
+      />
+
+      <div class="table-card">
+        <app-donation-table
+          [donations]="donations()"
+          [sortParams]="sortParams()"
+          (sortChange)="onSortChange($event)"
+        />
+
+        @if (viewMode() === 'infinite') {
+          @if (hasMore()) {
+            <div #scrollSentinel class="scroll-sentinel">
+              @if (isLoading()) {
+                <app-loading-spinner />
+              }
+            </div>
+          } @else if (donations().length > 0) {
+            <p class="all-loaded">{{ 'query.allLoaded' | transloco }}</p>
+          }
+        }
+      </div>
+
+      @if (viewMode() === 'pagination' && pagination(); as p) {
+        <div class="pagination-footer">
+          <nav class="pagination-nav" [attr.aria-label]="'query.aria.pageNav' | transloco">
+            <button class="page-btn" (click)="go(1)" [disabled]="p.page === 1" [attr.aria-label]="'query.aria.firstPage' | transloco">
+              <ng-icon name="solarDoubleAltArrowLeftBoldDuotone" size="14" aria-hidden="true" />
+            </button>
+            <button class="page-btn" (click)="go(p.page - 1)" [disabled]="p.page === 1" [attr.aria-label]="'query.aria.prevPage' | transloco">
+              <ng-icon name="solarAltArrowLeftBoldDuotone" size="14" aria-hidden="true" />
+            </button>
+
+            <app-dropdown
+              leadingIcon="solarListBoldDuotone"
+              [options]="pageOptions()"
+              [value]="currentPageValue()"
+              (valueChange)="onPageDropdownChange($event)"
+              [attr.aria-label]="'query.aria.goToPage' | transloco"
+            />
+
+            <button class="page-btn" (click)="go(p.page + 1)" [disabled]="p.page === p.totalPages" [attr.aria-label]="'query.aria.nextPage' | transloco">
+              <ng-icon name="solarAltArrowRightBoldDuotone" size="14" aria-hidden="true" />
+            </button>
+            <button class="page-btn" (click)="go(p.totalPages)" [disabled]="p.page === p.totalPages" [attr.aria-label]="'query.aria.lastPage' | transloco">
+              <ng-icon name="solarDoubleAltArrowRightBoldDuotone" size="14" aria-hidden="true" />
+            </button>
+          </nav>
+
+          <div class="pagination-end">
+            <span class="pagination-info" aria-live="polite">
+              @if (isLoading()) {
+                {{ 'query.loading' | transloco }}
+              } @else {
+                {{ 'query.showing' | transloco }} {{ rangeStart() }}–{{ rangeEnd() }} {{ 'query.of' | transloco }} {{ p.total }}
+              }
+            </span>
+            <app-dropdown
+              [options]="rowsOptions()"
+              [value]="currentRowsValue()"
+              (valueChange)="onRowsDropdownChange($event)"
+              [attr.aria-label]="'query.aria.rowsPerPage' | transloco"
+            />
+          </div>
+        </div>
+      }
+    }
+
+    @if (activeTab() === 'donors') {
+      @if (donorsLoading() && donors().length === 0) {
+        <app-loading-spinner />
+      }
+      @if (donorsError()) {
+        <app-error-banner [message]="donorsError()?.message ?? ('query.loadError.donors' | transloco)" />
+      }
+      <app-donor-filter-bar
+        [filter]="donorFilter()"
+        [isLoading]="donorsLoading()"
+        (filterChange)="onDonorFilterChange($event)"
+      />
+      <div class="table-card">
+        <app-donor-table [donors]="donors()" />
+      </div>
+      @if (donorPagination(); as p) {
+        <app-pagination
+          [currentPage]="p.page"
+          [totalPages]="p.totalPages"
+          [total]="p.total"
+          [limit]="p.limit"
+          (pageChange)="onDonorPageChange($event)"
+        />
+      }
+    }
+
+    @if (activeTab() === 'fundraisers') {
+      @if (fundraisersLoading()) {
+        <app-loading-spinner />
+      }
+      @if (fundraisersError()) {
+        <app-error-banner [message]="fundraisersError()?.message ?? ('query.loadError.fundraisers' | transloco)" />
+      }
+      <app-fundraiser-filter-bar
+        [filter]="fundraiserFilter()"
+        [isLoading]="fundraisersLoading()"
+        (filterChange)="onFundraiserFilterChange($event)"
+      />
+      <div class="table-card">
+        <app-fundraiser-table [fundraisers]="fundraisers()" />
+      </div>
+    }
+
+    @if (activeTab() === 'campaigns') {
+      @if (campaignsLoading()) {
+        <app-loading-spinner />
+      }
+      @if (campaignsError()) {
+        <app-error-banner [message]="campaignsError()?.message ?? ('query.loadError.campaigns' | transloco)" />
+      }
+      <app-campaign-filter-bar
+        [filter]="campaignFilter()"
+        (filterChange)="onCampaignFilterChange($event)"
+      />
+      <div class="table-card">
+        <app-campaign-table [campaigns]="campaigns()" />
+      </div>
+    }
+
+    @if (activeTab() === 'organizations') {
+      @if (organizationsLoading()) {
+        <app-loading-spinner />
+      }
+      @if (organizationsError()) {
+        <app-error-banner [message]="organizationsError()?.message ?? ('query.loadError.organizations' | transloco)" />
+      }
+      <app-organization-filter-bar
+        [filter]="organizationFilter()"
+        (filterChange)="onOrganizationFilterChange($event)"
+      />
+      <div class="table-card">
+        <app-organization-table [organizations]="organizations()" />
+      </div>
+    }
+
+  </div>
+</div>

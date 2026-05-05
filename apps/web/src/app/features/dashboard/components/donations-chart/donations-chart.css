@@ -25,6 +25,7 @@
   gap: 3px;
   height: 140px;
   overflow-x: auto;
+  min-width: 0;
 }
 
 .chart-bar-wrap {

@@ -1,0 +1,388 @@
+{
+  "nav": {
+    "links": {
+      "dashboard": "Dashboard",
+      "donations": "Donations",
+      "query": "Query",
+      "fundraisers": "Fundraisers",
+      "donors": "Donors",
+      "conversations": "Conversations",
+      "settings": "Settings"
+    },
+    "aria": {
+      "switchToLight": "Switch to light mode",
+      "switchToDark": "Switch to dark mode",
+      "closeMenu": "Close menu",
+      "openMenu": "Open menu",
+      "openProfile": "Open profile",
+      "switchToEN": "Switch to English",
+      "switchToDE": "Switch to German"
+    },
+    "signIn": "Sign in"
+  },
+  "profile": {
+    "title": "Profile",
+    "myConversations": "My conversations",
+    "newChat": "+ New",
+    "noConversations": "No conversations yet",
+    "shared": "Shared",
+    "signOut": "Sign out"
+  },
+  "dashboard": {
+    "title": "Campaign Dashboard",
+    "loadError": "Failed to load campaigns",
+    "charts": {
+      "donationsByDay": "Donations by Day (last 30 days)",
+      "noData": "No donation data available."
+    }
+  },
+  "query": {
+    "title": "Query",
+    "tabs": {
+      "donations": "Donations",
+      "donors": "Donors",
+      "fundraisers": "Fundraisers",
+      "campaigns": "Campaigns",
+      "organizations": "Organizations"
+    },
+    "live": "Live",
+    "paused": "Paused",
+    "aria": {
+      "pauseLive": "Pause live updates",
+      "resumeLive": "Resume live updates",
+      "selectTable": "Select table",
+      "donationEntryMode": "Donation entry mode",
+      "firstPage": "First page",
+      "prevPage": "Previous page",
+      "nextPage": "Next page",
+      "lastPage": "Last page",
+      "goToPage": "Go to page",
+      "rowsPerPage": "Rows per page",
+      "pageNav": "Page navigation"
+    },
+    "sidebar": {
+      "single": "Single",
+      "bulk": "Bulk Upload"
+    },
+    "allLoaded": "All donations loaded",
+    "showing": "Showing",
+    "of": "of",
+    "loading": "Loading…",
+    "loadError": {
+      "donations": "Failed to load donations",
+      "donors": "Failed to load donors",
+      "fundraisers": "Failed to load fundraisers",
+      "campaigns": "Failed to load campaigns",
+      "organizations": "Failed to load organizations"
+    }
+  },
+  "fundraisers": {
+    "title": "Fundraisers",
+    "ariaLabel": "Fundraisers",
+    "allCampaigns": "All campaigns",
+    "filterByCampaign": "Filter by campaign",
+    "loadError": "Failed to load fundraisers",
+    "empty": "No fundraisers found.",
+    "table": {
+      "rank": "#",
+      "name": "Name",
+      "email": "Email",
+      "donations": "Donations",
+      "totalRaised": "Total Raised",
+      "status": "Status",
+      "active": "Active",
+      "inactive": "Inactive"
+    }
+  },
+  "donors": {
+    "title": "Donors",
+    "ariaLabel": "Donors",
+    "searchPlaceholder": "Search donors…",
+    "searchAriaLabel": "Search donors",
+    "loadError": "Failed to load donors",
+    "empty": "No donors found.",
+    "table": {
+      "name": "Name",
+      "email": "Email",
+      "city": "City",
+      "country": "Country",
+      "numDonations": "# Donations",
+      "totalDonated": "Total Donated",
+      "lastDonation": "Last Donation"
+    }
+  },
+  "conversations": {
+    "title": "All Conversations",
+    "subtitle": "AI chat sessions from your team",
+    "sharedHeading": "Shared conversation",
+    "sharedBy": "Shared by",
+    "loading": "Loading conversations…",
+    "empty": "No conversations yet. Start one by clicking <strong>Ask AI</strong> in the bottom-right corner.",
+    "loadingMessages": "Loading messages…",
+    "modelNotReady": "AI model loading — you can read but not reply yet.",
+    "viewSQL": "View SQL",
+    "followUpPlaceholder": "Ask a follow-up…",
+    "shared": "Shared"
+  },
+  "filter": {
+    "title": "Filters",
+    "donorName": "Donor name",
+    "search": "Search…",
+    "payment": "Payment",
+    "allMethods": "All methods",
+    "channel": "Channel",
+    "allChannels": "All channels",
+    "amount": "Amount",
+    "dateRange": "Date range",
+    "clear": "Clear filters",
+    "filteredBy": "Filtered by",
+    "switchToPaginated": "Switch to paginated view",
+    "paginated": "Paginated",
+    "min": "Min",
+    "max": "Max",
+    "removeFilter": "Remove filter",
+    "searchAria": "Search by donor name",
+    "minAmountAria": "Minimum donation amount",
+    "maxAmountAria": "Maximum donation amount",
+    "dateFrom": "Date from",
+    "dateTo": "Date to",
+    "activeFilters": "Active filters"
+  },
+  "pagination": {
+    "firstPage": "First page",
+    "prevPage": "Previous page",
+    "nextPage": "Next page",
+    "lastPage": "Last page",
+    "goToPage": "Go to page",
+    "go": "Go",
+    "rows": "Rows",
+    "showing": "Showing",
+    "of": "of"
+  },
+  "settings": {
+    "title": "System Status",
+    "subtitle": "Live health check · refreshes every 5 seconds",
+    "lastUpdated": "Last updated:",
+    "health": {
+      "server": "Server",
+      "database": "Database",
+      "llm": "LLM / Chat",
+      "uptime": "Uptime",
+      "memoryRss": "Memory RSS",
+      "heapUsedTotal": "Heap used / total",
+      "wsConnections": "WS connections",
+      "queryResponse": "Query response",
+      "postgresql": "PostgreSQL",
+      "connected": "Connected",
+      "phase": "Phase",
+      "modelLoaded": "Model loaded",
+      "yes": "Yes",
+      "no": "No",
+      "downloadProgress": "Download progress",
+      "notRunning": "Service not running"
+    },
+    "setup": {
+      "title": "Setup",
+      "desc": "Build the data hierarchy in order: create an organization, then campaigns within it, then assign fundraisers.",
+      "org": {
+        "title": "01 — Organization",
+        "name": "Name",
+        "type": "Type",
+        "country": "Country",
+        "website": "Website",
+        "creating": "Creating…",
+        "create": "Create Organization",
+        "blockedMsg": "Create an organization in step 01 first.",
+        "typeNpo": "Non-Profit (NPO)",
+        "typeFundraisingAgency": "Fundraising Agency"
+      },
+      "campaign": {
+        "title": "02 — Campaign",
+        "organization": "Organization",
+        "selectPlaceholder": "— select —",
+        "campaignTitle": "Title",
+        "description": "Description",
+        "goal": "Goal (€)",
+        "currency": "Currency",
+        "status": "Status",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "creating": "Creating…",
+        "create": "Create Campaign",
+        "statusDraft": "Draft",
+        "statusActive": "Active",
+        "statusPaused": "Paused",
+        "statusCompleted": "Completed"
+      },
+      "fundraiser": {
+        "title": "03 — Fundraiser",
+        "organization": "Organization",
+        "firstName": "First name",
+        "lastName": "Last name",
+        "email": "Email",
+        "phone": "Phone",
+        "creating": "Creating…",
+        "create": "Create Fundraiser"
+      },
+      "donations": {
+        "title": "04 — Donations",
+        "single": "Single Donation",
+        "bulk": "Bulk Upload",
+        "blockedMsg": "Create a campaign in step 02 first."
+      }
+    },
+    "stream": {
+      "title": "Simulate Donation Stream",
+      "desc": "Stream live synthetic donations into the database. Open the Donations page in another tab to watch records arrive in real-time — for demoing WebSocket updates and pagination under load.",
+      "cardTitle": "Donation Stream",
+      "cardDesc": "Each tick inserts one synthetic donation and broadcasts it to all connected clients via WebSocket. Switch to the Donations page to watch them land in real-time.",
+      "live": "Live",
+      "stopped": "Stopped",
+      "sent": "sent",
+      "campaign": "Campaign",
+      "speed": "Speed",
+      "minAmount": "Min €",
+      "maxAmount": "Max €",
+      "starting": "Starting…",
+      "start": "Start Stream",
+      "stopping": "Stopping…",
+      "stop": "Stop Stream"
+    },
+    "mock": {
+      "title": "Mock Data",
+      "desc": "Generate synthetic donations to stress-test the system, then clean them up when done.",
+      "generate": {
+        "title": "Generate Random Donations",
+        "desc": "Seeds the active campaign with synthetic records. Use large counts (1 000–5 000) to verify pagination performance.",
+        "count": "Count",
+        "minAmount": "Min $",
+        "maxAmount": "Max $",
+        "from": "From",
+        "to": "To",
+        "working": "Working…",
+        "generate": "Generate"
+      },
+      "delete": {
+        "title": "Delete All Mock Donations",
+        "desc": "Permanently removes every donation flagged as mock. Cannot be undone.",
+        "button": "Delete All Mock"
+      },
+      "upload": {
+        "title": "Upload Excel / CSV",
+        "desc": "Import donation records from a spreadsheet. Accepts .xlsx and .csv files.",
+        "button": "Choose file"
+      }
+    },
+    "spikes": {
+      "title": "Spike History",
+      "desc": "Automatically recorded when a service exceeds a health threshold. Deduplicated with a 60-second cooldown per metric.",
+      "empty": "No spikes recorded — everything looks healthy.",
+      "ariaLabel": "Spike history table",
+      "columns": {
+        "time": "Time",
+        "service": "Service",
+        "metric": "Metric",
+        "value": "Value",
+        "threshold": "Threshold",
+        "severity": "Severity"
+      }
+    },
+    "arch": {
+      "title": "Architecture Notes",
+      "desc": "How this system is designed to handle scale and production concerns.",
+      "cards": {
+        "caching": "State & Caching",
+        "performance": "Performance at Scale",
+        "realtime": "Real-time Updates",
+        "production": "Production Readiness"
+      }
+    }
+  },
+  "paymentMethods": {
+    "allMethods": "All methods",
+    "sepaDirectDebit": "SEPA Direct Debit",
+    "creditCard": "Credit Card",
+    "googlePay": "Google Pay",
+    "applePay": "Apple Pay",
+    "paypal": "PayPal",
+    "bankTransfer": "Bank Transfer",
+    "cash": "Cash"
+  },
+  "channels": {
+    "allChannels": "All channels",
+    "street": "Street",
+    "doorToDoor": "Door to Door",
+    "event": "Event",
+    "phone": "Phone",
+    "email": "Email",
+    "socialMedia": "Social Media"
+  },
+  "donationTable": {
+    "name": "Name",
+    "email": "Email",
+    "channel": "Channel",
+    "amount": "Amount",
+    "method": "Method",
+    "date": "Date",
+    "empty": "No donations found.",
+    "ariaLabel": "Donations table"
+  },
+  "auth": {
+    "login": {
+      "title": "Sign in",
+      "email": "Email",
+      "password": "Password",
+      "forgotPassword": "Forgot password?",
+      "submitting": "Signing in…",
+      "submit": "Sign in",
+      "noAccount": "Don't have an account?",
+      "signUp": "Sign up",
+      "errors": {
+        "emailRequired": "Valid email is required",
+        "passwordRequired": "Password must be at least 8 characters"
+      }
+    },
+    "signup": {
+      "title": "Create account",
+      "fullName": "Full name",
+      "email": "Email",
+      "password": "Password",
+      "submitting": "Creating account…",
+      "submit": "Create account",
+      "hasAccount": "Already have an account?",
+      "signIn": "Sign in",
+      "errors": {
+        "nameRequired": "Name must be at least 2 characters",
+        "emailRequired": "Valid email is required",
+        "passwordRequired": "Password must be at least 8 characters"
+      }
+    },
+    "forgotPassword": {
+      "title": "Reset password",
+      "subtitle": "Enter your account email and we'll generate a reset token.",
+      "email": "Email",
+      "submitting": "Generating token…",
+      "submit": "Get reset token",
+      "rememberIt": "Remember it?",
+      "signIn": "Sign in",
+      "tokenNote": "In production this would be emailed to you. For this demo, your reset token is:",
+      "continue": "Continue to set new password",
+      "errors": {
+        "emailRequired": "Valid email is required"
+      }
+    },
+    "resetPassword": {
+      "title": "Set new password",
+      "resetToken": "Reset token",
+      "tokenPlaceholder": "Paste your reset token",
+      "newPassword": "New password",
+      "submitting": "Saving…",
+      "submit": "Set new password",
+      "backToSignIn": "Back to sign in",
+      "errors": {
+        "tokenRequired": "Reset token is required",
+        "passwordRequired": "Password must be at least 8 characters"
+      }
+    }
+  }
+}

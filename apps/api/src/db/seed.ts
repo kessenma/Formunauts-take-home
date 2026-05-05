@@ -13,7 +13,7 @@ function randInt(min: number, max: number) {
 }
 
 function pick<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
+  return arr[Math.floor(Math.random() * arr.length)]!;
 }
 
 function randDate(start: Date, end: Date) {
@@ -66,6 +66,7 @@ export async function seed() {
     { name: 'Community Health Foundation', type: 'npo', country: 'DE', website: 'https://communityhealthfoundation.org' },
     { name: 'FundRaise Pro Agency', type: 'fundraising_agency', country: 'AT', website: 'https://fundraisepro.at' },
   ]).returning();
+  if (!npo || !agency) throw new Error('Organization insert returned no rows');
 
   // ── App users ───────────────────────────────────────────────────────────────
   await db.insert(appUsers).values([
@@ -117,6 +118,7 @@ export async function seed() {
       endDate: new Date('2024-12-31'),
     },
   ]).returning();
+  if (!c1 || !c2 || !c3 || !c4) throw new Error('Campaign insert returned no rows');
 
   const allCampaigns = [c1, c2, c3, c4];
 
@@ -192,7 +194,7 @@ export async function seed() {
   const donationRows = Array.from({ length: 500 }, () => {
     const campaign = pick(allCampaigns);
     const channel = pick(CHANNELS);
-    const paymentMethod = pick(CHANNEL_PAYMENT_MAP[channel]);
+    const paymentMethod = pick(CHANNEL_PAYMENT_MAP[channel]!);
     const hasFundraiser = ['street', 'door_to_door', 'event'].includes(channel) && Math.random() > 0.1;
     const hasLocation = Math.random() > 0.2;
     const hasFeedback = Math.random() > 0.8;

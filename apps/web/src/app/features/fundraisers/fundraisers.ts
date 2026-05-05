@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { CurrencyPipe } from '@angular/common';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { FundraiserService } from '../../core/services/fundraiser';
 import { CampaignService } from '../../core/services/campaign';
 import { LoadingSpinner } from '../../shared/components/loading-spinner/loading-spinner';
@@ -7,7 +8,7 @@ import { ErrorBanner } from '../../shared/components/error-banner/error-banner';
 
 @Component({
   selector: 'app-fundraisers',
-  imports: [CurrencyPipe, LoadingSpinner, ErrorBanner],
+  imports: [CurrencyPipe, LoadingSpinner, ErrorBanner, TranslocoPipe],
   templateUrl: './fundraisers.html',
   styleUrl: './fundraisers.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

@@ -1,13 +1,14 @@
 import { ChangeDetectionStrategy, Component, computed, inject } from '@angular/core';
 import { CurrencyPipe, DatePipe } from '@angular/common';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { DonorService } from '../../core/services/donor';
-import { Pagination } from '../donations/components/pagination/pagination';
+import { Pagination } from '../query/components/pagination/pagination';
 import { LoadingSpinner } from '../../shared/components/loading-spinner/loading-spinner';
 import { ErrorBanner } from '../../shared/components/error-banner/error-banner';
 
 @Component({
   selector: 'app-donors',
-  imports: [CurrencyPipe, DatePipe, Pagination, LoadingSpinner, ErrorBanner],
+  imports: [CurrencyPipe, DatePipe, Pagination, LoadingSpinner, ErrorBanner, TranslocoPipe],
   templateUrl: './donors.html',
   styleUrl: './donors.css',
   changeDetection: ChangeDetectionStrategy.OnPush,

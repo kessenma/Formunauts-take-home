@@ -1,7 +1,7 @@
 <div class="settings-page">
   <header class="settings-header">
-    <h1 class="settings-title">System Status</h1>
-    <p class="settings-subtitle">Live health check &middot; refreshes every 5 seconds</p>
+    <h1 class="settings-title">{{ 'settings.title' | transloco }}</h1>
+    <p class="settings-subtitle">{{ 'settings.subtitle' | transloco }}</p>
   </header>
 
   @if (!health()) {
@@ -15,24 +15,24 @@
       <div class="health-card">
         <div class="health-card__header">
           <span [class]="dotClass(health()!.server.status)"></span>
-          <h2 class="health-card__title">Server</h2>
+          <h2 class="health-card__title">{{ 'settings.health.server' | transloco }}</h2>
           <span [class]="badgeClass(health()!.server.status)">{{ health()!.server.status }}</span>
         </div>
         <dl class="health-card__metrics">
           <div class="metric-row">
-            <dt>Uptime</dt>
+            <dt>{{ 'settings.health.uptime' | transloco }}</dt>
             <dd>{{ formattedUptime() }}</dd>
           </div>
           <div class="metric-row">
-            <dt>Memory RSS</dt>
+            <dt>{{ 'settings.health.memoryRss' | transloco }}</dt>
             <dd>{{ health()!.server.memoryMb.rss }} MB</dd>
           </div>
           <div class="metric-row">
-            <dt>Heap used / total</dt>
+            <dt>{{ 'settings.health.heapUsedTotal' | transloco }}</dt>
             <dd>{{ health()!.server.memoryMb.heapUsed }} / {{ health()!.server.memoryMb.heapTotal }} MB</dd>
           </div>
           <div class="metric-row">
-            <dt>WS connections</dt>
+            <dt>{{ 'settings.health.wsConnections' | transloco }}</dt>
             <dd>{{ health()!.server.wsConnections }}</dd>
           </div>
         </dl>
@@ -42,17 +42,17 @@
       <div class="health-card">
         <div class="health-card__header">
           <span [class]="dotClass(health()!.database.status)"></span>
-          <h2 class="health-card__title">Database</h2>
+          <h2 class="health-card__title">{{ 'settings.health.database' | transloco }}</h2>
           <span [class]="badgeClass(health()!.database.status)">{{ health()!.database.status }}</span>
         </div>
         <dl class="health-card__metrics">
           <div class="metric-row">
-            <dt>Query response</dt>
+            <dt>{{ 'settings.health.queryResponse' | transloco }}</dt>
             <dd>{{ health()!.database.responseTimeMs }} ms</dd>
           </div>
           <div class="metric-row">
-            <dt>PostgreSQL</dt>
-            <dd>{{ health()!.database.status === 'ok' ? 'Connected' : health()!.database.status }}</dd>
+            <dt>{{ 'settings.health.postgresql' | transloco }}</dt>
+            <dd>{{ health()!.database.status === 'ok' ? ('settings.health.connected' | transloco) : health()!.database.status }}</dd>
           </div>
         </dl>
       </div>
@@ -61,29 +61,29 @@
       <div class="health-card">
         <div class="health-card__header">
           <span [class]="dotClass(health()!.llm.status)"></span>
-          <h2 class="health-card__title">LLM / Chat</h2>
+          <h2 class="health-card__title">{{ 'settings.health.llm' | transloco }}</h2>
           <span [class]="badgeClass(health()!.llm.status)">{{ health()!.llm.status }}</span>
         </div>
         <dl class="health-card__metrics">
           @if (health()!.llm.phase) {
             <div class="metric-row">
-              <dt>Phase</dt>
+              <dt>{{ 'settings.health.phase' | transloco }}</dt>
               <dd>{{ health()!.llm.phase }}</dd>
             </div>
           }
           <div class="metric-row">
-            <dt>Model loaded</dt>
-            <dd>{{ health()!.llm.modelLoaded ? 'Yes' : 'No' }}</dd>
+            <dt>{{ 'settings.health.modelLoaded' | transloco }}</dt>
+            <dd>{{ health()!.llm.modelLoaded ? ('settings.health.yes' | transloco) : ('settings.health.no' | transloco) }}</dd>
           </div>
           @if ((health()!.llm.progress ?? 100) < 100) {
             <div class="metric-row">
-              <dt>Download progress</dt>
+              <dt>{{ 'settings.health.downloadProgress' | transloco }}</dt>
               <dd>{{ health()!.llm.progress }}%</dd>
             </div>
           }
           @if (health()!.llm.status === 'unreachable') {
             <div class="metric-row metric-row--note">
-              <dd>Service not running</dd>
+              <dd>{{ 'settings.health.notRunning' | transloco }}</dd>
             </div>
           }
         </dl>
@@ -91,92 +91,93 @@
 
     </div>
 
-    <p class="settings-timestamp">Last updated: {{ lastUpdated() }}</p>
+    <p class="settings-timestamp">{{ 'settings.lastUpdated' | transloco }} {{ lastUpdated() }}</p>
   }
 
   <!-- ── Setup Flow ──────────────────────────────────────────────────────────── -->
   <section class="settings-section">
     <div class="settings-section__header">
-      <h2 class="settings-section__title">Setup</h2>
-      <p class="settings-section__desc">
-        Build the data hierarchy in order: create an organization, then campaigns within it, then assign fundraisers.
-      </p>
+      <h2 class="settings-section__title">{{ 'settings.setup.title' | transloco }}</h2>
+      <p class="settings-section__desc">{{ 'settings.setup.desc' | transloco }}</p>
     </div>
 
     <app-accordion>
 
       <!-- 01 — Organization -->
-      <app-accordion-item title="01 — Organization">
+      <app-accordion-item [title]="'settings.setup.org.title' | transloco">
         <form [formGroup]="orgForm" (ngSubmit)="createOrg()" class="setup-form">
           <div class="setup-form__fields">
-            <app-text-input label="Name" formControlName="name" placeholder="Acme Foundation" />
-            <label class="form-field">
-              <span class="form-field__label">Type</span>
-              <select class="form-input form-select" formControlName="type">
-                <option value="npo">Non-Profit (NPO)</option>
-                <option value="fundraising_agency">Fundraising Agency</option>
-              </select>
-            </label>
+            <app-text-input [label]="'settings.setup.org.name' | transloco" formControlName="name" placeholder="Acme Foundation" />
+            <div class="form-field">
+              <span class="form-field__label">{{ 'settings.setup.org.type' | transloco }}</span>
+              <app-radio-card-group formControlName="type">
+                <app-radio-card-item value="npo">{{ 'settings.setup.org.typeNpo' | transloco }}</app-radio-card-item>
+                <app-radio-card-item value="fundraising_agency">{{ 'settings.setup.org.typeFundraisingAgency' | transloco }}</app-radio-card-item>
+              </app-radio-card-group>
+            </div>
             <div class="setup-form__row">
-              <app-text-input label="Country" formControlName="country" placeholder="DE" />
-              <app-text-input label="Website" formControlName="website" placeholder="https://example.org" />
+              <app-text-input [label]="'settings.setup.org.country' | transloco" formControlName="country" placeholder="DE" />
+              <app-text-input [label]="'settings.setup.org.website' | transloco" formControlName="website" placeholder="https://example.org" />
             </div>
           </div>
           <div class="setup-form__actions">
             <button class="action-btn action-btn--primary" type="submit" [disabled]="orgForm.invalid || orgWorking()">
               <ng-icon name="solarBuildingsBoldDuotone" size="14" aria-hidden="true"></ng-icon>
-              {{ orgWorking() ? 'Creating…' : 'Create Organization' }}
+              {{ orgWorking() ? ('settings.setup.org.creating' | transloco) : ('settings.setup.org.create' | transloco) }}
             </button>
           </div>
         </form>
       </app-accordion-item>
 
       <!-- 02 — Campaign -->
-      <app-accordion-item title="02 — Campaign">
+      <app-accordion-item [title]="'settings.setup.campaign.title' | transloco">
         @if (!hasOrgs()) {
           <p class="setup-blocked">
             <ng-icon name="solarLockKeyholeMinimalisticBoldDuotone" size="14" aria-hidden="true"></ng-icon>
-            Create an organization in step 01 first.
+            {{ 'settings.setup.org.blockedMsg' | transloco }}
           </p>
         } @else {
           <form [formGroup]="campaignForm" (ngSubmit)="createCampaign()" class="setup-form">
             <div class="setup-form__fields">
-              <label class="form-field">
-                <span class="form-field__label">Organization</span>
-                <select class="form-input form-select" formControlName="organizationId">
-                  <option [value]="0" disabled>— select —</option>
-                  @for (org of organizations.value() ?? []; track org.id) {
-                    <option [value]="org.id">{{ org.name }}</option>
-                  }
-                </select>
-              </label>
-              <app-text-input label="Title" formControlName="title" placeholder="Summer Drive 2025" />
-              <app-text-input label="Description" formControlName="description" [multiline]="true" [autoGrow]="true" placeholder="What is this campaign about?" />
-              <div class="setup-form__row">
-                <label class="form-field">
-                  <span class="form-field__label">Goal (€)</span>
-                  <input class="form-input" type="number" formControlName="goal" min="1" placeholder="10000" />
-                </label>
-                <app-text-input label="Currency" formControlName="currency" />
+              <div class="form-field">
+                <span class="form-field__label">{{ 'settings.setup.campaign.organization' | transloco }}</span>
+                <app-dropdown
+                  [options]="orgOptions()"
+                  [value]="campaignForm.controls.organizationId.value.toString()"
+                  [placeholder]="'settings.setup.campaign.selectPlaceholder' | transloco"
+                  (valueChange)="campaignForm.controls.organizationId.setValue(+$event)"
+                />
               </div>
+              <app-text-input [label]="'settings.setup.campaign.campaignTitle' | transloco" formControlName="title" placeholder="Summer Drive 2025" />
+              <app-text-input [label]="'settings.setup.campaign.description' | transloco" formControlName="description" [multiline]="true" [autoGrow]="true" placeholder="What is this campaign about?" />
               <label class="form-field">
-                <span class="form-field__label">Status</span>
-                <select class="form-input form-select" formControlName="status">
-                  <option value="draft">Draft</option>
-                  <option value="active">Active</option>
-                  <option value="paused">Paused</option>
-                  <option value="completed">Completed</option>
-                </select>
+                <span class="form-field__label">{{ 'settings.setup.campaign.goal' | transloco }}</span>
+                <input class="form-input" type="number" formControlName="goal" min="1" placeholder="10000" />
               </label>
+              <div class="form-field">
+                <span class="form-field__label">{{ 'settings.setup.campaign.currency' | transloco }}</span>
+                <app-radio-card-group formControlName="currency">
+                  <app-radio-card-item value="EUR">EUR</app-radio-card-item>
+                  <app-radio-card-item value="USD">USD</app-radio-card-item>
+                </app-radio-card-group>
+              </div>
+              <div class="form-field">
+                <span class="form-field__label">{{ 'settings.setup.campaign.status' | transloco }}</span>
+                <app-dropdown
+                  [options]="campaignStatusOptions()"
+                  [value]="campaignForm.controls.status.value"
+                  (valueChange)="campaignForm.controls.status.setValue($event)"
+                />
+              </div>
               <div class="setup-form__row">
-                <app-text-input label="Start date" formControlName="startDate" type="date" placeholder=" " />
-                <app-text-input label="End date" formControlName="endDate" type="date" placeholder=" " />
+                <app-text-input [label]="'settings.setup.campaign.startDate' | transloco" formControlName="startDate" type="date" placeholder=" " />
+                <app-text-input [label]="'settings.setup.campaign.endDate' | transloco" formControlName="endDate" type="date" placeholder=" " />
               </div>
             </div>
             <div class="setup-form__actions">
               <button class="action-btn action-btn--primary" type="submit" [disabled]="campaignForm.invalid || campaignWorking()">
                 <ng-icon name="solarFlagBoldDuotone" size="14" aria-hidden="true"></ng-icon>
-                {{ campaignWorking() ? 'Creating…' : 'Create Campaign' }}
+                {{ campaignWorking() ? ('settings.setup.campaign.creating' | transloco) : ('settings.setup.campaign.create' | transloco) }}
               </button>
             </div>
           </form>
@@ -184,37 +185,37 @@
       </app-accordion-item>
 
       <!-- 03 — Fundraiser -->
-      <app-accordion-item title="03 — Fundraiser">
+      <app-accordion-item [title]="'settings.setup.fundraiser.title' | transloco">
         @if (!hasOrgs()) {
           <p class="setup-blocked">
             <ng-icon name="solarLockKeyholeMinimalisticBoldDuotone" size="14" aria-hidden="true"></ng-icon>
-            Create an organization in step 01 first.
+            {{ 'settings.setup.org.blockedMsg' | transloco }}
           </p>
         } @else {
           <form [formGroup]="fundraiserForm" (ngSubmit)="createFundraiser()" class="setup-form">
             <div class="setup-form__fields">
-              <label class="form-field">
-                <span class="form-field__label">Organization</span>
-                <select class="form-input form-select" formControlName="organizationId">
-                  <option [value]="0" disabled>— select —</option>
-                  @for (org of organizations.value() ?? []; track org.id) {
-                    <option [value]="org.id">{{ org.name }}</option>
-                  }
-                </select>
-              </label>
-              <div class="setup-form__row">
-                <app-text-input label="First name" formControlName="firstName" />
-                <app-text-input label="Last name" formControlName="lastName" />
+              <div class="form-field">
+                <span class="form-field__label">{{ 'settings.setup.fundraiser.organization' | transloco }}</span>
+                <app-dropdown
+                  [options]="orgOptions()"
+                  [value]="fundraiserForm.controls.organizationId.value.toString()"
+                  [placeholder]="'settings.setup.campaign.selectPlaceholder' | transloco"
+                  (valueChange)="fundraiserForm.controls.organizationId.setValue(+$event)"
+                />
               </div>
               <div class="setup-form__row">
-                <app-text-input label="Email" formControlName="email" type="email" />
-                <app-text-input label="Phone" formControlName="phone" type="tel" />
+                <app-text-input [label]="'settings.setup.fundraiser.firstName' | transloco" formControlName="firstName" />
+                <app-text-input [label]="'settings.setup.fundraiser.lastName' | transloco" formControlName="lastName" />
+              </div>
+              <div class="setup-form__row">
+                <app-text-input [label]="'settings.setup.fundraiser.email' | transloco" formControlName="email" type="email" />
+                <app-text-input [label]="'settings.setup.fundraiser.phone' | transloco" formControlName="phone" type="tel" />
               </div>
             </div>
             <div class="setup-form__actions">
               <button class="action-btn action-btn--primary" type="submit" [disabled]="fundraiserForm.invalid || fundraiserWorking()">
                 <ng-icon name="solarUserPlusBoldDuotone" size="14" aria-hidden="true"></ng-icon>
-                {{ fundraiserWorking() ? 'Creating…' : 'Create Fundraiser' }}
+                {{ fundraiserWorking() ? ('settings.setup.fundraiser.creating' | transloco) : ('settings.setup.fundraiser.create' | transloco) }}
               </button>
             </div>
           </form>
@@ -222,17 +223,17 @@
       </app-accordion-item>
 
       <!-- 04 — Donations -->
-      <app-accordion-item title="04 — Donations">
+      <app-accordion-item [title]="'settings.setup.donations.title' | transloco">
         @if (!hasCampaigns()) {
           <p class="setup-blocked">
             <ng-icon name="solarLockKeyholeMinimalisticBoldDuotone" size="14" aria-hidden="true"></ng-icon>
-            Create a campaign in step 02 first.
+            {{ 'settings.setup.donations.blockedMsg' | transloco }}
           </p>
         } @else {
           <app-tabs value="single" variant="underline">
             <app-tabs-list>
-              <app-tabs-trigger value="single">Single Donation</app-tabs-trigger>
-              <app-tabs-trigger value="bulk">Bulk Upload</app-tabs-trigger>
+              <app-tabs-trigger value="single">{{ 'settings.setup.donations.single' | transloco }}</app-tabs-trigger>
+              <app-tabs-trigger value="bulk">{{ 'settings.setup.donations.bulk' | transloco }}</app-tabs-trigger>
             </app-tabs-list>
 
             <app-tabs-content value="single">
@@ -252,11 +253,14 @@
     </app-accordion>
   </section>
 
+  <!-- ── Simulate Donation Stream ─────────────────────────────────────────────── -->
+  <app-donation-streamer />
+
   <!-- ── Mock Data Utilities ───────────────────────────────────────────────────── -->
   <section class="settings-section">
     <div class="settings-section__header">
-      <h2 class="settings-section__title">Mock Data</h2>
-      <p class="settings-section__desc">Generate synthetic donations to stress-test the system, then clean them up when done.</p>
+      <h2 class="settings-section__title">{{ 'settings.mock.title' | transloco }}</h2>
+      <p class="settings-section__desc">{{ 'settings.mock.desc' | transloco }}</p>
     </div>
 
     <div class="mock-card">
@@ -264,34 +268,34 @@
       <!-- Generate -->
       <div class="mock-tool">
         <div class="mock-tool__meta">
-          <h4 class="mock-tool__title">Generate Random Donations</h4>
-          <p class="mock-tool__desc">Seeds the active campaign with synthetic records. Use large counts (1 000–5 000) to verify pagination performance.</p>
+          <h4 class="mock-tool__title">{{ 'settings.mock.generate.title' | transloco }}</h4>
+          <p class="mock-tool__desc">{{ 'settings.mock.generate.desc' | transloco }}</p>
         </div>
         <form [formGroup]="randomForm" (ngSubmit)="generateRandom()" class="mock-form">
           <div class="mock-form__row">
             <label class="mock-field">
-              <span>Count</span>
+              <span>{{ 'settings.mock.generate.count' | transloco }}</span>
               <input class="form-input" type="number" formControlName="count" min="1" max="10000" />
             </label>
             <label class="mock-field">
-              <span>Min $</span>
+              <span>{{ 'settings.mock.generate.minAmount' | transloco }}</span>
               <input class="form-input" type="number" formControlName="minAmount" min="1" />
             </label>
             <label class="mock-field">
-              <span>Max $</span>
+              <span>{{ 'settings.mock.generate.maxAmount' | transloco }}</span>
               <input class="form-input" type="number" formControlName="maxAmount" min="1" />
             </label>
             <label class="mock-field">
-              <span>From</span>
+              <span>{{ 'settings.mock.generate.from' | transloco }}</span>
               <input class="form-input" type="date" formControlName="startDate" />
             </label>
             <label class="mock-field">
-              <span>To</span>
+              <span>{{ 'settings.mock.generate.to' | transloco }}</span>
               <input class="form-input" type="date" formControlName="endDate" />
             </label>
             <button class="action-btn action-btn--primary action-btn--self-end" type="submit" [disabled]="randomForm.invalid || mockWorking()">
               <ng-icon name="solarRefreshBoldDuotone" size="14" aria-hidden="true"></ng-icon>
-              {{ mockWorking() ? 'Working…' : 'Generate' }}
+              {{ mockWorking() ? ('settings.mock.generate.working' | transloco) : ('settings.mock.generate.generate' | transloco) }}
             </button>
           </div>
         </form>
@@ -303,23 +307,23 @@
       <div class="mock-tool mock-tool--row">
         <div class="mock-danger">
           <div class="mock-tool__meta">
-            <h4 class="mock-tool__title">Delete All Mock Donations</h4>
-            <p class="mock-tool__desc">Permanently removes every donation flagged as mock. Cannot be undone.</p>
+            <h4 class="mock-tool__title">{{ 'settings.mock.delete.title' | transloco }}</h4>
+            <p class="mock-tool__desc">{{ 'settings.mock.delete.desc' | transloco }}</p>
           </div>
           <button class="action-btn action-btn--danger" type="button" (click)="deleteMock()" [disabled]="mockWorking()">
             <ng-icon name="solarTrashBinMinimalisticBoldDuotone" size="14" aria-hidden="true"></ng-icon>
-            Delete All Mock
+            {{ 'settings.mock.delete.button' | transloco }}
           </button>
         </div>
 
         <div class="mock-danger">
           <div class="mock-tool__meta">
-            <h4 class="mock-tool__title">Upload Excel / CSV</h4>
-            <p class="mock-tool__desc">Import donation records from a spreadsheet. Accepts .xlsx and .csv files.</p>
+            <h4 class="mock-tool__title">{{ 'settings.mock.upload.title' | transloco }}</h4>
+            <p class="mock-tool__desc">{{ 'settings.mock.upload.desc' | transloco }}</p>
           </div>
           <label class="action-btn action-btn--ghost" for="excel-upload">
             <ng-icon name="solarUploadBoldDuotone" size="14" aria-hidden="true"></ng-icon>
-            Choose file
+            {{ 'settings.mock.upload.button' | transloco }}
             <input id="excel-upload" type="file" accept=".xlsx,.csv" class="sr-only" (change)="onFileSelected($event)" />
           </label>
         </div>
@@ -331,18 +335,18 @@
   <!-- ── Spike History ──────────────────────────────────────────────────────── -->
   <section class="settings-section">
     <div class="settings-section__header">
-      <h2 class="settings-section__title">Spike History</h2>
-      <p class="settings-section__desc">Automatically recorded when a service exceeds a health threshold. Deduplicated with a 60-second cooldown per metric.</p>
+      <h2 class="settings-section__title">{{ 'settings.spikes.title' | transloco }}</h2>
+      <p class="settings-section__desc">{{ 'settings.spikes.desc' | transloco }}</p>
     </div>
 
     @if (spikes() === null || spikes() === undefined) {
       <div class="settings-loading"><app-loading-spinner /></div>
     } @else {
       <app-table
-        [columns]="spikeColumns"
+        [columns]="spikeColumns()"
         [isEmpty]="spikesEmpty()"
-        emptyMessage="No spikes recorded — everything looks healthy."
-        ariaLabel="Spike history table"
+        [emptyMessage]="'settings.spikes.empty' | transloco"
+        [ariaLabel]="'settings.spikes.ariaLabel' | transloco"
       >
         @for (spike of spikes()!; track spike.id) {
           <tr [class]="'spike-row spike-row--' + spike.severity">
@@ -361,25 +365,25 @@
   <!-- ── Architecture Notes ─────────────────────────────────────────────────── -->
   <section class="settings-section">
     <div class="settings-section__header">
-      <h2 class="settings-section__title">Architecture Notes</h2>
-      <p class="settings-section__desc">How this system is designed to handle scale and production concerns.</p>
+      <h2 class="settings-section__title">{{ 'settings.arch.title' | transloco }}</h2>
+      <p class="settings-section__desc">{{ 'settings.arch.desc' | transloco }}</p>
     </div>
 
     <div class="arch-grid">
       <div class="arch-card">
-        <h3 class="arch-card__title">State &amp; Caching</h3>
+        <h3 class="arch-card__title">{{ 'settings.arch.cards.caching' | transloco }}</h3>
         <p>Components use Angular signals with <code>ChangeDetectionStrategy.OnPush</code> — only re-render on explicit signal writes. Shared state (campaign, donations) lives in root-level services using <code>httpResource</code>, which caches the last response and avoids duplicate requests across components. Health data uses <code>shareReplay(1)</code> so the health and spike services share one HTTP stream.</p>
       </div>
       <div class="arch-card">
-        <h3 class="arch-card__title">Performance at Scale</h3>
+        <h3 class="arch-card__title">{{ 'settings.arch.cards.performance' | transloco }}</h3>
         <p>All donation queries are server-side paginated (max 100 rows per page) with DB indexes on <code>campaign_id + date</code>, <code>donor_id</code>, <code>channel</code>, and <code>is_mock</code>. The donations list never loads a full table scan. Mock data stress-tests this: generate 5,000+ rows and pagination stays fast.</p>
       </div>
       <div class="arch-card">
-        <h3 class="arch-card__title">Real-time Updates</h3>
-        <p>A WebSocket at <code>/api/donations/live</code> pushes new donations instantly to all connected clients — no polling needed for the live feed. Mutations (POST donation) re-fetch via the WebSocket event rather than an additional HTTP call. This page uses 5-second polling for health since WebSocket push isn't suitable for infrastructure metrics.</p>
+        <h3 class="arch-card__title">{{ 'settings.arch.cards.realtime' | transloco }}</h3>
+        <p>A WebSocket at <code>/api/donations/live</code> pushes new donations instantly to all connected clients — no polling needed for the live feed. Mutations (POST donation) re-fetch via the WebSocket event rather than an additional HTTP call. The Donation Stream simulator uses the same pipeline: a server-side interval generates one record per tick and broadcasts it through Redis, so the Donations page updates live without any client staying open. This page uses 5-second polling for health since WebSocket push isn't suitable for infrastructure metrics.</p>
       </div>
       <div class="arch-card">
-        <h3 class="arch-card__title">Production Readiness</h3>
+        <h3 class="arch-card__title">{{ 'settings.arch.cards.production' | transloco }}</h3>
         <p>Auth is enforced at the API level (better-auth sessions) and via Angular route guards. Session lookups are cached in Redis via <code>secondaryStorage</code> — zero Postgres hits per request after first login. Error boundaries handled by a global HTTP interceptor with toast feedback. Spike detection uses Redis <code>SET NX EX</code> for distributed debouncing that survives restarts and scales across replicas.</p>
       </div>
     </div>

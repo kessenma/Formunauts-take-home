@@ -1,8 +1,8 @@
 <div class="page-header">
-  <h1 class="page-title">Fundraisers</h1>
+  <h1 class="page-title">{{ 'fundraisers.title' | transloco }}</h1>
 
-  <select class="campaign-filter" (change)="onCampaignFilter($event)" aria-label="Filter by campaign">
-    <option value="">All campaigns</option>
+  <select class="campaign-filter" (change)="onCampaignFilter($event)" [attr.aria-label]="'fundraisers.filterByCampaign' | transloco">
+    <option value="">{{ 'fundraisers.allCampaigns' | transloco }}</option>
     @for (c of campaigns.value() ?? []; track c.id) {
       <option [value]="c.id">{{ c.name }}</option>
     }
@@ -12,20 +12,20 @@
 @if (isLoading()) {
   <app-loading-spinner />
 } @else if (error()) {
-  <app-error-banner [message]="error()?.message ?? 'Failed to load fundraisers'" />
+  <app-error-banner [message]="error()?.message ?? ('fundraisers.loadError' | transloco)" />
 } @else if (fundraisers().length === 0) {
-  <p class="empty-state">No fundraisers found.</p>
+  <p class="empty-state">{{ 'fundraisers.empty' | transloco }}</p>
 } @else {
   <div class="table-wrapper">
-    <table class="fundraiser-table" aria-label="Fundraisers">
+    <table class="fundraiser-table" [attr.aria-label]="'fundraisers.ariaLabel' | transloco">
       <thead>
         <tr>
-          <th>#</th>
-          <th>Name</th>
-          <th>Email</th>
-          <th class="col-number">Donations</th>
-          <th class="col-number">Total Raised</th>
-          <th>Status</th>
+          <th>{{ 'fundraisers.table.rank' | transloco }}</th>
+          <th>{{ 'fundraisers.table.name' | transloco }}</th>
+          <th>{{ 'fundraisers.table.email' | transloco }}</th>
+          <th class="col-number">{{ 'fundraisers.table.donations' | transloco }}</th>
+          <th class="col-number">{{ 'fundraisers.table.totalRaised' | transloco }}</th>
+          <th>{{ 'fundraisers.table.status' | transloco }}</th>
         </tr>
       </thead>
       <tbody>
@@ -38,7 +38,7 @@
             <td class="col-number col-amount">{{ f.totalRaised | currency }}</td>
             <td>
               <span class="status-badge status-badge--{{ f.isActive ? 'active' : 'inactive' }}">
-                {{ f.isActive ? 'Active' : 'Inactive' }}
+                {{ f.isActive ? ('fundraisers.table.active' | transloco) : ('fundraisers.table.inactive' | transloco) }}
               </span>
             </td>
           </tr>

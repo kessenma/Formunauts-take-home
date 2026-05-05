@@ -1,0 +1,175 @@
+<header class="app-header">
+  <nav class="app-nav" aria-label="Main navigation">
+    <a routerLink="/" class="app-nav__brand" (click)="onLogoClick()">
+      <img src="/logo.svg" alt="Formunauts" class="app-nav__logo" [class.app-nav__logo--pulse]="logoPulsing()" width="30" height="30">
+      @if (auth.isAuthenticated()) {
+        @if (pageName(); as name) {
+          <span class="app-nav__page-title">{{ name }}</span>
+        }
+      } @else {
+        <span>Formunauts</span>
+      }
+    </a>
+
+    @if (auth.isAuthenticated()) {
+      <ul class="app-nav__links" [class.app-nav__links--open]="menuOpen()">
+        <li>
+          <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             (click)="menuOpen.set(false)">
+            <ng-icon name="solarHomeBoldDuotone" size="16" aria-hidden="true"></ng-icon>{{ 'nav.links.dashboard' | transloco }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/query" routerLinkActive="active" (click)="menuOpen.set(false)">
+            <ng-icon name="solarHeartBoldDuotone" size="16" aria-hidden="true"></ng-icon>{{ 'nav.links.query' | transloco }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/conversations" routerLinkActive="active" (click)="menuOpen.set(false)">
+            <ng-icon name="solarChatRoundBoldDuotone" size="16" aria-hidden="true"></ng-icon>{{ 'nav.links.conversations' | transloco }}
+          </a>
+        </li>
+        <li>
+          <a routerLink="/settings" routerLinkActive="active" (click)="menuOpen.set(false)">
+            <ng-icon name="solarSettingsMinimalisticBoldDuotone" size="16" aria-hidden="true"></ng-icon>{{ 'nav.links.settings' | transloco }}
+          </a>
+        </li>
+      </ul>
+    }
+
+    <div class="app-nav__actions">
+      @if (!auth.isAuthenticated()) {
+        <a routerLink="/login" class="app-nav__login-btn">{{ 'nav.signIn' | transloco }}</a>
+      }
+
+      @if (auth.currentUser(); as user) {
+        <button
+          class="app-nav__avatar-btn"
+          type="button"
+          (click)="profileSheetOpen.set(true)"
+          [attr.aria-label]="'nav.aria.openProfile' | transloco"
+        >
+          <app-avatar [name]="user.name" [maxInitials]="1" [size]="32" />
+        </button>
+      }
+
+      <button
+        class="app-nav__lang-toggle"
+        type="button"
+        (click)="lang.toggle()"
+        [attr.aria-label]="lang.lang() === 'en' ? ('nav.aria.switchToDE' | transloco) : ('nav.aria.switchToEN' | transloco)"
+      >
+        {{ lang.lang() === 'en' ? 'DE' : 'EN' }}
+      </button>
+
+      <button
+        class="app-nav__theme-toggle"
+        (click)="triggerThemeAnimation()"
+        [disabled]="animating()"
+        [attr.aria-label]="theme.isDark() ? ('nav.aria.switchToLight' | transloco) : ('nav.aria.switchToDark' | transloco)"
+        [attr.aria-pressed]="theme.isDark()"
+        type="button"
+      >
+        <ng-icon [name]="theme.isDark() ? 'solarSunBoldDuotone' : 'solarMoonBoldDuotone'" size="18" aria-hidden="true"></ng-icon>
+      </button>
+
+      @if (auth.isAuthenticated()) {
+        <button
+          class="app-nav__hamburger"
+          type="button"
+          (click)="menuOpen.update(v => !v)"
+          [attr.aria-label]="menuOpen() ? ('nav.aria.closeMenu' | transloco) : ('nav.aria.openMenu' | transloco)"
+          [attr.aria-expanded]="menuOpen()"
+        >
+          <ng-icon [name]="menuOpen() ? 'solarCloseCircleBoldDuotone' : 'solarHamburgerMenuBoldDuotone'" size="22" aria-hidden="true"></ng-icon>
+        </button>
+      }
+    </div>
+  </nav>
+</header>
+
+@if (auth.currentUser(); as user) {
+  <app-sheet
+    [open]="profileSheetOpen()"
+    [title]="'profile.title' | transloco"
+    (closed)="profileSheetOpen.set(false)"
+  >
+    <div class="profile-info">
+      <app-avatar [name]="user.name" [size]="64" />
+      <div class="profile-info__text">
+        <p class="profile-info__name">{{ user.name }}</p>
+        <p class="profile-info__email">{{ user.email }}</p>
+      </div>
+    </div>
+
+    <div class="profile-section">
+      <div class="profile-section__header">
+        <h3 class="profile-section__title">{{ 'profile.myConversations' | transloco }}</h3>
+        <button class="profile-section__new-btn" type="button" (click)="newChat()">{{ 'profile.newChat' | transloco }}</button>
+      </div>
+      @if (chatService.mySessions().length === 0) {
+        <p class="profile-section__empty">{{ 'profile.noConversations' | transloco }}</p>
+      } @else {
+        <ul class="chat-history-list">
+          @for (s of chatService.mySessions(); track s.id) {
+            <li>
+              <button
+                class="chat-history-item"
+                [class.chat-history-item--active]="s.id === chatService.currentSessionId()"
+                type="button"
+                (click)="openChatSession(s)"
+              >
+                <span class="chat-history-item__title">{{ s.title }}</span>
+                @if (s.shareToken) {
+                  <span class="chat-history-item__shared" [title]="'profile.shared' | transloco">↗</span>
+                }
+              </button>
+            </li>
+          }
+        </ul>
+      }
+    </div>
+
+    <button class="profile-sign-out" type="button" (click)="signOut()">{{ 'profile.signOut' | transloco }}</button>
+  </app-sheet>
+}
+
+@if (animating()) {
+  <div class="rocket-overlay" aria-hidden="true">
+    <div
+      class="wipe-overlay"
+      [class.wipe-overlay--to-dark]="!launchingFromDark()"
+      [class.wipe-overlay--to-light]="launchingFromDark()"
+    ></div>
+    @for (bubble of wipeBubbles; track $index) {
+      <span
+        class="wipe-bubble"
+        [class.wipe-bubble--to-dark]="!launchingFromDark()"
+        [class.wipe-bubble--to-light]="launchingFromDark()"
+        [style.bottom]="bubble.bottom"
+        [style.left]="bubble.left"
+        [style.width.px]="bubble.size"
+        [style.height.px]="bubble.size"
+        [style.animation-delay]="bubble.delay"
+      ></span>
+    }
+    <img
+      class="rocket-overlay__rocket"
+      [class.rocket-overlay__rocket--white]="launchingFromDark()"
+      [class.rocket-overlay__rocket--black]="!launchingFromDark()"
+      src="/rocket.svg"
+      alt=""
+      width="80"
+      height="80"
+    >
+    @for (circle of smokeCircles; track $index) {
+      <span
+        class="rocket-smoke"
+        [class.rocket-smoke--white]="launchingFromDark()"
+        [class.rocket-smoke--black]="!launchingFromDark()"
+        [style.bottom]="circle.bottom"
+        [style.animation-delay]="circle.delay"
+      ></span>
+    }
+  </div>
+}

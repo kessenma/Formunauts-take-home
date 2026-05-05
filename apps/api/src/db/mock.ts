@@ -18,7 +18,7 @@ const CHANNEL_PAYMENT_MAP: Record<string, string[]> = {
 const CHANNELS = Object.keys(CHANNEL_PAYMENT_MAP) as (keyof typeof CHANNEL_PAYMENT_MAP)[];
 
 function pick<T>(arr: T[]): T {
-  return arr[Math.floor(Math.random() * arr.length)];
+  return arr[Math.floor(Math.random() * arr.length)]!;
 }
 
 function randDate(start: string, end: string) {
@@ -48,7 +48,7 @@ export async function generateMockDonations(params: MockDataParams, campaignId: 
 
   const donationRows = donorIds.map((donorId) => {
     const channel = pick(CHANNELS);
-    const paymentMethod = pick(CHANNEL_PAYMENT_MAP[channel]);
+    const paymentMethod = pick(CHANNEL_PAYMENT_MAP[channel]!);
     return {
       campaignId,
       donorId,
@@ -64,6 +64,48 @@ export async function generateMockDonations(params: MockDataParams, campaignId: 
 
   await db.insert(donations).values(donationRows);
   return donationRows.length;
+}
+
+export async function generateOneMockDonation(
+  campaignId: number,
+  minAmount: number,
+  maxAmount: number,
+): Promise<number> {
+  const existingLocations = await db.select({ id: donationLocations.id }).from(donationLocations).limit(8);
+  const locationIds = existingLocations.map(l => l.id);
+
+  const channel = pick(CHANNELS);
+  const paymentMethod = pick(CHANNEL_PAYMENT_MAP[channel]!);
+  const firstName = pick(FIRST_NAMES);
+  const lastName = pick(LAST_NAMES);
+
+  const [newDonor] = await db
+    .insert(donors)
+    .values({
+      firstName,
+      lastName,
+      email: `${firstName.toLowerCase()}.${lastName.toLowerCase()}.${Date.now()}@mock.test`,
+    })
+    .returning({ id: donors.id });
+  if (!newDonor) throw new Error('Donor insert returned no rows');
+
+  const [inserted] = await db
+    .insert(donations)
+    .values({
+      campaignId,
+      donorId: newDonor.id,
+      locationId: locationIds.length > 0 ? pick(locationIds) : null,
+      amount: (Math.random() * (maxAmount - minAmount) + minAmount).toFixed(2),
+      currency: 'EUR',
+      paymentMethod: paymentMethod as 'sepa_direct_debit' | 'credit_card' | 'google_pay' | 'apple_pay' | 'paypal' | 'bank_transfer' | 'cash',
+      channel: channel as 'street' | 'door_to_door' | 'event' | 'phone' | 'email' | 'social_media',
+      date: new Date(),
+      isMock: true,
+    })
+    .returning({ id: donations.id });
+  if (!inserted) throw new Error('Donation insert returned no rows');
+
+  return inserted.id;
 }
 
 export async function deleteAllMockDonations(): Promise<number> {

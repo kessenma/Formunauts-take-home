@@ -1,0 +1,39 @@
+<div class="dropdown" [class.dropdown--open]="isOpen()">
+  <button
+    class="dropdown__trigger"
+    type="button"
+    [attr.aria-expanded]="isOpen()"
+    aria-haspopup="listbox"
+    (click)="toggle()"
+  >
+    @if (leadingIcon()) {
+      <ng-icon [name]="leadingIcon()!" size="13" aria-hidden="true" class="dropdown__leading-icon" />
+    }
+    <span class="dropdown__label">{{ selectedLabel() }}</span>
+    <ng-icon
+      class="dropdown__chevron"
+      name="solarAltArrowDownBoldDuotone"
+      size="12"
+      aria-hidden="true"
+    />
+  </button>
+
+  @if (isOpen()) {
+    <div class="dropdown__panel" role="listbox">
+      @for (opt of options(); track opt.value) {
+        <button
+          class="dropdown__option"
+          [class.dropdown__option--selected]="opt.value === value()"
+          type="button"
+          role="option"
+          [attr.aria-selected]="opt.value === value()"
+          (click)="select(opt)"
+        >
+          {{ opt.label }}
+        </button>
+      } @empty {
+        <p class="dropdown__empty">No options</p>
+      }
+    </div>
+  }
+</div>

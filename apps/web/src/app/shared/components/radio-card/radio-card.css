@@ -44,9 +44,7 @@
 /* Selected */
 .radio-card-item--selected {
   border-color: var(--color-lochmara);
-  background: var(--color-lochmara);
-  color: white;
-  box-shadow: 0 1px 4px color-mix(in srgb, var(--color-lochmara) 35%, transparent);
+  border-width: 2px;
 }
 
 /* Disabled */
@@ -55,18 +53,3 @@
   cursor: not-allowed;
 }
 
-/* ── Check badge ── */
-
-.radio-card-item__check {
-  position: absolute;
-  top: var(--spacing-8);
-  right: var(--spacing-8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 20px;
-  height: 20px;
-  border-radius: var(--radius-full);
-  background: white;
-  color: var(--color-lochmara);
-}

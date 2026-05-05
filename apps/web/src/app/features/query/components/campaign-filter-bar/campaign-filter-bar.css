@@ -1,3 +1,17 @@
+/* ── Host ────────────────────────────────────────────────────────────────── */
+
+:host {
+  display: block;
+}
+
+:host(.is-sticky) {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  /* shadow separates the sticky bar from scrolling content below */
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.08));
+}
+
 /* ── Filter Bar ────────────────────────────────────────────────────────── */
 
 .filter-bar {
@@ -6,7 +20,15 @@
   margin-bottom: var(--spacing-20);
   border: 1px solid var(--border-color);
   border-radius: var(--radius-cards);
-  overflow: hidden;
+  background: var(--surface-0);
+}
+
+.filter-bar > :first-child {
+  border-radius: var(--radius-cards) var(--radius-cards) 0 0;
+}
+
+.filter-bar > :last-child {
+  border-radius: 0 0 var(--radius-cards) var(--radius-cards);
 }
 
 /* ── Filter inputs row ─────────────────────────────────────────────────── */
@@ -18,6 +40,7 @@
   flex-wrap: wrap;
   padding: var(--spacing-16);
   background: var(--surface-1);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .filter-group {
@@ -32,6 +55,9 @@
 }
 
 .filter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
   font-size: var(--text-caption);
   font-weight: var(--font-weight-semibold);
   color: var(--text-muted);
@@ -68,20 +94,6 @@
 .filter-input--active {
   border-color: var(--color-lochmara);
   background: var(--color-off-white);
-}
-
-/* ── Select chevron ──────────────────────────────────────────────────────── */
-
-.filter-input--select {
-  padding-right: 2rem;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%23615d59' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right var(--spacing-12) center;
-  cursor: pointer;
-}
-
-.filter-input--select.filter-input--active {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'%3E%3Cpath d='M1 1l4 4 4-4' stroke='%230074C8' stroke-width='1.5' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
 }
 
 /* ── Amount inputs ───────────────────────────────────────────────────────── */
@@ -155,7 +167,7 @@
   color: var(--text-primary);
 }
 
-/* ── Active filter chips (Info Badge style from DESIGN.md) ───────────────── */
+/* ── Active filter chips ─────────────────────────────────────────────────── */
 
 .active-chips {
   display: flex;
@@ -165,6 +177,7 @@
   padding: var(--spacing-8) var(--spacing-16);
   background: var(--color-off-white);
   border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
 }
 
 .chips-label {
@@ -216,125 +229,18 @@
 .controls-row {
   display: flex;
   align-items: center;
-  gap: var(--spacing-16);
+  gap: var(--spacing-8);
   flex-wrap: wrap;
   padding: var(--spacing-12) var(--spacing-16);
   background: var(--surface-0);
-  border-top: 1px solid var(--border-color);
 }
 
-/* ── Pagination ──────────────────────────────────────────────────────────── */
+/* ── Filter toggle button ────────────────────────────────────────────────── */
 
-.pagination-nav-row {
-  display: flex;
+.filter-toggle-btn {
+  display: inline-flex;
   align-items: center;
-  gap: var(--spacing-12);
-  flex-wrap: wrap;
-  padding: var(--spacing-8) var(--spacing-16);
-  background: var(--surface-0);
-  border-top: 1px solid var(--border-color);
-}
-
-.control-group {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-8);
-}
-
-.control-label {
-  font-size: var(--text-caption);
-  font-weight: var(--font-weight-medium);
-  color: var(--text-muted);
-  white-space: nowrap;
-}
-
-.limit-btn-group {
-  display: flex;
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  overflow: hidden;
-}
-
-.limit-btn {
-  height: 30px;
-  padding: 0 var(--spacing-8);
-  border: none;
-  border-left: 1px solid var(--border-color);
-  background: var(--surface-1);
-  font-size: var(--text-caption);
-  font-family: var(--font-family-base);
-  color: var(--text-primary);
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  transition: background 0.12s, color 0.12s;
-}
-
-.limit-btn:first-child {
-  border-left: none;
-}
-
-.limit-btn:hover:not(.active) {
-  background: var(--surface-0);
-  color: var(--color-lochmara);
-}
-
-.limit-btn.active {
-  background: var(--color-lochmara);
-  color: var(--color-paper-white);
-}
-
-.pagination {
-  display: flex;
-  align-items: center;
-  gap: 2px;
-}
-
-.page-btn {
-  min-width: 30px;
-  height: 30px;
-  padding: 0 var(--spacing-8);
-  border: 1px solid var(--border-color);
-  border-radius: var(--radius-sm);
-  background: var(--surface-1);
-  font-size: var(--text-caption);
-  font-family: var(--font-family-base);
-  cursor: pointer;
-  color: var(--text-primary);
-  transition: background 0.12s, border-color 0.12s, color 0.12s;
-}
-
-.page-btn:hover:not(:disabled) {
-  background: var(--surface-0);
-  border-color: var(--color-lochmara);
-  color: var(--color-lochmara);
-}
-
-.page-btn.active {
-  background: var(--color-lochmara);
-  color: var(--color-paper-white);
-  border-color: var(--color-lochmara);
-  font-weight: var(--font-weight-semibold);
-}
-
-.page-btn:disabled {
-  opacity: 0.35;
-  cursor: not-allowed;
-}
-
-.filter-input--page {
-  width: 48px;
-  height: 30px;
-  text-align: center;
-  font-size: var(--text-caption);
-  padding: 0 var(--spacing-8);
-}
-
-.filter-input--page::-webkit-outer-spin-button,
-.filter-input--page::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
-.filter-input--page[type='number'] { -moz-appearance: textfield; appearance: textfield; }
-
-.page-go-btn {
+  gap: var(--spacing-6, 6px);
   height: 30px;
   padding: 0 var(--spacing-12);
   border: 1px solid var(--border-color);
@@ -342,20 +248,105 @@
   background: var(--surface-1);
   font-size: var(--text-caption);
   font-family: var(--font-family-base);
-  color: var(--text-primary);
-  cursor: pointer;
-  transition: background 0.12s, border-color 0.12s;
-}
-
-.page-go-btn:hover {
-  background: var(--surface-0);
-  border-color: var(--color-lochmara);
-}
-
-.pagination-info {
-  margin-left: auto;
-  font-size: var(--text-caption);
   font-weight: var(--font-weight-medium);
   color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
   white-space: nowrap;
+}
+
+.filter-toggle-btn:hover {
+  background: var(--surface-0);
+  border-color: var(--color-lochmara);
+  color: var(--color-lochmara);
+}
+
+.filter-toggle-btn.active {
+  background: var(--color-off-white);
+  border-color: var(--color-lochmara);
+  color: var(--color-lochmara);
+}
+
+.filter-toggle-btn.has-filters:not(.active) {
+  border-color: rgba(9, 127, 232, 0.4);
+  color: var(--color-sky-surge);
+}
+
+.filter-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--color-lochmara);
+  color: var(--color-paper-white);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+}
+
+/* ── Paginated view switch button ────────────────────────────────────────── */
+
+.pagination-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-6, 6px);
+  height: 30px;
+  padding: 0 var(--spacing-12);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  font-size: var(--text-caption);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+
+.pagination-switch-btn:hover {
+  background: var(--surface-0);
+  border-color: var(--color-lochmara);
+  color: var(--color-lochmara);
+}
+
+/* ── Mobile ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .filter-row {
+    gap: var(--spacing-8);
+  }
+
+  .filter-group {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .range-group {
+    width: 100%;
+  }
+
+  .filter-input--date {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+
+  .amount-wrap {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .filter-input--amount {
+    width: 100%;
+  }
+
+  .clear-btn {
+    width: 100%;
+    align-self: stretch;
+    text-align: center;
+  }
 }

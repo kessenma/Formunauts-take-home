@@ -2,13 +2,14 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-signup',
   templateUrl: './signup.html',
   styleUrl: './signup.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe],
 })
 export class Signup {
   private fb = inject(FormBuilder);

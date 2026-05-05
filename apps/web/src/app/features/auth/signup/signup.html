@@ -4,7 +4,7 @@
       <span class="auth-brand__name">Formunauts</span>
     </div>
 
-    <h1 class="auth-title">Create account</h1>
+    <h1 class="auth-title">{{ 'auth.signup.title' | transloco }}</h1>
 
     @if (errorMessage()) {
       <p class="form-msg form-msg--error" role="alert">{{ errorMessage() }}</p>
@@ -12,7 +12,7 @@
 
     <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="auth-form">
       <div class="form-row">
-        <label class="form-label" for="name">Full name</label>
+        <label class="form-label" for="name">{{ 'auth.signup.fullName' | transloco }}</label>
         <input
           id="name"
           class="form-input"
@@ -23,12 +23,12 @@
           placeholder="Jane Smith"
         />
         @if (form.controls.name.invalid && form.controls.name.touched) {
-          <span class="form-error" role="alert">Name must be at least 2 characters</span>
+          <span class="form-error" role="alert">{{ 'auth.signup.errors.nameRequired' | transloco }}</span>
         }
       </div>
 
       <div class="form-row">
-        <label class="form-label" for="email">Email</label>
+        <label class="form-label" for="email">{{ 'auth.signup.email' | transloco }}</label>
         <input
           id="email"
           class="form-input"
@@ -39,12 +39,12 @@
           placeholder="you@example.com"
         />
         @if (form.controls.email.invalid && form.controls.email.touched) {
-          <span class="form-error" role="alert">Valid email is required</span>
+          <span class="form-error" role="alert">{{ 'auth.signup.errors.emailRequired' | transloco }}</span>
         }
       </div>
 
       <div class="form-row">
-        <label class="form-label" for="password">Password</label>
+        <label class="form-label" for="password">{{ 'auth.signup.password' | transloco }}</label>
         <input
           id="password"
           class="form-input"
@@ -55,18 +55,18 @@
           placeholder="Min. 8 characters"
         />
         @if (form.controls.password.invalid && form.controls.password.touched) {
-          <span class="form-error" role="alert">Password must be at least 8 characters</span>
+          <span class="form-error" role="alert">{{ 'auth.signup.errors.passwordRequired' | transloco }}</span>
         }
       </div>
 
       <button class="btn btn--primary btn--full" type="submit" [disabled]="submitting()">
-        {{ submitting() ? 'Creating account…' : 'Create account' }}
+        {{ submitting() ? ('auth.signup.submitting' | transloco) : ('auth.signup.submit' | transloco) }}
       </button>
     </form>
 
     <p class="auth-footer">
-      Already have an account?
-      <a routerLink="/login" class="auth-link">Sign in</a>
+      {{ 'auth.signup.hasAccount' | transloco }}
+      <a routerLink="/login" class="auth-link">{{ 'auth.signup.signIn' | transloco }}</a>
     </p>
   </div>
 </div>

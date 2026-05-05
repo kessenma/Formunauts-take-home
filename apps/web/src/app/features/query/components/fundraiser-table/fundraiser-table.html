@@ -1,0 +1,22 @@
+<app-table
+  [columns]="columns"
+  [sortParams]="null"
+  [isEmpty]="fundraisers().length === 0"
+  emptyMessage="No fundraisers found."
+  ariaLabel="Fundraisers table"
+>
+  @for (f of fundraisers(); track f.id) {
+    <tr>
+      <td>{{ f.firstName }} {{ f.lastName }}</td>
+      <td>{{ f.email ?? '—' }}</td>
+      <td>{{ f.phone ?? '—' }}</td>
+      <td>
+        <span class="status-badge" [class.status-badge--active]="f.isActive">
+          {{ f.isActive ? 'Active' : 'Inactive' }}
+        </span>
+      </td>
+      <td>{{ f.totalRaised | currency:'EUR':'symbol':'1.2-2' }}</td>
+      <td>{{ f.donationCount }}</td>
+    </tr>
+  }
+</app-table>

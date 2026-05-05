@@ -1,0 +1,128 @@
+<form (submit)="$event.preventDefault(); submit()" aria-label="Send a question">
+  <!-- Slash menu popup (above chips and input) -->
+  @if (slashMenuOpen()) {
+    <div class="slash-menu" (click)="$event.stopPropagation()" role="listbox" aria-label="Slash commands">
+      @if (slashMenuLevel() === 1) {
+        @for (cmd of filteredCommands(); track cmd.type; let i = $index) {
+          <div
+            class="slash-menu__item-row"
+            [class.slash-menu__item-row--focused]="slashMenuFocusIndex() === i"
+            role="option"
+          >
+            <button
+              type="button"
+              class="slash-menu__item"
+              (click)="tagTable(cmd.type)"
+              [attr.aria-label]="'Tag ' + cmd.label"
+            >
+              <ng-icon [name]="cmd.icon" size="14" aria-hidden="true"></ng-icon>
+              {{ cmd.label }}
+            </button>
+            <button
+              type="button"
+              class="slash-menu__item-drill"
+              (click)="selectCommandType(cmd.type)"
+              [attr.aria-label]="'Pick specific ' + cmd.label"
+              title="Pick specific"
+            >
+              <ng-icon name="solarAltArrowRightBoldDuotone" size="12" aria-hidden="true"></ng-icon>
+            </button>
+          </div>
+        }
+      } @else {
+        <div class="slash-menu__header">
+          <button
+            type="button"
+            class="slash-menu__back"
+            (click)="slashMenuLevel.set(1); slashMenuFocusIndex.set(0)"
+            aria-label="Back to command list"
+          >
+            <ng-icon name="solarAltArrowLeftBoldDuotone" size="12" aria-hidden="true"></ng-icon>
+          </button>
+          <span class="slash-menu__type-label">{{ getCommandLabel(slashMenuType()) }}</span>
+        </div>
+
+        @if (slashMenuType() === 'date') {
+          <div class="slash-menu__date-input">
+            <input
+              #dateInput
+              type="text"
+              class="slash-menu__date-field"
+              placeholder='e.g. "2024" or "March 2024"'
+              (keydown.enter)="$event.preventDefault(); commitDate(dateInput.value)"
+            />
+            <button type="button" class="slash-menu__date-confirm" (click)="commitDate(dateInput.value)">
+              Add
+            </button>
+          </div>
+        } @else {
+          @if (slashMenuType() === 'donor') {
+            <input
+              type="text"
+              class="slash-menu__search"
+              placeholder="Search donors…"
+              [value]="slashMenuSearch()"
+              (input)="onSlashSearchInput($any($event.target).value)"
+              aria-label="Search donors"
+            />
+          }
+          @if (slashMenuLoading()) {
+            <p class="slash-menu__loading">Loading…</p>
+          }
+          @for (item of filteredItems(); track item.id ?? item.label; let i = $index) {
+            <button
+              type="button"
+              class="slash-menu__item"
+              [class.slash-menu__item--focused]="slashMenuFocusIndex() === i"
+              (click)="commitItem(item)"
+              role="option"
+            >
+              {{ item.label }}
+            </button>
+          }
+          @if (!slashMenuLoading() && filteredItems().length === 0) {
+            <p class="slash-menu__empty">No results</p>
+          }
+        }
+      }
+    </div>
+  }
+
+  <!-- Chip strip -->
+  @if (mentions().length > 0) {
+    <div class="slash-chips" aria-label="Selected context">
+      @for (chip of mentions(); track $index; let i = $index) {
+        <span class="slash-chip">
+          <ng-icon [name]="getChipIcon(chip.type)" size="11" aria-hidden="true"></ng-icon>
+          {{ chip.label }}
+          <button
+            type="button"
+            class="slash-chip__remove"
+            (click)="removeMention(i)"
+            [attr.aria-label]="'Remove ' + chip.label"
+          >
+            <ng-icon name="solarCloseCircleBoldDuotone" size="11" aria-hidden="true"></ng-icon>
+          </button>
+        </span>
+      }
+    </div>
+  }
+
+  <!-- Input row -->
+  <div class="slash-input-row">
+    <app-text-input
+      #questionInput
+      [formControl]="questionControl"
+      [placeholder]="placeholder()"
+      [multiline]="true"
+      [autoGrow]="true"
+      [rows]="1"
+      (keydown)="onInputKeydown($event)"
+    ></app-text-input>
+    <button
+      type="submit"
+      [attr.disabled]="(submitDisabled() || !questionControl.value.trim()) ? '' : null"
+      aria-label="Send"
+    ><ng-icon name="solarArrowRightBoldDuotone" size="16" aria-hidden="true"></ng-icon></button>
+  </div>
+</form>

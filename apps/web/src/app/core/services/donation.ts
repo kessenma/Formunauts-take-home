@@ -36,6 +36,7 @@ export class DonationService {
     return `/api/donations?${params}`;
   });
 
+  readonly liveEnabled = signal(true);
   readonly #wsInserted = signal<Donation[]>([]);
   readonly #accumulated = signal<Donation[]>([]);
   readonly #lastAccumulatedPage = signal(0);
@@ -73,7 +74,12 @@ export class DonationService {
   });
 
   prependDonation(donation: Donation): void {
+    if (!this.liveEnabled()) return;
     this.#wsInserted.update((prev) => [donation, ...prev]);
+  }
+
+  toggleLive(): void {
+    this.liveEnabled.update(v => !v);
   }
 
   submit(req: CreateDonationRequest): Observable<Donation> {

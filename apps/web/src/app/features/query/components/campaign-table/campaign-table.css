@@ -1,0 +1,17 @@
+td {
+  padding: var(--spacing-12) var(--spacing-12);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover td {
+  background: var(--surface-0);
+}
+
+.status {
+  text-transform: capitalize;
+}

@@ -1,311 +1,182 @@
-<div class="chat-fab">
+<div class="chat-fab" [class.chat-fab--hidden]="fabHidden()">
   <!-- Shared body — instantiated in panel or modal, never both simultaneously -->
   <ng-template #chatBody>
-    <!-- Model not yet ready: show status instead of chat -->
-    @if (!modelReady()) {
-      <div class="model-status" aria-live="polite">
-        @switch (modelStatus()?.phase) {
-          @case ('downloading') {
-            <div class="model-status__spinner" aria-hidden="true"></div>
-            <p class="model-status__label">Downloading AI model…</p>
-            <div class="model-status__bar-track" role="progressbar"
-                 [attr.aria-valuenow]="modelStatus()!.progress"
-                 aria-valuemin="0" aria-valuemax="100">
-              <div
-                class="model-status__bar-fill"
-                [style.width.%]="modelStatus()!.progress"
-              ></div>
-            </div>
-            <p class="model-status__detail">
-              {{ modelStatus()!.detail || 'Starting…' }}
-              &nbsp;({{ modelStatus()!.progress }}%)
-            </p>
-            <button class="model-status__pause-btn" type="button" (click)="pauseDownload()">
-              <ng-icon name="solarPauseBoldDuotone" size="16" aria-hidden="true"></ng-icon>Pause
-            </button>
-          }
-          @case ('paused') {
-            <div class="model-status__icon" aria-hidden="true"><ng-icon name="solarPauseBoldDuotone" size="28"></ng-icon></div>
-            <p class="model-status__label">Download paused</p>
-            <div class="model-status__bar-track" role="progressbar"
-                 [attr.aria-valuenow]="modelStatus()!.progress"
-                 aria-valuemin="0" aria-valuemax="100">
-              <div
-                class="model-status__bar-fill"
-                [style.width.%]="modelStatus()!.progress"
-              ></div>
-            </div>
-            <p class="model-status__detail">{{ modelStatus()!.detail }}</p>
-            <button class="model-status__pause-btn model-status__pause-btn--resume" type="button" (click)="resumeDownload()">
-              <ng-icon name="solarPlayBoldDuotone" size="16" aria-hidden="true"></ng-icon>Resume
-            </button>
-          }
-          @case ('loading') {
-            <div class="model-status__icon model-status__icon--spin" aria-hidden="true"><ng-icon name="solarRefreshCircleBoldDuotone" size="28"></ng-icon></div>
-            <p class="model-status__label">Loading model into memory…</p>
-            <div class="model-status__bar-track model-status__bar-track--indeterminate"
-                 role="progressbar" aria-label="Loading">
-              <div class="model-status__bar-fill model-status__bar-fill--indeterminate"></div>
-            </div>
-            <p class="model-status__detail">This takes ~30 s on first load.</p>
-          }
-          @case ('error') {
-            <div class="model-status__icon" aria-hidden="true"><ng-icon name="solarDangerCircleBoldDuotone" size="28"></ng-icon></div>
-            <p class="model-status__label model-status__label--error">Model failed to load</p>
-            <p class="model-status__detail">{{ modelStatus()!.error || 'Unknown error' }}</p>
-          }
-          @default {
-            <div class="model-status__icon model-status__icon--spin" aria-hidden="true"><ng-icon name="solarRefreshCircleBoldDuotone" size="28"></ng-icon></div>
-            <p class="model-status__label">Connecting to AI service…</p>
-            <div class="model-status__bar-track model-status__bar-track--indeterminate"
-                 role="progressbar" aria-label="Connecting">
-              <div class="model-status__bar-fill model-status__bar-fill--indeterminate"></div>
-            </div>
-          }
+    <div
+      class="chat-content"
+      [class.chat-content--modal]="isExpanded()"
+    >
+      <!-- Messages — always visible regardless of model state -->
+      <div
+        class="chat-panel__messages"
+        role="log"
+        aria-live="polite"
+        aria-atomic="false"
+        aria-label="Conversation"
+      >
+        @if (messages().length === 0 && modelReady()) {
+          <p class="chat-panel__hint">
+            Try: "Who donated the most?" or "Which channel raised the most?" or "Top 5 donors this year"
+          </p>
         }
 
-        @if (modelStatus()?.model_name) {
-          <div class="model-info" [class.model-info--open]="modelInfoOpen()">
-            <button class="model-info__btn" type="button" aria-label="About this model"
-              [attr.aria-expanded]="modelInfoOpen()"
-              (click)="toggleModelInfo($event)"><ng-icon name="solarInfoCircleBoldDuotone" size="16" aria-hidden="true"></ng-icon></button>
-            <div class="model-info__popup" role="tooltip">
-              <span class="model-info__name">{{ modelStatus()!.model_name }}</span>
-              <a class="model-info__link" [href]="modelStatus()!.model_url" target="_blank" rel="noopener noreferrer">
-                View on HuggingFace ↗
-              </a>
+        @for (msg of messages(); track $index) {
+          <div
+            class="chat-msg"
+            [class.chat-msg--user]="msg.role === 'user'"
+            [class.chat-msg--assistant]="msg.role === 'assistant'"
+          >
+            <div
+              class="chat-msg__bubble"
+              [class.chat-msg__bubble--error]="msg.error"
+            >
+              <p class="chat-msg__text">{{ msg.text }}</p>
+
+              @if (!msg.error && msg.columns && msg.columns.length > 0 && msg.rows && msg.rows.length > 0) {
+                <div class="chat-msg__results">
+                  @if (msg.rows.length === 1 && msg.columns.length === 1) {
+                    <span class="chat-msg__value">{{ msg.rows[0][0] }}</span>
+                  } @else {
+                    <div class="chat-msg__table-wrap">
+                      <table class="chat-msg__table">
+                        <thead>
+                          <tr>
+                            @for (col of msg.columns; track col) {
+                              <th scope="col">{{ col }}</th>
+                            }
+                          </tr>
+                        </thead>
+                        <tbody>
+                          @for (row of msg.rows; track $index) {
+                            <tr>
+                              @for (cell of row; track $index) {
+                                <td>{{ cell }}</td>
+                              }
+                            </tr>
+                          }
+                        </tbody>
+                      </table>
+                    </div>
+                  }
+                </div>
+              }
+
+              @if (msg.sql) {
+                <details class="chat-msg__sql">
+                  <summary>View SQL</summary>
+                  <pre>{{ msg.sql }}</pre>
+                </details>
+              }
             </div>
           </div>
         }
-      </div>
 
-    } @else {
-      <!-- Model ready: normal chat UI -->
-      <div
-        class="chat-content"
-        [class.chat-content--modal]="isExpanded()"
-      >
-        <div
-          class="chat-panel__messages"
-          role="log"
-          aria-live="polite"
-          aria-atomic="false"
-          aria-label="Conversation"
-        >
-          @if (messages().length === 0) {
-            <p class="chat-panel__hint">
-              Try: "Who donated the most?" or "Which channel raised the most?" or "Top 5 donors this year"
-            </p>
-          }
-
-          @for (msg of messages(); track $index) {
-            <div
-              class="chat-msg"
-              [class.chat-msg--user]="msg.role === 'user'"
-              [class.chat-msg--assistant]="msg.role === 'assistant'"
-            >
-              <div
-                class="chat-msg__bubble"
-                [class.chat-msg__bubble--error]="msg.error"
-              >
-                <p class="chat-msg__text">{{ msg.text }}</p>
-
-                @if (!msg.error && msg.columns && msg.columns.length > 0 && msg.rows && msg.rows.length > 0) {
-                  <div class="chat-msg__results">
-                    @if (msg.rows.length === 1 && msg.columns.length === 1) {
-                      <span class="chat-msg__value">{{ msg.rows[0][0] }}</span>
-                    } @else {
-                      <div class="chat-msg__table-wrap">
-                        <table class="chat-msg__table">
-                          <thead>
-                            <tr>
-                              @for (col of msg.columns; track col) {
-                                <th scope="col">{{ col }}</th>
-                              }
-                            </tr>
-                          </thead>
-                          <tbody>
-                            @for (row of msg.rows; track $index) {
-                              <tr>
-                                @for (cell of row; track $index) {
-                                  <td>{{ cell }}</td>
-                                }
-                              </tr>
-                            }
-                          </tbody>
-                        </table>
-                      </div>
-                    }
-                  </div>
-                }
-
-                @if (msg.sql) {
-                  <details class="chat-msg__sql">
-                    <summary>View SQL</summary>
-                    <pre>{{ msg.sql }}</pre>
-                  </details>
-                }
+        @if (isLoading()) {
+          <div class="chat-msg chat-msg--assistant" aria-label="Assistant is thinking">
+            <div class="chat-msg__bubble">
+              <div class="chat-msg__typing" aria-hidden="true">
+                <span></span><span></span><span></span>
               </div>
             </div>
-          }
+          </div>
+        }
 
-          @if (isLoading()) {
-            <div class="chat-msg chat-msg--assistant" aria-label="Assistant is thinking">
-              <div class="chat-msg__bubble">
-                <div class="chat-msg__typing" aria-hidden="true">
-                  <span></span><span></span><span></span>
+        <div #messagesEnd></div>
+      </div>
+
+      <!-- Bottom: model status (loading) | input form (ready) | read-only notice -->
+      @if (isOwner()) {
+        @if (!modelReady()) {
+          <div class="model-status model-status--compact" aria-live="polite" (click)="$event.stopPropagation()">
+            @switch (modelStatus()?.phase) {
+              @case ('downloading') {
+                <div class="model-status__spinner" aria-hidden="true"></div>
+                <p class="model-status__label">Downloading AI model…</p>
+                <div class="model-status__bar-track" role="progressbar"
+                     [attr.aria-valuenow]="modelStatus()!.progress"
+                     aria-valuemin="0" aria-valuemax="100">
+                  <div
+                    class="model-status__bar-fill"
+                    [style.width.%]="modelStatus()!.progress"
+                  ></div>
+                </div>
+                <p class="model-status__detail">
+                  {{ modelStatus()!.detail || 'Starting…' }}
+                  &nbsp;({{ modelStatus()!.progress }}%)
+                </p>
+                <button class="model-status__pause-btn" type="button" (click)="pauseDownload()">
+                  <ng-icon name="solarPauseBoldDuotone" size="16" aria-hidden="true"></ng-icon>Pause
+                </button>
+              }
+              @case ('paused') {
+                <div class="model-status__icon" aria-hidden="true"><ng-icon name="solarPauseBoldDuotone" size="28"></ng-icon></div>
+                <p class="model-status__label">Download paused</p>
+                <div class="model-status__bar-track" role="progressbar"
+                     [attr.aria-valuenow]="modelStatus()!.progress"
+                     aria-valuemin="0" aria-valuemax="100">
+                  <div
+                    class="model-status__bar-fill"
+                    [style.width.%]="modelStatus()!.progress"
+                  ></div>
+                </div>
+                <p class="model-status__detail">{{ modelStatus()!.detail }}</p>
+                <button class="model-status__pause-btn model-status__pause-btn--resume" type="button" (click)="resumeDownload()">
+                  <ng-icon name="solarPlayBoldDuotone" size="16" aria-hidden="true"></ng-icon>Resume
+                </button>
+              }
+              @case ('loading') {
+                <div class="model-status__icon model-status__icon--spin" aria-hidden="true"><ng-icon name="solarRefreshCircleBoldDuotone" size="28"></ng-icon></div>
+                <p class="model-status__label">Loading model into memory…</p>
+                <div class="model-status__bar-track model-status__bar-track--indeterminate"
+                     role="progressbar" aria-label="Loading">
+                  <div class="model-status__bar-fill model-status__bar-fill--indeterminate"></div>
+                </div>
+                <p class="model-status__detail">This takes ~30 s on first load.</p>
+              }
+              @case ('error') {
+                <div class="model-status__icon" aria-hidden="true"><ng-icon name="solarDangerCircleBoldDuotone" size="28"></ng-icon></div>
+                <p class="model-status__label model-status__label--error">Model failed to load</p>
+                <p class="model-status__detail">{{ modelStatus()!.error || 'Unknown error' }}</p>
+              }
+              @default {
+                <div class="model-status__icon model-status__icon--spin" aria-hidden="true"><ng-icon name="solarRefreshCircleBoldDuotone" size="28"></ng-icon></div>
+                <p class="model-status__label">Connecting to AI service…</p>
+                <div class="model-status__bar-track model-status__bar-track--indeterminate"
+                     role="progressbar" aria-label="Connecting">
+                  <div class="model-status__bar-fill model-status__bar-fill--indeterminate"></div>
+                </div>
+              }
+            }
+
+            @if (modelStatus()?.model_name) {
+              <div class="model-info" [class.model-info--open]="modelInfoOpen()">
+                <button class="model-info__btn" type="button" aria-label="About this model"
+                  [attr.aria-expanded]="modelInfoOpen()"
+                  (click)="toggleModelInfo($event)"><ng-icon name="solarInfoCircleBoldDuotone" size="16" aria-hidden="true"></ng-icon></button>
+                <div class="model-info__popup" role="tooltip">
+                  <span class="model-info__name">{{ modelStatus()!.model_name }}</span>
+                  <a class="model-info__link" [href]="modelStatus()!.model_url" target="_blank" rel="noopener noreferrer">
+                    View on HuggingFace ↗
+                  </a>
                 </div>
               </div>
-            </div>
-          }
-
-          <div #messagesEnd></div>
-        </div>
-
-        @if (isOwner()) {
-          <form
-            class="chat-panel__form"
-            (submit)="$event.preventDefault(); send()"
-            aria-label="Send a question"
-          >
-            <!-- Slash menu popup (above chips and input) -->
-            @if (slashMenuOpen()) {
-              <div class="slash-menu" (click)="$event.stopPropagation()" role="listbox" aria-label="Slash commands">
-                @if (slashMenuLevel() === 1) {
-                  @for (cmd of filteredCommands(); track cmd.type; let i = $index) {
-                    <div
-                      class="slash-menu__item-row"
-                      [class.slash-menu__item-row--focused]="slashMenuFocusIndex() === i"
-                      role="option"
-                    >
-                      <button
-                        type="button"
-                        class="slash-menu__item"
-                        (click)="tagTable(cmd.type)"
-                        [attr.aria-label]="'Tag ' + cmd.label"
-                      >
-                        <ng-icon [name]="cmd.icon" size="14" aria-hidden="true"></ng-icon>
-                        {{ cmd.label }}
-                      </button>
-                      <button
-                        type="button"
-                        class="slash-menu__item-drill"
-                        (click)="selectCommandType(cmd.type)"
-                        [attr.aria-label]="'Pick specific ' + cmd.label"
-                        title="Pick specific"
-                      >
-                        <ng-icon name="solarAltArrowRightBoldDuotone" size="12" aria-hidden="true"></ng-icon>
-                      </button>
-                    </div>
-                  }
-                } @else {
-                  <div class="slash-menu__header">
-                    <button
-                      type="button"
-                      class="slash-menu__back"
-                      (click)="slashMenuLevel.set(1); slashMenuFocusIndex.set(0)"
-                      aria-label="Back to command list"
-                    >
-                      <ng-icon name="solarAltArrowLeftBoldDuotone" size="12" aria-hidden="true"></ng-icon>
-                    </button>
-                    <span class="slash-menu__type-label">{{ getCommandLabel(slashMenuType()) }}</span>
-                  </div>
-
-                  @if (slashMenuType() === 'date') {
-                    <div class="slash-menu__date-input">
-                      <input
-                        #dateInput
-                        type="text"
-                        class="slash-menu__date-field"
-                        placeholder='e.g. "2024" or "March 2024"'
-                        (keydown.enter)="$event.preventDefault(); commitDate(dateInput.value)"
-                      />
-                      <button type="button" class="slash-menu__date-confirm" (click)="commitDate(dateInput.value)">
-                        Add
-                      </button>
-                    </div>
-                  } @else {
-                    @if (slashMenuType() === 'donor') {
-                      <input
-                        type="text"
-                        class="slash-menu__search"
-                        placeholder="Search donors…"
-                        [value]="slashMenuSearch()"
-                        (input)="onSlashSearchInput($any($event.target).value)"
-                        aria-label="Search donors"
-                      />
-                    }
-                    @if (slashMenuLoading()) {
-                      <p class="slash-menu__loading">Loading…</p>
-                    }
-                    @for (item of filteredItems(); track item.id ?? item.label; let i = $index) {
-                      <button
-                        type="button"
-                        class="slash-menu__item"
-                        [class.slash-menu__item--focused]="slashMenuFocusIndex() === i"
-                        (click)="commitItem(item)"
-                        role="option"
-                      >
-                        {{ item.label }}
-                      </button>
-                    }
-                    @if (!slashMenuLoading() && filteredItems().length === 0) {
-                      <p class="slash-menu__empty">No results</p>
-                    }
-                  }
-                }
-              </div>
             }
-
-            <!-- Chip strip -->
-            @if (mentions().length > 0) {
-              <div class="slash-chips" aria-label="Selected context">
-                @for (chip of mentions(); track $index; let i = $index) {
-                  <span class="slash-chip">
-                    <ng-icon [name]="getChipIcon(chip.type)" size="11" aria-hidden="true"></ng-icon>
-                    {{ chip.label }}
-                    <button
-                      type="button"
-                      class="slash-chip__remove"
-                      (click)="removeMention(i)"
-                      [attr.aria-label]="'Remove ' + chip.label"
-                    >
-                      <ng-icon name="solarCloseCircleBoldDuotone" size="11" aria-hidden="true"></ng-icon>
-                    </button>
-                  </span>
-                }
-              </div>
-            }
-
-            <!-- Input row -->
-            <div class="slash-input-row">
-              <app-text-input
-                #questionInput
-                [formControl]="questionControl"
-                placeholder="Ask about donations… (/ for context)"
-                [multiline]="true"
-                [autoGrow]="true"
-                [rows]="1"
-                (keydown)="onInputKeydown($event)"
-              ></app-text-input>
-              <button
-                type="submit"
-                [attr.disabled]="(isLoading() || !questionControl.value.trim()) ? '' : null"
-                aria-label="Send"
-              ><ng-icon name="solarArrowRightBoldDuotone" size="16" aria-hidden="true"></ng-icon></button>
-            </div>
-          </form>
+          </div>
         } @else {
-          <p class="chat-panel__shared-notice">
-            @if (isSharedView()) {
-              Shared by {{ sharedUserName() }} — read only
-            } @else {
-              View only — you can't add messages to someone else's conversation
-            }
-          </p>
+          <app-chat-input
+            [submitDisabled]="isLoading()"
+            (submitted)="onChatInputSubmit($event)"
+          ></app-chat-input>
         }
-      </div>
-    }
+      } @else {
+        <p class="chat-panel__shared-notice">
+          @if (isSharedView()) {
+            Shared by {{ sharedUserName() }} — read only
+          } @else {
+            View only — you can't add messages to someone else's conversation
+          }
+        </p>
+      }
+    </div>
   </ng-template>
 
   <button

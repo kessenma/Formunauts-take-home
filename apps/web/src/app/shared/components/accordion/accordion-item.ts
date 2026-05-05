@@ -2,7 +2,9 @@ import {
   ChangeDetectionStrategy,
   Component,
   ViewEncapsulation,
+  effect,
   input,
+  output,
   signal,
 } from '@angular/core';
 import { NgIcon } from '@ng-icons/core';
@@ -19,10 +21,18 @@ let nextId = 0;
 })
 export class AccordionItem {
   readonly title = input.required<string>();
+  readonly initiallyOpen = input<boolean>(false);
+  readonly toggled = output<boolean>();
   readonly isOpen = signal(false);
   readonly panelId = `accordion-panel-${nextId++}`;
 
+  constructor() {
+    effect(() => { if (this.initiallyOpen()) this.isOpen.set(true); });
+  }
+
   toggle(): void {
-    this.isOpen.update(v => !v);
+    const next = !this.isOpen();
+    this.isOpen.set(next);
+    this.toggled.emit(next);
   }
 }

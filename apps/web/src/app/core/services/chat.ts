@@ -6,7 +6,8 @@ import type {
   CreateSessionResponse, ShareResponse, SharedThreadResponse,
   SlashMention,
 } from '@formunauts/shared';
-import { Observable } from 'rxjs';
+import { Observable, Subscription, interval, of } from 'rxjs';
+import { catchError, startWith, switchMap, takeWhile } from 'rxjs/operators';
 
 @Injectable({ providedIn: 'root' })
 export class ChatService {
@@ -14,6 +15,8 @@ export class ChatService {
 
   // ── Shared state ────────────────────────────────────────────────────────────
   readonly isOpen = signal(false);
+  readonly modelStatus = signal<ModelStatus | null>(null);
+  #pollSub: Subscription | null = null;
   readonly currentSessionId = signal<number | null>(null);
   readonly currentSessionOwnerId = signal<string | null>(null);
   readonly sessions = signal<ChatSession[]>([]);
@@ -64,6 +67,21 @@ export class ChatService {
 
   resumeDownload(): Observable<void> {
     return this.#http.post<void>('/api/resume-download', {});
+  }
+
+  ensurePolling(): void {
+    if (this.#pollSub) return;
+    this.#pollSub = interval(2000).pipe(
+      startWith(0),
+      switchMap(() => this.getModelStatus().pipe(catchError(() => of(null)))),
+      takeWhile((s) => s === null || (!s.model_loaded && s.phase !== 'error'), true),
+    ).subscribe((s) => {
+      if (s) this.modelStatus.set(s);
+      if (s?.model_loaded || s?.phase === 'error') {
+        this.#pollSub?.unsubscribe();
+        this.#pollSub = null;
+      }
+    });
   }
 
   // ── State methods ────────────────────────────────────────────────────────────

@@ -1,0 +1,88 @@
+<div class="filter-bar">
+
+  <!-- ── Controls row ──────────────────────────────────────────────── -->
+  <div class="controls-row">
+    <button
+      class="filter-toggle-btn"
+      [class.active]="filtersOpen()"
+      [class.has-filters]="hasActiveFilters()"
+      type="button"
+      (click)="toggleFilters()"
+      [attr.aria-expanded]="filtersOpen()"
+      aria-controls="organization-filter-panel"
+    >
+      <ng-icon name="solarMagniferBoldDuotone" size="14" aria-hidden="true" />
+      Filters
+      @if (activeFilterCount() > 0) {
+        <span class="filter-count-badge">{{ activeFilterCount() }}</span>
+      }
+    </button>
+  </div>
+
+  <!-- ── Filter inputs ─────────────────────────────────────────────── -->
+  @if (filtersOpen()) {
+    <div id="organization-filter-panel" class="filter-row">
+
+      <div class="filter-group filter-group--grow">
+        <label class="filter-label" for="organization-filter-search">
+          <ng-icon name="solarMagniferBoldDuotone" size="14" aria-hidden="true" />
+          Organization name
+        </label>
+        <input
+          id="organization-filter-search"
+          class="filter-input"
+          [class.filter-input--active]="!!filter().search"
+          type="search"
+          placeholder="Search…"
+          [value]="filter().search ?? ''"
+          (input)="onSearchInput($any($event.target).value)"
+          autocomplete="off"
+          aria-label="Search by organization name"
+        />
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">
+          <ng-icon name="solarTagBoldDuotone" size="14" aria-hidden="true" />
+          Type
+        </span>
+        <app-dropdown
+          class="dropdown--form"
+          [options]="TYPE_OPTIONS"
+          [value]="currentTypeValue()"
+          placeholder="All types"
+          (valueChange)="onTypeChange($event)"
+          aria-label="Filter by organization type"
+        />
+      </div>
+
+      <button
+        class="clear-btn"
+        [style.visibility]="hasActiveFilters() ? 'visible' : 'hidden'"
+        (click)="clearFilters()"
+        aria-label="Clear all filters"
+      >
+        Clear filters
+      </button>
+
+    </div>
+  }
+
+  <!-- ── Active filter chips ───────────────────────────────────────── -->
+  @if (hasActiveFilters()) {
+    <div class="active-chips" role="status" aria-live="polite" aria-label="Active filters">
+      <span class="chips-label">Filtered by</span>
+      @for (chip of activeChips(); track chip.label) {
+        <span class="filter-chip">
+          {{ chip.label }}
+          <button
+            class="chip-remove"
+            (click)="chip.clear()"
+            [attr.aria-label]="'Remove filter: ' + chip.label"
+          ><ng-icon name="solarCloseCircleBoldDuotone" size="12" aria-hidden="true"></ng-icon></button>
+        </span>
+      }
+    </div>
+  }
+
+</div>

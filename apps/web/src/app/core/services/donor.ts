@@ -7,6 +7,7 @@ export class DonorService {
   readonly page = signal(1);
   readonly limit = signal(20);
   readonly search = signal('');
+  readonly country = signal('');
   readonly campaignFilter = signal<number | null>(null);
 
   readonly donors = httpResource<PaginatedResponse<DonorSummary>>(() => {
@@ -15,6 +16,7 @@ export class DonorService {
       limit: String(this.limit()),
     });
     if (this.search()) params.set('search', this.search());
+    if (this.country()) params.set('country', this.country());
     const cid = this.campaignFilter();
     if (cid) params.set('campaignId', String(cid));
     return `/api/donors?${params}`;
@@ -22,4 +24,5 @@ export class DonorService {
 
   setPage(p: number): void { this.page.set(p); }
   setSearch(s: string): void { this.search.set(s); this.page.set(1); }
+  setCountry(c: string): void { this.country.set(c); this.page.set(1); }
 }

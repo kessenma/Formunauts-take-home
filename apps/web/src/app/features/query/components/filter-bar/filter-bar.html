@@ -1,0 +1,179 @@
+<div class="filter-bar">
+
+  <!-- ── Controls row (always visible) ──────────────── -->
+  <div class="controls-row">
+
+    <button
+      class="filter-toggle-btn"
+      [class.active]="filtersOpen()"
+      [class.has-filters]="hasActiveFilters()"
+      type="button"
+      (click)="toggleFilters()"
+      [attr.aria-expanded]="filtersOpen()"
+      aria-controls="filter-panel"
+    >
+      <ng-icon name="solarMagniferBoldDuotone" size="14" aria-hidden="true" />
+      {{ 'filter.title' | transloco }}
+      @if (activeFilterCount() > 0) {
+        <span class="filter-count-badge">{{ activeFilterCount() }}</span>
+      }
+    </button>
+
+    @if (viewMode() === 'infinite') {
+      <button
+        class="pagination-switch-btn"
+        type="button"
+        (click)="switchToPagination()"
+        [attr.aria-label]="'filter.switchToPaginated' | transloco"
+      >
+        <ng-icon name="solarListDownMinimalisticBoldDuotone" size="14" aria-hidden="true" />
+        {{ 'filter.paginated' | transloco }}
+      </button>
+    }
+
+  </div>
+
+  <!-- ── Filter inputs (collapsible) ───────────────── -->
+  @if (filtersOpen()) {
+    <div id="filter-panel" class="filter-row">
+
+      <div class="filter-group filter-group--grow">
+        <label class="filter-label" for="filter-search">
+          <ng-icon name="solarFaceScanCircleBoldDuotone" size="14" aria-hidden="true" />
+          {{ 'filter.donorName' | transloco }}
+        </label>
+        <input
+          id="filter-search"
+          class="filter-input"
+          [class.filter-input--active]="!!filter().search"
+          type="search"
+          [placeholder]="'filter.search' | transloco"
+          [value]="filter().search ?? ''"
+          (input)="onSearchInput($any($event.target).value)"
+          autocomplete="off"
+          [attr.aria-label]="'filter.searchAria' | transloco"
+        />
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">
+          <ng-icon name="solarMoneyBagBoldDuotone" size="14" aria-hidden="true" />
+          {{ 'filter.payment' | transloco }}
+        </span>
+        <app-dropdown
+          class="dropdown--form"
+          [options]="PAYMENT_METHODS()"
+          [value]="filter().paymentMethod ?? ''"
+          [placeholder]="'filter.allMethods' | transloco"
+          (valueChange)="onPaymentMethodChange($event)"
+          [attr.aria-label]="'filter.payment' | transloco"
+        />
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">
+          <ng-icon name="solarFloorLampBoldDuotone" size="14" aria-hidden="true" />
+          {{ 'filter.channel' | transloco }}
+        </span>
+        <app-dropdown
+          class="dropdown--form"
+          [options]="CHANNELS()"
+          [value]="filter().channel ?? ''"
+          [placeholder]="'filter.allChannels' | transloco"
+          (valueChange)="onChannelChange($event)"
+          [attr.aria-label]="'filter.channel' | transloco"
+        />
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">
+          <ng-icon name="solarPieChartBoldDuotone" size="14" aria-hidden="true" />
+          {{ 'filter.amount' | transloco }}
+        </span>
+        <div class="range-group">
+          <div class="amount-wrap">
+            <span class="amount-symbol">$</span>
+            <input
+              class="filter-input filter-input--amount"
+              [class.filter-input--active]="filter().minAmount != null"
+              type="number"
+              [placeholder]="'filter.min' | transloco"
+              min="0"
+              [value]="filter().minAmount ?? ''"
+              (change)="onMinAmountChange($any($event.target).value)"
+              [attr.aria-label]="'filter.minAmountAria' | transloco"
+            />
+          </div>
+          <span class="range-sep">–</span>
+          <div class="amount-wrap">
+            <span class="amount-symbol">$</span>
+            <input
+              class="filter-input filter-input--amount"
+              [class.filter-input--active]="filter().maxAmount != null"
+              type="number"
+              [placeholder]="'filter.max' | transloco"
+              min="0"
+              [value]="filter().maxAmount ?? ''"
+              (change)="onMaxAmountChange($any($event.target).value)"
+              [attr.aria-label]="'filter.maxAmountAria' | transloco"
+            />
+          </div>
+        </div>
+      </div>
+
+      <div class="filter-group">
+        <span class="filter-label">
+          <ng-icon name="solarCalendarSearchBoldDuotone" size="14" aria-hidden="true" />
+          {{ 'filter.dateRange' | transloco }}
+        </span>
+        <div class="range-group">
+          <input
+            class="filter-input filter-input--date"
+            [class.filter-input--active]="!!filter().dateFrom"
+            type="date"
+            [value]="filter().dateFrom ?? ''"
+            (change)="onDateFromChange($any($event.target).value)"
+            [attr.aria-label]="'filter.dateFrom' | transloco"
+          />
+          <span class="range-sep">–</span>
+          <input
+            class="filter-input filter-input--date"
+            [class.filter-input--active]="!!filter().dateTo"
+            type="date"
+            [value]="filter().dateTo ?? ''"
+            (change)="onDateToChange($any($event.target).value)"
+            [attr.aria-label]="'filter.dateTo' | transloco"
+          />
+        </div>
+      </div>
+
+      <button
+        class="clear-btn"
+        [style.visibility]="hasActiveFilters() ? 'visible' : 'hidden'"
+        (click)="clearFilters()"
+        [attr.aria-label]="'filter.clear' | transloco"
+      >
+        {{ 'filter.clear' | transloco }}
+      </button>
+
+    </div>
+  }
+
+  <!-- ── Active filter chips ───────────────────────── -->
+  @if (hasActiveFilters()) {
+    <div class="active-chips" role="status" aria-live="polite" [attr.aria-label]="'filter.activeFilters' | transloco">
+      <span class="chips-label">{{ 'filter.filteredBy' | transloco }}</span>
+      @for (chip of activeChips(); track chip.label) {
+        <span class="filter-chip">
+          {{ chip.label }}
+          <button
+            class="chip-remove"
+            (click)="chip.clear()"
+            [attr.aria-label]="('filter.removeFilter' | transloco) + ': ' + chip.label"
+          ><ng-icon name="solarCloseCircleBoldDuotone" size="12" aria-hidden="true"></ng-icon></button>
+        </span>
+      }
+    </div>
+  }
+
+</div>

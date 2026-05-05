@@ -2,13 +2,14 @@ import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/cor
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { AuthService } from '../../../core/services/auth';
+import { TranslocoPipe } from '@jsverse/transloco';
 
 @Component({
   selector: 'app-reset-password',
   templateUrl: './reset-password.html',
   styleUrl: './reset-password.css',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslocoPipe],
 })
 export class ResetPassword {
   private fb = inject(FormBuilder);

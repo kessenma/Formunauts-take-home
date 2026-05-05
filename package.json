@@ -3,9 +3,6 @@
   "private": true,
   "scripts": {
     "dev": "node scripts/docker-dev.mjs",
-    "dev:local": "node scripts/docker-dev.mjs --preset=1",
-    "dev:detach": "node scripts/docker-dev.mjs --detach",
-    "docker:down": "node scripts/docker-dev.mjs --down --preset=3",
     "build": "pnpm -r build",
     "test": "pnpm -F web test",
     "docker:db": "docker compose -f docker-compose.db.yml up -d",
@@ -13,7 +10,8 @@
     "docker:web": "docker compose -f docker-compose.web.yml up --build",
     "kill:api": "pnpm -F api kill-port",
     "kill:web": "pnpm -F web kill-port",
-    "kill:all": "pnpm kill:api && pnpm kill:web"
+    "kill:all": "pnpm kill:api && pnpm kill:web",
+    "check-types": "pnpm -r check-types && uv run --directory apps/llm-service mypy ."
   },
   "devDependencies": {
     "concurrently": "^9.1.2"

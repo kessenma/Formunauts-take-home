@@ -1,0 +1,352 @@
+/* ── Host ────────────────────────────────────────────────────────────────── */
+
+:host {
+  display: block;
+}
+
+:host(.is-sticky) {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  /* shadow separates the sticky bar from scrolling content below */
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.08));
+}
+
+/* ── Filter Bar ────────────────────────────────────────────────────────── */
+
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: var(--spacing-20);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-cards);
+  background: var(--surface-0);
+}
+
+.filter-bar > :first-child {
+  border-radius: var(--radius-cards) var(--radius-cards) 0 0;
+}
+
+.filter-bar > :last-child {
+  border-radius: 0 0 var(--radius-cards) var(--radius-cards);
+}
+
+/* ── Filter inputs row ─────────────────────────────────────────────────── */
+
+.filter-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--spacing-12);
+  flex-wrap: wrap;
+  padding: var(--spacing-16);
+  background: var(--surface-1);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.filter-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.filter-group--grow {
+  flex: 1;
+  min-width: 160px;
+}
+
+.filter-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  user-select: none;
+}
+
+/* ── Input base ──────────────────────────────────────────────────────────── */
+
+.filter-input {
+  height: 36px;
+  padding: 0 var(--spacing-12);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-inputs);
+  background: var(--surface-1);
+  font-size: var(--text-body-sm);
+  font-family: var(--font-family-base);
+  color: var(--text-primary);
+  transition: border-color 0.15s, box-shadow 0.15s;
+  appearance: none;
+}
+
+.filter-input::placeholder {
+  color: var(--text-muted);
+}
+
+.filter-input:focus {
+  outline: none;
+  border-color: var(--color-lochmara);
+  box-shadow: 0 0 0 3px rgba(0, 116, 200, 0.14);
+}
+
+.filter-input--active {
+  border-color: var(--color-lochmara);
+  background: var(--color-off-white);
+}
+
+/* ── Amount inputs ───────────────────────────────────────────────────────── */
+
+.amount-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.amount-symbol {
+  position: absolute;
+  left: var(--spacing-8);
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.filter-input--amount {
+  width: 76px;
+  padding-left: var(--spacing-20);
+}
+
+.filter-input--amount::-webkit-outer-spin-button,
+.filter-input--amount::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
+.filter-input--amount[type='number'] { -moz-appearance: textfield; appearance: textfield; }
+
+/* ── Date input ──────────────────────────────────────────────────────────── */
+
+.filter-input--date {
+  width: 136px;
+  cursor: pointer;
+}
+
+/* ── Range layout ────────────────────────────────────────────────────────── */
+
+.range-group {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+}
+
+.range-sep {
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+  flex-shrink: 0;
+}
+
+/* ── Clear button ────────────────────────────────────────────────────────── */
+
+.clear-btn {
+  align-self: flex-end;
+  height: 36px;
+  padding: 0 var(--spacing-16);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-buttons);
+  background: transparent;
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  font-family: var(--font-family-base);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.clear-btn:hover {
+  background: var(--border-color);
+  color: var(--text-primary);
+}
+
+/* ── Active filter chips ─────────────────────────────────────────────────── */
+
+.active-chips {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  flex-wrap: wrap;
+  padding: var(--spacing-8) var(--spacing-16);
+  background: var(--color-off-white);
+  border-top: 1px solid var(--border-color);
+  border-bottom: 1px solid var(--border-color);
+}
+
+.chips-label {
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  white-space: nowrap;
+}
+
+.filter-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  padding: var(--spacing-4) var(--spacing-8) var(--spacing-4) var(--spacing-12);
+  background: var(--color-paper-white);
+  border: 1px solid rgba(9, 127, 232, 0.3);
+  border-radius: var(--radius-badges);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-normal);
+  color: var(--color-sky-surge);
+}
+
+.chip-remove {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 18px;
+  height: 18px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--color-sky-surge);
+  font-size: 14px;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0;
+  flex-shrink: 0;
+  transition: background 0.1s;
+}
+
+.chip-remove:hover {
+  background: rgba(9, 127, 232, 0.15);
+}
+
+/* ── Controls row ────────────────────────────────────────────────────────── */
+
+.controls-row {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  flex-wrap: wrap;
+  padding: var(--spacing-12) var(--spacing-16);
+  background: var(--surface-0);
+}
+
+/* ── Filter toggle button ────────────────────────────────────────────────── */
+
+.filter-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-6, 6px);
+  height: 30px;
+  padding: 0 var(--spacing-12);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  font-size: var(--text-caption);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+
+.filter-toggle-btn:hover {
+  background: var(--surface-0);
+  border-color: var(--color-lochmara);
+  color: var(--color-lochmara);
+}
+
+.filter-toggle-btn.active {
+  background: var(--color-off-white);
+  border-color: var(--color-lochmara);
+  color: var(--color-lochmara);
+}
+
+.filter-toggle-btn.has-filters:not(.active) {
+  border-color: rgba(9, 127, 232, 0.4);
+  color: var(--color-sky-surge);
+}
+
+.filter-count-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 16px;
+  height: 16px;
+  padding: 0 4px;
+  border-radius: 8px;
+  background: var(--color-lochmara);
+  color: var(--color-paper-white);
+  font-size: 10px;
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+}
+
+/* ── Paginated view switch button ────────────────────────────────────────── */
+
+.pagination-switch-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-6, 6px);
+  height: 30px;
+  padding: 0 var(--spacing-12);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  font-size: var(--text-caption);
+  font-family: var(--font-family-base);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: background 0.12s, border-color 0.12s, color 0.12s;
+  white-space: nowrap;
+}
+
+.pagination-switch-btn:hover {
+  background: var(--surface-0);
+  border-color: var(--color-lochmara);
+  color: var(--color-lochmara);
+}
+
+/* ── Mobile ──────────────────────────────────────────────────────────────── */
+
+@media (max-width: 640px) {
+  .filter-row {
+    gap: var(--spacing-8);
+  }
+
+  .filter-group {
+    flex: 1 1 100%;
+    min-width: 0;
+  }
+
+  .range-group {
+    width: 100%;
+  }
+
+  .filter-input--date {
+    flex: 1;
+    width: auto;
+    min-width: 0;
+  }
+
+  .amount-wrap {
+    flex: 1;
+    min-width: 0;
+  }
+
+  .filter-input--amount {
+    width: 100%;
+  }
+
+  .clear-btn {
+    width: 100%;
+    align-self: stretch;
+    text-align: center;
+  }
+}

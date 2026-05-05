@@ -1,0 +1,29 @@
+td {
+  padding: var(--spacing-12) var(--spacing-12);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover td {
+  background: var(--surface-0);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px var(--spacing-8);
+  border-radius: var(--radius-full);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+  background: var(--surface-0);
+  color: var(--text-muted);
+}
+
+.status-badge--active {
+  background: var(--color-success-bg);
+  color: var(--color-forest-green);
+}

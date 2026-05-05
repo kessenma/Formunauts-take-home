@@ -1,4 +1,4 @@
-<h1 class="page-title">Campaign Dashboard</h1>
+<h1 class="page-title">{{ 'dashboard.title' | transloco }}</h1>
 
 <app-campaign-selector
   [campaigns]="campaigns.value() ?? []"
@@ -9,7 +9,7 @@
 @if (campaigns.isLoading()) {
   <app-loading-spinner />
 } @else if (campaigns.error()) {
-  <app-error-banner [message]="campaigns.error()?.message ?? 'Failed to load campaigns'" />
+  <app-error-banner [message]="campaigns.error()?.message ?? ('dashboard.loadError' | transloco)" />
 } @else if (selectedCampaign(); as campaign) {
   <p class="org-context">{{ campaign.organizationName }}</p>
   <app-campaign-card [campaign]="campaign" />

@@ -1,0 +1,523 @@
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-prussian-blue);
+  color: var(--color-paper-white);
+  padding: 0 var(--spacing-24);
+}
+
+.app-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-24);
+  height: 60px;
+}
+
+.app-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-body-sm);
+  letter-spacing: var(--tracking-body-sm);
+  color: var(--color-paper-white);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.app-nav__logo {
+  display: block;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+}
+
+.app-nav__page-title {
+  display: none;
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-body-sm);
+  letter-spacing: var(--tracking-body-sm);
+  color: var(--color-paper-white);
+  opacity: 0.9;
+}
+
+@keyframes logo-pulse {
+  0%   { transform: scale(1); }
+  35%  { transform: scale(1.3); }
+  65%  { transform: scale(0.92); }
+  100% { transform: scale(1); }
+}
+
+.app-nav__logo--pulse {
+  animation: logo-pulse 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+}
+
+.app-nav__links {
+  display: flex;
+  gap: var(--spacing-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.app-nav__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8) var(--spacing-12);
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: var(--text-body-sm);
+  border-radius: var(--radius-buttons);
+  transition: background 0.15s, color 0.15s;
+}
+
+.app-nav__links a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-paper-white);
+}
+
+.app-nav__links a.active {
+  color: var(--color-paper-white);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.app-nav__actions {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+}
+
+.app-nav__login-btn {
+  padding: var(--spacing-8) var(--spacing-16);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-buttons);
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+  font-size: var(--text-body-sm);
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.app-nav__login-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--color-paper-white);
+}
+
+.app-nav__theme-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-buttons);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.app-nav__theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--color-paper-white);
+}
+
+.app-nav__theme-toggle:focus-visible {
+  outline: 2px solid var(--color-lochmara);
+  outline-offset: 2px;
+}
+
+.app-nav__lang-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-buttons);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.04em;
+  font-family: var(--font-family-base);
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.app-nav__lang-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--color-paper-white);
+}
+
+.app-nav__lang-toggle:focus-visible {
+  outline: 2px solid var(--color-lochmara);
+  outline-offset: 2px;
+}
+
+.app-nav__avatar-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  transition: box-shadow 0.15s;
+}
+
+.app-nav__avatar-btn:hover {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+.app-nav__avatar-btn:focus-visible {
+  outline: 2px solid var(--color-lochmara);
+  outline-offset: 2px;
+}
+
+.app-nav__hamburger {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-buttons);
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.app-nav__hamburger:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--color-paper-white);
+}
+
+.app-nav__hamburger:focus-visible {
+  outline: 2px solid var(--color-lochmara);
+  outline-offset: 2px;
+}
+
+/* ── Profile sheet ──────────────────────────────────────────────────────── */
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-16);
+}
+
+.profile-info__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.profile-info__name {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.profile-info__email {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  padding-top: var(--spacing-16);
+  border-top: 1px solid var(--border-color);
+}
+
+.profile-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+}
+
+.profile-section__title {
+  margin: 0;
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.profile-section__new-btn {
+  background: none;
+  border: none;
+  padding: var(--spacing-4) var(--spacing-8);
+  font-size: var(--text-caption);
+  font-family: var(--font-family-base);
+  color: var(--color-lochmara);
+  cursor: pointer;
+  border-radius: var(--radius-buttons);
+  transition: background 0.15s;
+}
+
+.profile-section__new-btn:hover {
+  background: var(--surface-0);
+}
+
+.profile-section__empty {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+  text-align: center;
+  padding: var(--spacing-12) 0;
+}
+
+.chat-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.chat-history-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  width: 100%;
+  padding: var(--spacing-8) var(--spacing-12);
+  background: none;
+  border: none;
+  border-radius: var(--radius-buttons);
+  text-align: left;
+  font-family: var(--font-family-base);
+  font-size: var(--text-body-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.chat-history-item:hover {
+  background: var(--surface-0);
+}
+
+.chat-history-item--active {
+  color: var(--color-lochmara);
+  background: var(--surface-0);
+  font-weight: var(--font-weight-semibold);
+}
+
+.chat-history-item__title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-history-item__shared {
+  flex-shrink: 0;
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.profile-sign-out {
+  margin-top: auto;
+  background: none;
+  border: none;
+  padding: var(--spacing-8) var(--spacing-12);
+  font-size: var(--text-body-sm);
+  font-family: var(--font-family-base);
+  color: var(--color-danger, #dc2626);
+  cursor: pointer;
+  border-radius: var(--radius-buttons);
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.profile-sign-out:hover {
+  background: var(--surface-0);
+}
+
+/* ── Mobile: hamburger menu ─────────────────────────────────────────────── */
+
+@media (max-width: 768px) {
+  .app-header {
+    padding: 0 var(--spacing-16);
+  }
+
+  .app-nav__hamburger {
+    display: flex;
+  }
+
+  .app-nav__page-title {
+    display: block;
+  }
+
+  .app-nav__links {
+    display: none;
+    flex-direction: column;
+    position: absolute;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--color-prussian-blue);
+    padding: var(--spacing-8) var(--spacing-16) var(--spacing-16);
+    z-index: 99;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    gap: var(--spacing-2);
+  }
+
+  .app-nav__links--open {
+    display: flex;
+  }
+
+  .app-nav__links a {
+    width: 100%;
+  }
+}
+
+/* ── Rocket theme-toggle animation ──────────────────────────────────────────── */
+
+/*
+  Register --wipe-progress as an animatable percentage.
+  This lets the browser interpolate it smoothly inside mask-image.
+*/
+/*
+  Start the wipe at -30% so the gradient zone (±15%) is fully off-screen
+  at t=0 — nothing visible until the animation actually moves the line up.
+*/
+@property --wipe-progress {
+  syntax: '<percentage>';
+  inherits: false;
+  initial-value: -30%;
+}
+
+@keyframes rocket-launch {
+  0%   { transform: translateY(0);      opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateY(-130vh); opacity: 0; }
+}
+
+@keyframes wipe-reveal {
+  from { --wipe-progress: -30%; }
+  to   { --wipe-progress: 115%; }
+}
+
+@keyframes smoke-puff {
+  0%   { transform: scale(0); opacity: 0;    }
+  10%  { opacity: 0.75; }
+  100% { transform: scale(5); opacity: 0;    }
+}
+
+@keyframes overlay-fadeout {
+  from { opacity: 1; }
+  to   { opacity: 0; }
+}
+
+/*
+  Cloud circles expand to full size and STAY — no fade-out.
+  The overlay itself fades at 1800ms, taking all circles with it cleanly.
+*/
+@keyframes cloud-expand {
+  0%   { transform: scale(0);    opacity: 0;    }
+  40%  { transform: scale(1.08); opacity: 0.88; }
+  100% { transform: scale(1);    opacity: 0.85; }
+}
+
+.rocket-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  overflow: hidden;
+  animation: overlay-fadeout 0.3s ease-out 1800ms forwards;
+}
+
+/*
+  Gradient zone is ±15% (30% of viewport total) — wide enough to look
+  like diffuse smoke rather than a sharp line.
+*/
+.wipe-overlay {
+  position: absolute;
+  inset: 0;
+  mask-image: linear-gradient(
+    to top,
+    black 0%,
+    black calc(var(--wipe-progress) - 15%),
+    transparent calc(var(--wipe-progress) + 15%)
+  );
+  animation: wipe-reveal 1.8s ease-in forwards;
+}
+
+.wipe-overlay--to-dark  { background: #000000; }
+.wipe-overlay--to-light { background: #f6f5f4; }
+
+/*
+  `translate` (the standalone CSS property) centers the rocket horizontally
+  without conflicting with `transform: translateY(...)` in the keyframe.
+*/
+.rocket-overlay__rocket {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  translate: -50% 0;
+  width: 80px;
+  height: 80px;
+  animation: rocket-launch 1.8s ease-in forwards;
+}
+
+.rocket-overlay__rocket--white {
+  filter: brightness(0) saturate(0) invert(1);
+}
+
+/* brightness(0) collapses all channels to black */
+.rocket-overlay__rocket--black {
+  filter: brightness(0);
+}
+
+/*
+  Cloud puffs: centered on their `left`/`bottom` position via `translate`.
+  They expand quickly to full size and hold, accumulating as the wipe rises.
+*/
+.wipe-bubble {
+  position: absolute;
+  border-radius: 50%;
+  translate: -50% 50%;
+  opacity: 0;
+  animation: cloud-expand 0.5s ease-out forwards;
+}
+
+.wipe-bubble--to-dark  { background: rgba(0, 0, 0, 0.82); }
+.wipe-bubble--to-light { background: rgba(246, 245, 244, 0.88); }
+
+.rocket-smoke {
+  position: absolute;
+  left: 50%;
+  translate: -50% 50%;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(0, 116, 200, 0.65);
+  opacity: 0;
+  animation: smoke-puff 1.0s ease-out forwards;
+}
+
+.rocket-smoke--white {
+  background: rgba(255, 255, 255, 0.65);
+}
+
+.rocket-smoke--black {
+  background: rgba(0, 0, 0, 0.65);
+}

@@ -1,0 +1,69 @@
+<section class="settings-section">
+  <div class="settings-section__header">
+    <h2 class="settings-section__title">{{ 'settings.stream.title' | transloco }}</h2>
+    <p class="settings-section__desc">{{ 'settings.stream.desc' | transloco }}</p>
+  </div>
+
+  <div class="mock-card">
+    <div class="mock-tool">
+      <div class="stream-header">
+        <div class="mock-tool__meta">
+          <h4 class="mock-tool__title">{{ 'settings.stream.cardTitle' | transloco }}</h4>
+          <p class="mock-tool__desc">{{ 'settings.stream.cardDesc' | transloco }}</p>
+        </div>
+        <div class="stream-status-badge">
+          <span [class]="streamRunning() ? 'stream-dot stream-dot--live' : 'stream-dot'"></span>
+          <span class="stream-status-label">{{ streamRunning() ? ('settings.stream.live' | transloco) : ('settings.stream.stopped' | transloco) }}</span>
+          @if (streamRunning()) {
+            <span class="stream-count">{{ streamCount() }} {{ 'settings.stream.sent' | transloco }}</span>
+          }
+        </div>
+      </div>
+
+      <form [formGroup]="streamForm" class="mock-form">
+        <div class="mock-form__row">
+          <div class="mock-field mock-field--wide">
+            <span>{{ 'settings.stream.campaign' | transloco }}</span>
+            <app-dropdown
+              [options]="campaignOptions()"
+              [value]="streamForm.controls.campaignId.value.toString()"
+              [placeholder]="'settings.setup.campaign.selectPlaceholder' | transloco"
+              (valueChange)="streamForm.controls.campaignId.setValue(+$event)"
+            />
+          </div>
+          <div class="mock-field">
+            <span>{{ 'settings.stream.speed' | transloco }}</span>
+            <app-dropdown
+              [options]="speedOptions"
+              [value]="streamForm.controls.speed.value"
+              (valueChange)="streamForm.controls.speed.setValue($event)"
+            />
+          </div>
+          <label class="mock-field">
+            <span>{{ 'settings.stream.minAmount' | transloco }}</span>
+            <input class="form-input" type="number" formControlName="minAmount" min="1" />
+          </label>
+          <label class="mock-field">
+            <span>{{ 'settings.stream.maxAmount' | transloco }}</span>
+            <input class="form-input" type="number" formControlName="maxAmount" min="1" />
+          </label>
+          @if (!streamRunning()) {
+            <button class="action-btn action-btn--primary action-btn--self-end" type="button"
+              (click)="startStream()"
+              [disabled]="streamForm.invalid || streamWorking() || !hasCampaigns()">
+              <ng-icon name="solarPlayBoldDuotone" size="14" aria-hidden="true"></ng-icon>
+              {{ streamWorking() ? ('settings.stream.starting' | transloco) : ('settings.stream.start' | transloco) }}
+            </button>
+          } @else {
+            <button class="action-btn action-btn--danger action-btn--self-end" type="button"
+              (click)="stopStream()"
+              [disabled]="streamWorking()">
+              <ng-icon name="solarPauseBoldDuotone" size="14" aria-hidden="true"></ng-icon>
+              {{ streamWorking() ? ('settings.stream.stopping' | transloco) : ('settings.stream.stop' | transloco) }}
+            </button>
+          }
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

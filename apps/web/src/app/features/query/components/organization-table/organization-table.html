@@ -1,0 +1,22 @@
+<app-table
+  [columns]="columns"
+  [sortParams]="null"
+  [isEmpty]="organizations().length === 0"
+  emptyMessage="No organizations found."
+  ariaLabel="Organizations table"
+>
+  @for (org of organizations(); track org.id) {
+    <tr>
+      <td>{{ org.name }}</td>
+      <td class="type">{{ org.type.replace('_', ' ') }}</td>
+      <td>{{ org.country ?? '—' }}</td>
+      <td>
+        @if (org.website) {
+          <a [href]="org.website" target="_blank" rel="noopener">{{ org.website }}</a>
+        } @else {
+          —
+        }
+      </td>
+    </tr>
+  }
+</app-table>

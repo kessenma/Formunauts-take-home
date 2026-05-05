@@ -1,0 +1,26 @@
+td {
+  padding: var(--spacing-12) var(--spacing-12);
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+tbody tr:last-child td {
+  border-bottom: none;
+}
+
+tbody tr:hover td {
+  background: var(--surface-0);
+}
+
+.type {
+  text-transform: capitalize;
+}
+
+a {
+  color: var(--color-lochmara);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}

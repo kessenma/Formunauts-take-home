@@ -15,7 +15,7 @@ const SERVICES = {
   db: {
     label: 'PostgreSQL (port 5432)',
     file: 'docker-compose.db.yml',
-    ports: [5432],
+    ports: [5432, 6379], // redis is also in docker-compose.db.yml
     local: null, // Docker-only
   },
   api: {
@@ -33,6 +33,8 @@ const SERVICES = {
     local: { cmd: 'pnpm', args: ['dev'], cwd: 'apps/web' },
   },
 };
+
+const ALL_COMPOSE_FILES = [...new Set(Object.values(SERVICES).map((s) => s.file))];
 
 /**
  * Presets: { docker: string[], local: string[] }
@@ -182,7 +184,7 @@ async function warnIfAlreadyRunning(composeFiles, { canSkip = false } = {}) {
   }
 
   if (toRestart.length > 0) {
-    const args = composeFiles.flatMap((f) => ['-f', f]);
+    const args = ALL_COMPOSE_FILES.flatMap((f) => ['-f', f]);
     execSync(['docker', 'compose', ...args, 'stop', ...toRestart].join(' '), {
       stdio: 'inherit',
     });

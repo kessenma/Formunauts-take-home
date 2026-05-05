@@ -1,35 +1,122 @@
 <div class="conversations-page">
   <header class="conversations-page__header">
-    <h1 class="conversations-page__title">All Conversations</h1>
-    <p class="conversations-page__subtitle">AI chat sessions from your team</p>
+    <h1 class="conversations-page__title">{{ 'conversations.title' | transloco }}</h1>
+    <p class="conversations-page__subtitle">{{ 'conversations.subtitle' | transloco }}</p>
   </header>
+
+  @if (sharedThread()) {
+    <section class="conversations-shared">
+      <h2 class="conversations-shared__heading">{{ 'conversations.sharedHeading' | transloco }}</h2>
+      <app-accordion>
+        <app-accordion-item [title]="sharedThread()!.title" [initiallyOpen]="true">
+          <p class="conversations-shared__by">{{ 'conversations.sharedBy' | transloco }} {{ sharedThread()!.userName }}</p>
+          <div class="conversations-messages">
+            @for (msg of sharedThread()!.messages; track $index) {
+              <div class="chat-msg" [class.chat-msg--user]="msg.role === 'user'" [class.chat-msg--assistant]="msg.role === 'assistant'">
+                <div class="chat-msg__bubble" [class.chat-msg__bubble--error]="msg.error">
+                  <p class="chat-msg__text">{{ msg.text }}</p>
+                  @if (msg.sql) {
+                    <details class="chat-msg__sql"><summary>{{ 'conversations.viewSQL' | transloco }}</summary><pre>{{ msg.sql }}</pre></details>
+                  }
+                </div>
+              </div>
+            }
+          </div>
+        </app-accordion-item>
+      </app-accordion>
+    </section>
+  }
 
   @if (isLoading()) {
     <div class="conversations-page__loading">
-      <p>Loading conversations…</p>
+      <p>{{ 'conversations.loading' | transloco }}</p>
     </div>
   } @else if (sessions().length === 0) {
     <div class="conversations-page__empty">
-      <p>No conversations yet. Start one by clicking <strong>Ask AI</strong> in the bottom-right corner.</p>
+      <p [innerHTML]="'conversations.empty' | transloco"></p>
     </div>
   } @else {
-    <ul class="conversations-list">
+    <app-accordion>
       @for (s of sessions(); track s.id) {
-        <li>
-          <button class="conversations-item" type="button" (click)="openSession(s)">
-            <app-avatar [name]="s.userName" [size]="40" />
-            <div class="conversations-item__content">
-              <span class="conversations-item__title">{{ s.title }}</span>
-              <span class="conversations-item__meta">
-                {{ s.userName }} &middot; {{ s.createdAt | date: 'MMM d, y' }}
-              </span>
-            </div>
+        <app-accordion-item
+          [title]="s.title"
+          (toggled)="onToggle(s, $event)"
+        >
+          <p class="conversations-item__meta">
+            <app-avatar [name]="s.userName" [size]="20" />
+            {{ s.userName }} &middot; {{ s.createdAt | date: 'MMM d, y' }}
             @if (s.shareToken) {
-              <span class="conversations-item__shared-badge">Shared</span>
+              <span class="conversations-item__shared-badge">{{ 'conversations.shared' | transloco }}</span>
             }
-          </button>
-        </li>
+          </p>
+
+          @if (sessionMessages().get(s.id); as msgs) {
+            <div class="conversations-messages">
+              @for (msg of msgs; track $index) {
+                <div class="chat-msg" [class.chat-msg--user]="msg.role === 'user'" [class.chat-msg--assistant]="msg.role === 'assistant'">
+                  <div class="chat-msg__bubble" [class.chat-msg__bubble--error]="msg.error">
+                    <p class="chat-msg__text">{{ msg.text }}</p>
+                    @if (!msg.error && msg.columns && msg.columns.length > 0 && msg.rows && msg.rows.length > 0) {
+                      <div class="chat-msg__results">
+                        @if (msg.rows.length === 1 && msg.columns.length === 1) {
+                          <span class="chat-msg__value">{{ msg.rows[0][0] }}</span>
+                        } @else {
+                          <div class="chat-msg__table-wrap">
+                            <table class="chat-msg__table">
+                              <thead>
+                                <tr>
+                                  @for (col of msg.columns; track col) {
+                                    <th scope="col">{{ col }}</th>
+                                  }
+                                </tr>
+                              </thead>
+                              <tbody>
+                                @for (row of msg.rows; track $index) {
+                                  <tr>
+                                    @for (cell of row; track $index) {
+                                      <td>{{ cell }}</td>
+                                    }
+                                  </tr>
+                                }
+                              </tbody>
+                            </table>
+                          </div>
+                        }
+                      </div>
+                    }
+                    @if (msg.sql) {
+                      <details class="chat-msg__sql"><summary>{{ 'conversations.viewSQL' | transloco }}</summary><pre>{{ msg.sql }}</pre></details>
+                    }
+                  </div>
+                </div>
+              }
+              @if (sendingFor() === s.id) {
+                <div class="chat-msg chat-msg--assistant" aria-label="Assistant is thinking">
+                  <div class="chat-msg__bubble">
+                    <div class="chat-msg__typing" aria-hidden="true">
+                      <span></span><span></span><span></span>
+                    </div>
+                  </div>
+                </div>
+              }
+            </div>
+          } @else {
+            <p class="conversations-loading">{{ 'conversations.loadingMessages' | transloco }}</p>
+          }
+
+          @if (isOwner(s)) {
+            @if (modelReady()) {
+              <app-chat-input
+                [placeholder]="'conversations.followUpPlaceholder' | transloco"
+                [submitDisabled]="sendingFor() !== null"
+                (submitted)="sendMessage(s, $event)"
+              ></app-chat-input>
+            } @else {
+              <p class="conversations-model-notice">{{ 'conversations.modelNotReady' | transloco }}</p>
+            }
+          }
+        </app-accordion-item>
       }
-    </ul>
+    </app-accordion>
   }
 </div>

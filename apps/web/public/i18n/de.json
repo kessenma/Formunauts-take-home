@@ -1,0 +1,388 @@
+{
+  "nav": {
+    "links": {
+      "dashboard": "Übersicht",
+      "donations": "Spenden",
+      "query": "Abfrage",
+      "fundraisers": "Fundraiser",
+      "donors": "Spender",
+      "conversations": "Gespräche",
+      "settings": "Einstellungen"
+    },
+    "aria": {
+      "switchToLight": "Zum hellen Design wechseln",
+      "switchToDark": "Zum dunklen Design wechseln",
+      "closeMenu": "Menü schließen",
+      "openMenu": "Menü öffnen",
+      "openProfile": "Profil öffnen",
+      "switchToEN": "Zu Englisch wechseln",
+      "switchToDE": "Zu Deutsch wechseln"
+    },
+    "signIn": "Anmelden"
+  },
+  "profile": {
+    "title": "Profil",
+    "myConversations": "Meine Gespräche",
+    "newChat": "+ Neu",
+    "noConversations": "Noch keine Gespräche",
+    "shared": "Geteilt",
+    "signOut": "Abmelden"
+  },
+  "dashboard": {
+    "title": "Kampagnen-Dashboard",
+    "loadError": "Kampagnen konnten nicht geladen werden",
+    "charts": {
+      "donationsByDay": "Spenden nach Tag (letzte 30 Tage)",
+      "noData": "Keine Spendendaten verfügbar."
+    }
+  },
+  "query": {
+    "title": "Abfrage",
+    "tabs": {
+      "donations": "Spenden",
+      "donors": "Spender",
+      "fundraisers": "Fundraiser",
+      "campaigns": "Kampagnen",
+      "organizations": "Organisationen"
+    },
+    "live": "Live",
+    "paused": "Pausiert",
+    "aria": {
+      "pauseLive": "Live-Updates pausieren",
+      "resumeLive": "Live-Updates fortsetzen",
+      "selectTable": "Tabelle auswählen",
+      "donationEntryMode": "Spendeneingabemodus",
+      "firstPage": "Erste Seite",
+      "prevPage": "Vorherige Seite",
+      "nextPage": "Nächste Seite",
+      "lastPage": "Letzte Seite",
+      "goToPage": "Zur Seite",
+      "rowsPerPage": "Zeilen pro Seite",
+      "pageNav": "Seitennavigation"
+    },
+    "sidebar": {
+      "single": "Einzeln",
+      "bulk": "Massenupload"
+    },
+    "allLoaded": "Alle Spenden geladen",
+    "showing": "Zeige",
+    "of": "von",
+    "loading": "Laden…",
+    "loadError": {
+      "donations": "Spenden konnten nicht geladen werden",
+      "donors": "Spender konnten nicht geladen werden",
+      "fundraisers": "Fundraiser konnten nicht geladen werden",
+      "campaigns": "Kampagnen konnten nicht geladen werden",
+      "organizations": "Organisationen konnten nicht geladen werden"
+    }
+  },
+  "fundraisers": {
+    "title": "Fundraiser",
+    "ariaLabel": "Fundraiser",
+    "allCampaigns": "Alle Kampagnen",
+    "filterByCampaign": "Nach Kampagne filtern",
+    "loadError": "Fundraiser konnten nicht geladen werden",
+    "empty": "Keine Fundraiser gefunden.",
+    "table": {
+      "rank": "#",
+      "name": "Name",
+      "email": "E-Mail",
+      "donations": "Spenden",
+      "totalRaised": "Gesamt gesammelt",
+      "status": "Status",
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    }
+  },
+  "donors": {
+    "title": "Spender",
+    "ariaLabel": "Spender",
+    "searchPlaceholder": "Spender suchen…",
+    "searchAriaLabel": "Spender suchen",
+    "loadError": "Spender konnten nicht geladen werden",
+    "empty": "Keine Spender gefunden.",
+    "table": {
+      "name": "Name",
+      "email": "E-Mail",
+      "city": "Stadt",
+      "country": "Land",
+      "numDonations": "Anz. Spenden",
+      "totalDonated": "Gesamt gespendet",
+      "lastDonation": "Letzte Spende"
+    }
+  },
+  "conversations": {
+    "title": "Alle Gespräche",
+    "subtitle": "KI-Chat-Sitzungen Ihres Teams",
+    "sharedHeading": "Geteiltes Gespräch",
+    "sharedBy": "Geteilt von",
+    "loading": "Gespräche werden geladen…",
+    "empty": "Noch keine Gespräche. Starten Sie eines, indem Sie auf <strong>KI fragen</strong> unten rechts klicken.",
+    "loadingMessages": "Nachrichten werden geladen…",
+    "modelNotReady": "KI-Modell wird geladen — Lesen ist möglich, Antworten noch nicht.",
+    "viewSQL": "SQL anzeigen",
+    "followUpPlaceholder": "Nachfrage stellen…",
+    "shared": "Geteilt"
+  },
+  "filter": {
+    "title": "Filter",
+    "donorName": "Spendername",
+    "search": "Suchen…",
+    "payment": "Zahlung",
+    "allMethods": "Alle Methoden",
+    "channel": "Kanal",
+    "allChannels": "Alle Kanäle",
+    "amount": "Betrag",
+    "dateRange": "Datumsbereich",
+    "clear": "Filter zurücksetzen",
+    "filteredBy": "Gefiltert nach",
+    "switchToPaginated": "Zur Seitenansicht wechseln",
+    "paginated": "Paginiert",
+    "min": "Min",
+    "max": "Max",
+    "removeFilter": "Filter entfernen",
+    "searchAria": "Nach Spendername suchen",
+    "minAmountAria": "Mindestbetrag",
+    "maxAmountAria": "Höchstbetrag",
+    "dateFrom": "Von Datum",
+    "dateTo": "Bis Datum",
+    "activeFilters": "Aktive Filter"
+  },
+  "pagination": {
+    "firstPage": "Erste Seite",
+    "prevPage": "Vorherige Seite",
+    "nextPage": "Nächste Seite",
+    "lastPage": "Letzte Seite",
+    "goToPage": "Zur Seite",
+    "go": "Los",
+    "rows": "Zeilen",
+    "showing": "Zeige",
+    "of": "von"
+  },
+  "settings": {
+    "title": "Systemstatus",
+    "subtitle": "Live-Systemcheck · aktualisiert alle 5 Sekunden",
+    "lastUpdated": "Zuletzt aktualisiert:",
+    "health": {
+      "server": "Server",
+      "database": "Datenbank",
+      "llm": "LLM / Chat",
+      "uptime": "Betriebszeit",
+      "memoryRss": "Speicher RSS",
+      "heapUsedTotal": "Heap verwendet / gesamt",
+      "wsConnections": "WS-Verbindungen",
+      "queryResponse": "Abfrageantwort",
+      "postgresql": "PostgreSQL",
+      "connected": "Verbunden",
+      "phase": "Phase",
+      "modelLoaded": "Modell geladen",
+      "yes": "Ja",
+      "no": "Nein",
+      "downloadProgress": "Download-Fortschritt",
+      "notRunning": "Dienst nicht aktiv"
+    },
+    "setup": {
+      "title": "Einrichtung",
+      "desc": "Erstellen Sie die Datenhierarchie in dieser Reihenfolge: Organisation, dann Kampagnen, dann Fundraiser.",
+      "org": {
+        "title": "01 — Organisation",
+        "name": "Name",
+        "type": "Typ",
+        "country": "Land",
+        "website": "Website",
+        "creating": "Wird erstellt…",
+        "create": "Organisation erstellen",
+        "blockedMsg": "Erstellen Sie zuerst eine Organisation in Schritt 01.",
+        "typeNpo": "Gemeinnützig (NPO)",
+        "typeFundraisingAgency": "Fundraising-Agentur"
+      },
+      "campaign": {
+        "title": "02 — Kampagne",
+        "organization": "Organisation",
+        "selectPlaceholder": "— auswählen —",
+        "campaignTitle": "Titel",
+        "description": "Beschreibung",
+        "goal": "Ziel (€)",
+        "currency": "Währung",
+        "status": "Status",
+        "startDate": "Startdatum",
+        "endDate": "Enddatum",
+        "creating": "Wird erstellt…",
+        "create": "Kampagne erstellen",
+        "statusDraft": "Entwurf",
+        "statusActive": "Aktiv",
+        "statusPaused": "Pausiert",
+        "statusCompleted": "Abgeschlossen"
+      },
+      "fundraiser": {
+        "title": "03 — Fundraiser",
+        "organization": "Organisation",
+        "firstName": "Vorname",
+        "lastName": "Nachname",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "creating": "Wird erstellt…",
+        "create": "Fundraiser erstellen"
+      },
+      "donations": {
+        "title": "04 — Spenden",
+        "single": "Einzelspende",
+        "bulk": "Massenupload",
+        "blockedMsg": "Erstellen Sie zuerst eine Kampagne in Schritt 02."
+      }
+    },
+    "stream": {
+      "title": "Spendenstream simulieren",
+      "desc": "Streamen Sie live synthetische Spenden in die Datenbank. Öffnen Sie die Spendenseite in einem anderen Tab, um Datensätze in Echtzeit eintreffen zu sehen.",
+      "cardTitle": "Spendenstream",
+      "cardDesc": "Jeder Tick fügt eine synthetische Spende ein und sendet sie an alle verbundenen Clients via WebSocket. Wechseln Sie zur Spendenseite, um sie live zu sehen.",
+      "live": "Live",
+      "stopped": "Gestoppt",
+      "sent": "gesendet",
+      "campaign": "Kampagne",
+      "speed": "Geschwindigkeit",
+      "minAmount": "Min €",
+      "maxAmount": "Max €",
+      "starting": "Wird gestartet…",
+      "start": "Stream starten",
+      "stopping": "Wird gestoppt…",
+      "stop": "Stream stoppen"
+    },
+    "mock": {
+      "title": "Testdaten",
+      "desc": "Generieren Sie synthetische Spenden zum Stresstest, dann bereinigen Sie diese.",
+      "generate": {
+        "title": "Zufällige Spenden generieren",
+        "desc": "Füllt die aktive Kampagne mit synthetischen Datensätzen. Große Mengen (1.000–5.000) testen die Paginierungsleistung.",
+        "count": "Anzahl",
+        "minAmount": "Min $",
+        "maxAmount": "Max $",
+        "from": "Von",
+        "to": "Bis",
+        "working": "Arbeite…",
+        "generate": "Generieren"
+      },
+      "delete": {
+        "title": "Alle Testspenden löschen",
+        "desc": "Löscht dauerhaft alle als Test markierten Spenden. Kann nicht rückgängig gemacht werden.",
+        "button": "Alle Testdaten löschen"
+      },
+      "upload": {
+        "title": "Excel / CSV hochladen",
+        "desc": "Importiert Spendendatensätze aus einer Tabellenkalkulation. Akzeptiert .xlsx und .csv.",
+        "button": "Datei auswählen"
+      }
+    },
+    "spikes": {
+      "title": "Spike-Verlauf",
+      "desc": "Wird automatisch aufgezeichnet, wenn ein Dienst einen Schwellenwert überschreitet. Dedupliziert mit 60-Sekunden-Abklingzeit pro Metrik.",
+      "empty": "Keine Spikes aufgezeichnet — alles sieht gut aus.",
+      "ariaLabel": "Spike-Verlaufstabelle",
+      "columns": {
+        "time": "Zeit",
+        "service": "Dienst",
+        "metric": "Metrik",
+        "value": "Wert",
+        "threshold": "Schwellenwert",
+        "severity": "Schweregrad"
+      }
+    },
+    "arch": {
+      "title": "Architekturnotizen",
+      "desc": "Wie dieses System für Skalierung und Produktionsanforderungen konzipiert ist.",
+      "cards": {
+        "caching": "Status & Caching",
+        "performance": "Performance bei Skalierung",
+        "realtime": "Echtzeit-Updates",
+        "production": "Produktionsreife"
+      }
+    }
+  },
+  "paymentMethods": {
+    "allMethods": "Alle Methoden",
+    "sepaDirectDebit": "SEPA-Lastschriftverfahren",
+    "creditCard": "Kreditkarte",
+    "googlePay": "Google Pay",
+    "applePay": "Apple Pay",
+    "paypal": "PayPal",
+    "bankTransfer": "Banküberweisung",
+    "cash": "Bargeld"
+  },
+  "channels": {
+    "allChannels": "Alle Kanäle",
+    "street": "Straße",
+    "doorToDoor": "Haustür zu Haustür",
+    "event": "Veranstaltung",
+    "phone": "Telefon",
+    "email": "E-Mail",
+    "socialMedia": "Soziale Medien"
+  },
+  "donationTable": {
+    "name": "Name",
+    "email": "E-Mail",
+    "channel": "Kanal",
+    "amount": "Betrag",
+    "method": "Methode",
+    "date": "Datum",
+    "empty": "Keine Spenden gefunden.",
+    "ariaLabel": "Spendentabelle"
+  },
+  "auth": {
+    "login": {
+      "title": "Anmelden",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "forgotPassword": "Passwort vergessen?",
+      "submitting": "Anmeldung läuft…",
+      "submit": "Anmelden",
+      "noAccount": "Noch kein Konto?",
+      "signUp": "Registrieren",
+      "errors": {
+        "emailRequired": "Gültige E-Mail-Adresse erforderlich",
+        "passwordRequired": "Passwort muss mindestens 8 Zeichen lang sein"
+      }
+    },
+    "signup": {
+      "title": "Konto erstellen",
+      "fullName": "Vollständiger Name",
+      "email": "E-Mail",
+      "password": "Passwort",
+      "submitting": "Konto wird erstellt…",
+      "submit": "Konto erstellen",
+      "hasAccount": "Bereits ein Konto?",
+      "signIn": "Anmelden",
+      "errors": {
+        "nameRequired": "Name muss mindestens 2 Zeichen lang sein",
+        "emailRequired": "Gültige E-Mail-Adresse erforderlich",
+        "passwordRequired": "Passwort muss mindestens 8 Zeichen lang sein"
+      }
+    },
+    "forgotPassword": {
+      "title": "Passwort zurücksetzen",
+      "subtitle": "Geben Sie Ihre E-Mail-Adresse ein und wir generieren einen Reset-Token.",
+      "email": "E-Mail",
+      "submitting": "Token wird generiert…",
+      "submit": "Reset-Token anfordern",
+      "rememberIt": "Erinnern Sie sich?",
+      "signIn": "Anmelden",
+      "tokenNote": "In der Produktion würde dies per E-Mail gesendet. Für diese Demo lautet Ihr Reset-Token:",
+      "continue": "Weiter zum neuen Passwort",
+      "errors": {
+        "emailRequired": "Gültige E-Mail-Adresse erforderlich"
+      }
+    },
+    "resetPassword": {
+      "title": "Neues Passwort festlegen",
+      "resetToken": "Reset-Token",
+      "tokenPlaceholder": "Reset-Token einfügen",
+      "newPassword": "Neues Passwort",
+      "submitting": "Wird gespeichert…",
+      "submit": "Neues Passwort festlegen",
+      "backToSignIn": "Zurück zur Anmeldung",
+      "errors": {
+        "tokenRequired": "Reset-Token ist erforderlich",
+        "passwordRequired": "Passwort muss mindestens 8 Zeichen lang sein"
+      }
+    }
+  }
+}

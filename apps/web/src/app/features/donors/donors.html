@@ -1,10 +1,10 @@
 <div class="page-header">
-  <h1 class="page-title">Donors</h1>
+  <h1 class="page-title">{{ 'donors.title' | transloco }}</h1>
   <input
     class="search-input"
     type="search"
-    placeholder="Search donors…"
-    aria-label="Search donors"
+    [placeholder]="'donors.searchPlaceholder' | transloco"
+    [attr.aria-label]="'donors.searchAriaLabel' | transloco"
     (input)="onSearch($event)"
   />
 </div>
@@ -12,21 +12,21 @@
 @if (isLoading()) {
   <app-loading-spinner />
 } @else if (error()) {
-  <app-error-banner [message]="error()?.message ?? 'Failed to load donors'" />
+  <app-error-banner [message]="error()?.message ?? ('donors.loadError' | transloco)" />
 } @else if (donors().length === 0) {
-  <p class="empty-state">No donors found.</p>
+  <p class="empty-state">{{ 'donors.empty' | transloco }}</p>
 } @else {
   <div class="table-wrapper">
-    <table class="donor-table" aria-label="Donors">
+    <table class="donor-table" [attr.aria-label]="'donors.ariaLabel' | transloco">
       <thead>
         <tr>
-          <th>Name</th>
-          <th>Email</th>
-          <th>City</th>
-          <th>Country</th>
-          <th class="col-number"># Donations</th>
-          <th class="col-number">Total Donated</th>
-          <th>Last Donation</th>
+          <th>{{ 'donors.table.name' | transloco }}</th>
+          <th>{{ 'donors.table.email' | transloco }}</th>
+          <th>{{ 'donors.table.city' | transloco }}</th>
+          <th>{{ 'donors.table.country' | transloco }}</th>
+          <th class="col-number">{{ 'donors.table.numDonations' | transloco }}</th>
+          <th class="col-number">{{ 'donors.table.totalDonated' | transloco }}</th>
+          <th>{{ 'donors.table.lastDonation' | transloco }}</th>
         </tr>
       </thead>
       <tbody>

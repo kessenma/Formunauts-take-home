@@ -103,10 +103,12 @@
   white-space: nowrap;
 }
 
-/* Multiline: anchor label to the top of the textarea */
+/* Multiline: label always rides the top border — no floating needed for textareas */
 .text-input--multiline .text-input__label {
-  top: var(--spacing-16);
-  transform: none;
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 11px;
+  background: var(--_bg);
 }
 
 /* Floated: ride the top border */

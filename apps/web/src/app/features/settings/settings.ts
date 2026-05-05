@@ -4,6 +4,8 @@ import { DatePipe } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { NgIcon } from '@ng-icons/core';
 import { toast } from 'ngx-sonner';
+import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { LanguageService } from '../../core/services/language';
 import { HealthService } from '../../core/services/health';
 import { SpikesService } from '../../core/services/spikes';
 import { OrganizationService } from '../../core/services/organization';
@@ -20,7 +22,11 @@ import { TabsContent } from '../../shared/components/tabs/tabs-content';
 import { DonationForm } from '../donation-form/donation-form';
 import { BulkDonationUpload } from '../donation-form/bulk-donation-upload/bulk-donation-upload';
 import { TextInput } from '../../shared/components/text-input/text-input';
+import { Dropdown, type DropdownOption } from '../../shared/components/dropdown/dropdown';
+import { RadioCardGroup } from '../../shared/components/radio-card/radio-card-group';
+import { RadioCardItem } from '../../shared/components/radio-card/radio-card-item';
 import type { MockDataParams, CreateDonationRequest } from '@formunauts/shared';
+import { DonationStreamer } from './donation-streamer/donation-streamer';
 
 @Component({
   selector: 'app-settings',
@@ -29,7 +35,8 @@ import type { MockDataParams, CreateDonationRequest } from '@formunauts/shared';
     Accordion, AccordionItem,
     Tabs, TabsList, TabsTrigger, TabsContent,
     DonationForm, BulkDonationUpload,
-    TextInput,
+    TextInput, Dropdown, RadioCardGroup, RadioCardItem,
+    TranslocoPipe, DonationStreamer,
   ],
   templateUrl: './settings.html',
   styleUrl: './settings.css',
@@ -43,10 +50,13 @@ export class Settings {
   readonly #donationService = inject(DonationService);
   readonly #http = inject(HttpClient);
   readonly #fb = inject(FormBuilder);
+  readonly #lang = inject(LanguageService);
+  readonly #transloco = inject(TranslocoService);
 
   readonly health = this.#healthService.health;
   readonly spikes = this.#spikesService.spikes;
   readonly organizations = this.#orgService.organizations;
+  readonly campaigns = this.#campaignService.campaigns;
 
   readonly donationFormRef = viewChild(DonationForm);
 
@@ -63,19 +73,38 @@ export class Settings {
     return this.#campaignService.campaigns.value()?.[0]?.id ?? 0;
   });
 
+  readonly campaignStatusOptions = computed<DropdownOption[]>(() => {
+    this.#lang.lang();
+    const t = (k: string) => this.#transloco.translate(k);
+    return [
+      { value: 'draft',     label: t('settings.setup.campaign.statusDraft') },
+      { value: 'active',    label: t('settings.setup.campaign.statusActive') },
+      { value: 'paused',    label: t('settings.setup.campaign.statusPaused') },
+      { value: 'completed', label: t('settings.setup.campaign.statusCompleted') },
+    ];
+  });
+
+  readonly orgOptions = computed<DropdownOption[]>(() =>
+    (this.organizations.value() ?? []).map(o => ({ value: String(o.id), label: o.name })),
+  );
+
   readonly spikesEmpty = computed(() => {
     const s = this.spikes();
     return s !== null && s !== undefined && s.length === 0;
   });
 
-  readonly spikeColumns: TableColumn[] = [
-    { key: 'time',      label: 'Time' },
-    { key: 'service',   label: 'Service' },
-    { key: 'metric',    label: 'Metric' },
-    { key: 'value',     label: 'Value' },
-    { key: 'threshold', label: 'Threshold' },
-    { key: 'severity',  label: 'Severity' },
-  ];
+  readonly spikeColumns = computed<TableColumn[]>(() => {
+    this.#lang.lang();
+    const t = (k: string) => this.#transloco.translate(k);
+    return [
+      { key: 'time',      label: t('settings.spikes.columns.time') },
+      { key: 'service',   label: t('settings.spikes.columns.service') },
+      { key: 'metric',    label: t('settings.spikes.columns.metric') },
+      { key: 'value',     label: t('settings.spikes.columns.value') },
+      { key: 'threshold', label: t('settings.spikes.columns.threshold') },
+      { key: 'severity',  label: t('settings.spikes.columns.severity') },
+    ];
+  });
 
   readonly orgForm = this.#fb.nonNullable.group({
     name:    ['', Validators.required],

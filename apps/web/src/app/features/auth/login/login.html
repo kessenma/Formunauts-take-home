@@ -4,7 +4,7 @@
       <span class="auth-brand__name">Formunauts</span>
     </div>
 
-    <h1 class="auth-title">Sign in</h1>
+    <h1 class="auth-title">{{ 'auth.login.title' | transloco }}</h1>
 
     @if (errorMessage()) {
       <p class="form-msg form-msg--error" role="alert">{{ errorMessage() }}</p>
@@ -12,7 +12,7 @@
 
     <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="auth-form">
       <div class="form-row">
-        <label class="form-label" for="email">Email</label>
+        <label class="form-label" for="email">{{ 'auth.login.email' | transloco }}</label>
         <input
           id="email"
           class="form-input"
@@ -23,12 +23,12 @@
           placeholder="you@example.com"
         />
         @if (form.controls.email.invalid && form.controls.email.touched) {
-          <span class="form-error" role="alert">Valid email is required</span>
+          <span class="form-error" role="alert">{{ 'auth.login.errors.emailRequired' | transloco }}</span>
         }
       </div>
 
       <div class="form-row">
-        <label class="form-label" for="password">Password</label>
+        <label class="form-label" for="password">{{ 'auth.login.password' | transloco }}</label>
         <input
           id="password"
           class="form-input"
@@ -39,22 +39,22 @@
           placeholder="••••••••"
         />
         @if (form.controls.password.invalid && form.controls.password.touched) {
-          <span class="form-error" role="alert">Password must be at least 8 characters</span>
+          <span class="form-error" role="alert">{{ 'auth.login.errors.passwordRequired' | transloco }}</span>
         }
       </div>
 
       <div class="form-row--actions">
-        <a routerLink="/forgot-password" class="auth-link auth-link--sm">Forgot password?</a>
+        <a routerLink="/forgot-password" class="auth-link auth-link--sm">{{ 'auth.login.forgotPassword' | transloco }}</a>
       </div>
 
       <button class="btn btn--primary btn--full" type="submit" [disabled]="submitting()">
-        {{ submitting() ? 'Signing in…' : 'Sign in' }}
+        {{ submitting() ? ('auth.login.submitting' | transloco) : ('auth.login.submit' | transloco) }}
       </button>
     </form>
 
     <p class="auth-footer">
-      Don't have an account?
-      <a routerLink="/signup" class="auth-link">Sign up</a>
+      {{ 'auth.login.noAccount' | transloco }}
+      <a routerLink="/signup" class="auth-link">{{ 'auth.login.signUp' | transloco }}</a>
     </p>
   </div>
 </div>

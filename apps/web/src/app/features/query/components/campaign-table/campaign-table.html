@@ -1,0 +1,20 @@
+<app-table
+  [columns]="columns"
+  [sortParams]="null"
+  [isEmpty]="campaigns().length === 0"
+  emptyMessage="No campaigns found."
+  ariaLabel="Campaigns table"
+>
+  @for (c of campaigns(); track c.id) {
+    <tr>
+      <td>{{ c.name }}</td>
+      <td>{{ c.organizationName }}</td>
+      <td class="status">{{ c.status }}</td>
+      <td>{{ c.goal | currency:c.currency:'symbol':'1.2-2' }}</td>
+      <td>{{ c.totalRaised | currency:c.currency:'symbol':'1.2-2' }}</td>
+      <td>{{ c.donorCount }}</td>
+      <td>{{ c.startDate ? (c.startDate | date:'mediumDate') : '—' }}</td>
+      <td>{{ c.endDate ? (c.endDate | date:'mediumDate') : '—' }}</td>
+    </tr>
+  }
+</app-table>

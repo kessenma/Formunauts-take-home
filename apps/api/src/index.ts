@@ -8,7 +8,7 @@ import {
   organizations, campaignFundraisers, chatSessions, chatMessages, authUsers,
 } from './db/schema';
 import { eq, sql, asc, desc, count, and, or, ilike, gte, lte, SQL } from 'drizzle-orm';
-import { generateMockDonations, deleteAllMockDonations } from './db/mock';
+import { generateMockDonations, deleteAllMockDonations, generateOneMockDonation } from './db/mock';
 import { seed } from './db/seed';
 import type {
   WsDonationEvent, MockDataParams, Donation, SortParams,
@@ -61,7 +61,7 @@ const wsClients = new Set<import('bun').ServerWebSocket<unknown>>();
 // ── Spike detection ───────────────────────────────────────────────────────────
 
 async function shouldRecordSpike(key: string, cooldownSecs = 60): Promise<boolean> {
-  const result = await redis.set(`spike:${key}`, '1', 'NX', 'EX', cooldownSecs);
+  const result = await redis.set(`spike:${key}`, '1', 'NX', 'EX', String(cooldownSecs));
   return result === 'OK';
 }
 
@@ -192,6 +192,30 @@ function shapeRow(row: JoinedRow): Donation {
       longitude: row.locationLng ? parseFloat(row.locationLng) : null,
     } : null,
   };
+}
+
+// ── Donation stream ───────────────────────────────────────────────────────────
+
+interface StreamConfig { campaignId: number; intervalMs: number; minAmount: number; maxAmount: number; }
+
+let streamTimer: ReturnType<typeof setInterval> | null = null;
+let streamConfig: StreamConfig | null = null;
+let streamCount = 0;
+let streamStartedAt: string | null = null;
+
+async function streamTick(): Promise<void> {
+  if (!streamConfig) return;
+  try {
+    const donationId = await generateOneMockDonation(streamConfig.campaignId, streamConfig.minAmount, streamConfig.maxAmount);
+    const [shaped] = await donationsBaseQuery(eq(donations.id, donationId));
+    if (shaped) {
+      const donation = shapeRow(shaped as JoinedRow);
+      await redis.publish('donations:live', JSON.stringify(donation));
+      streamCount++;
+    }
+  } catch (err) {
+    console.error('[stream] tick error', err);
+  }
 }
 
 // ── App ───────────────────────────────────────────────────────────────────────
@@ -333,7 +357,7 @@ const app = new Elysia()
 
     const where = conditions.length > 0 ? and(...conditions) : undefined;
 
-    const [rows, [{ total }]] = await Promise.all([
+    const [rows, countRows] = await Promise.all([
       donationsBaseQuery(where).orderBy(orderFn(sortCol)).limit(limit).offset(offset),
       db
         .select({ total: count() })
@@ -341,6 +365,7 @@ const app = new Elysia()
         .leftJoin(donors, eq(donations.donorId, donors.id))
         .where(where),
     ]);
+    const { total } = countRows[0]!;
 
     const totalPages = Math.ceil(total / limit);
     return {
@@ -372,14 +397,14 @@ const app = new Elysia()
             .insert(donors)
             .values({ firstName: body.firstName, lastName: body.lastName, email: body.email, phone: body.phone ?? null })
             .returning({ id: donors.id });
-          donorId = created.id;
+          donorId = created!.id;
         }
       } else {
         const [created] = await db
           .insert(donors)
           .values({ firstName: body.firstName, lastName: body.lastName, phone: body.phone ?? null })
           .returning({ id: donors.id });
-        donorId = created.id;
+        donorId = created!.id;
       }
 
       // 2. Resolve location (find or create by city+country)
@@ -397,7 +422,7 @@ const app = new Elysia()
             .insert(donationLocations)
             .values({ city: body.city, country: body.country })
             .returning({ id: donationLocations.id });
-          locationId = created.id;
+          locationId = created!.id;
         }
       }
 
@@ -419,7 +444,7 @@ const app = new Elysia()
         .returning({ id: donations.id });
 
       // 4. Re-fetch with joins for consistent response shape
-      const [shaped] = await donationsBaseQuery(eq(donations.id, inserted.id));
+      const [shaped] = await donationsBaseQuery(eq(donations.id, inserted!.id));
       const donation = shapeRow(shaped as JoinedRow);
       await redis.publish('donations:live', JSON.stringify(donation));
       return donation;
@@ -485,6 +510,43 @@ const app = new Elysia()
     const deleted = await deleteAllMockDonations();
     return { deleted };
   })
+
+  // Start donation stream
+  .post(
+    '/api/mock/stream/start',
+    async ({ body }) => {
+      if (streamTimer !== null) clearInterval(streamTimer);
+      streamConfig = body as StreamConfig;
+      streamCount = 0;
+      streamStartedAt = new Date().toISOString();
+      streamTimer = setInterval(() => { streamTick(); }, streamConfig.intervalMs);
+      return { running: true, config: streamConfig, totalGenerated: 0, startedAt: streamStartedAt };
+    },
+    {
+      body: t.Object({
+        campaignId: t.Number({ minimum: 1 }),
+        intervalMs: t.Number({ minimum: 100, maximum: 10000 }),
+        minAmount:  t.Number({ minimum: 1 }),
+        maxAmount:  t.Number({ minimum: 1 }),
+      }),
+    },
+  )
+
+  // Stop donation stream
+  .post('/api/mock/stream/stop', () => {
+    if (streamTimer !== null) { clearInterval(streamTimer); streamTimer = null; }
+    const result = { running: false, config: streamConfig, totalGenerated: streamCount, startedAt: streamStartedAt };
+    streamConfig = null; streamCount = 0; streamStartedAt = null;
+    return result;
+  })
+
+  // Stream status
+  .get('/api/mock/stream/status', () => ({
+    running: streamTimer !== null,
+    config: streamConfig,
+    totalGenerated: streamCount,
+    startedAt: streamStartedAt,
+  }))
 
   // LLM model status
   .get('/api/model-status', async () => {
@@ -648,6 +710,9 @@ const app = new Elysia()
     async ({ body, session }) => {
       const { question, sessionId, context } = body;
       const enrichedQuestion = buildEnrichedQuestion(question, context);
+      const displayQuestion = context?.length
+        ? `${question}  ${context.map(c => `[${c.label}]`).join(' ')}`
+        : question;
 
       // Verify ownership
       const [sess] = await db
@@ -664,11 +729,11 @@ const app = new Elysia()
         .where(eq(chatMessages.sessionId, sessionId));
       const cnt = countResult[0]?.cnt ?? 0;
 
-      await db.insert(chatMessages).values({ sessionId, role: 'user', text: question });
+      await db.insert(chatMessages).values({ sessionId, role: 'user', text: displayQuestion });
 
       if (cnt === 0) {
         await db.update(chatSessions)
-          .set({ title: question.slice(0, 80), updatedAt: new Date() })
+          .set({ title: displayQuestion.slice(0, 80), updatedAt: new Date() })
           .where(eq(chatSessions.id, sessionId));
       }
 
@@ -896,7 +961,7 @@ const app = new Elysia()
           endDate:        body.endDate   ? new Date(body.endDate)   : null,
         })
         .returning({ id: campaigns.id });
-      return row[0];
+      return row;
     },
     {
       body: t.Object({
@@ -931,7 +996,7 @@ const app = new Elysia()
           phone:          body.phone ?? null,
         })
         .returning({ id: fundraisers.id });
-      return row[0];
+      return row;
     },
     {
       body: t.Object({
@@ -988,9 +1053,22 @@ const app = new Elysia()
     const limit = Math.min(100, parseInt((query.limit as string) ?? '50'));
     const offset = (page - 1) * limit;
 
-    const where = campaignId
-      ? eq(campaignFundraisers.campaignId, campaignId)
-      : undefined;
+    const conditions: SQL[] = [];
+    if (campaignId) {
+      conditions.push(eq(campaignFundraisers.campaignId, campaignId));
+    }
+    if ((query.search as string | undefined)?.trim()) {
+      const q = `%${(query.search as string).trim()}%`;
+      conditions.push(or(
+        ilike(fundraisers.firstName, q),
+        ilike(fundraisers.lastName, q),
+        ilike(sql`${fundraisers.firstName} || ' ' || ${fundraisers.lastName}`, q),
+      )!);
+    }
+    if ((query.isActive as string | undefined) !== undefined && (query.isActive as string) !== '') {
+      conditions.push(eq(fundraisers.isActive, (query.isActive as string) === 'true'));
+    }
+    const where = conditions.length ? and(...conditions) : undefined;
 
     const rows = await db
       .select({
@@ -1016,7 +1094,12 @@ const app = new Elysia()
       .limit(limit)
       .offset(offset);
 
-    const [{ total }] = await db.select({ total: count() }).from(fundraisers);
+    const [fundraiserCountRow] = await db
+      .select({ total: count() })
+      .from(fundraisers)
+      .leftJoin(campaignFundraisers, eq(campaignFundraisers.fundraiserId, fundraisers.id))
+      .where(where);
+    const total = fundraiserCountRow!.total;
 
     return {
       data: rows.map(r => ({ ...r, totalRaised: parseFloat(r.totalRaised) })),
@@ -1042,6 +1125,9 @@ const app = new Elysia()
         ilike(sql`${donors.firstName} || ' ' || ${donors.lastName}`, q),
       )!);
     }
+    if ((query.country as string | undefined)?.trim()) {
+      conditions.push(ilike(donors.country, (query.country as string).trim()));
+    }
     if (campaignId) {
       conditions.push(eq(donations.campaignId, campaignId));
     }
@@ -1058,7 +1144,7 @@ const app = new Elysia()
         country: donors.country,
         totalDonated: sql<string>`coalesce(sum(${donations.amount}), 0)`,
         donationCount: sql<number>`count(${donations.id})::int`,
-        lastDonationAt: sql<Date | null>`max(${donations.date})`,
+        lastDonationAt: sql<string | null>`max(${donations.date})`,
       })
       .from(donors)
       .leftJoin(donations, eq(donations.donorId, donors.id))
@@ -1068,18 +1154,19 @@ const app = new Elysia()
       .limit(limit)
       .offset(offset);
 
-    const [{ total }] = await db
+    const [donorCountRow] = await db
       .select({ total: count() })
       .from(donors)
       .leftJoin(donations, eq(donations.donorId, donors.id))
       .where(where);
+    const total = donorCountRow!.total;
 
     const totalPages = Math.ceil(total / limit);
     return {
       data: rows.map(r => ({
         ...r,
         totalDonated: parseFloat(r.totalDonated),
-        lastDonationAt: r.lastDonationAt?.toISOString() ?? null,
+        lastDonationAt: r.lastDonationAt ?? null,
       })),
       pagination: { page, limit, total, totalPages },
       total, page, limit, totalPages,
@@ -1119,8 +1206,8 @@ const app = new Elysia()
 
   // WebSocket — real-time donation feed
   .ws('/api/donations/live', {
-    open(ws)  { wsClients.add(ws.raw); },
-    close(ws) { wsClients.delete(ws.raw); },
+    open(ws)  { wsClients.add(ws.raw as import('bun').ServerWebSocket<unknown>); },
+    close(ws) { wsClients.delete(ws.raw as import('bun').ServerWebSocket<unknown>); },
     message() { /* server-push only */ },
   })
 
