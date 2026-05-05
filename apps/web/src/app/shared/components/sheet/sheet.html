@@ -1,0 +1,31 @@
+<dialog
+  #dialogEl
+  class="sheet"
+  [class.sheet--left]="side() === 'left'"
+  (click)="closed.emit()"
+  (cancel)="onCancel($event)"
+  [attr.aria-label]="title()"
+  aria-modal="true"
+>
+  <div class="sheet__panel" (click)="$event.stopPropagation()">
+    <div class="sheet__header">
+      <h2 class="sheet__title">{{ title() }}</h2>
+      <button
+        class="sheet__close-btn"
+        type="button"
+        (click)="closed.emit()"
+        aria-label="Close"
+      ><ng-icon name="solarCloseCircleBoldDuotone" size="16" aria-hidden="true"></ng-icon></button>
+    </div>
+
+    <div class="sheet__body">
+      <ng-content />
+    </div>
+
+    @if (showFooter()) {
+      <div class="sheet__footer">
+        <ng-content select="[sheet-footer]" />
+      </div>
+    }
+  </div>
+</dialog>

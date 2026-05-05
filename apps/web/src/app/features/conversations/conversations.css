@@ -1,0 +1,98 @@
+.conversations-page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-24);
+}
+
+.conversations-page__header {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.conversations-page__title {
+  margin: 0;
+  font-size: var(--text-heading);
+  font-weight: var(--font-weight-bold);
+  color: var(--text-primary);
+}
+
+.conversations-page__subtitle {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+}
+
+.conversations-page__loading,
+.conversations-page__empty {
+  padding: var(--spacing-48) var(--spacing-24);
+  text-align: center;
+  color: var(--text-muted);
+  font-size: var(--text-body-sm);
+  background: var(--surface-1);
+  border-radius: var(--radius-cards);
+  border: 1px solid var(--border-color);
+}
+
+.conversations-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.conversations-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-16);
+  width: 100%;
+  padding: var(--spacing-16) var(--spacing-20);
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-cards);
+  text-align: left;
+  font-family: var(--font-family-base);
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, box-shadow 0.15s;
+}
+
+.conversations-item:hover {
+  background: var(--surface-0);
+  border-color: var(--color-lochmara);
+  box-shadow: 0 0 0 1px var(--color-lochmara);
+}
+
+.conversations-item__content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+.conversations-item__title {
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.conversations-item__meta {
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.conversations-item__shared-badge {
+  flex-shrink: 0;
+  padding: var(--spacing-2) var(--spacing-8);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-lochmara);
+  background: color-mix(in srgb, var(--color-lochmara) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--color-lochmara) 30%, transparent);
+  border-radius: var(--radius-badges);
+}

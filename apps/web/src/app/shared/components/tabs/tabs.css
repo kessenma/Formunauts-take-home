@@ -1,0 +1,172 @@
+/* ViewEncapsulation.None — scoped via .tabs prefix */
+
+.tabs {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+/* ── List ── */
+
+.tabs-list {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Default: muted pill container */
+.tabs-list--default {
+  background: var(--surface-2);
+  border-radius: var(--radius-general);
+  padding: var(--spacing-4);
+  gap: var(--spacing-4);
+}
+
+/* Underline: just a bottom border */
+.tabs-list--underline {
+  width: 100%;
+  border-bottom: 1px solid var(--border-color);
+  gap: 0;
+}
+
+/* Pills: flex row with gap */
+.tabs-list--pills {
+  gap: var(--spacing-8);
+}
+
+/* Styled: full-width card group */
+.tabs-list--styled {
+  width: 100%;
+  gap: var(--spacing-12);
+}
+
+/* ── Trigger ── */
+
+.tabs-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  font-family: inherit;
+  line-height: var(--leading-body-sm);
+  color: var(--text-muted);
+  background: none;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  transition: color 0.15s ease, background 0.15s ease, border-color 0.15s ease;
+}
+
+.tabs-trigger:focus-visible {
+  box-shadow: 0 0 0 2px var(--color-lochmara);
+  border-radius: var(--radius-general);
+}
+
+.tabs-trigger--disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+
+/* ── Default variant triggers ── */
+
+.tabs-list--default .tabs-trigger {
+  border-radius: var(--radius-general);
+  padding: var(--spacing-4) var(--spacing-12);
+}
+
+.tabs-list--default .tabs-trigger:hover:not(.tabs-trigger--disabled) {
+  color: var(--text-primary);
+}
+
+.tabs-list--default .tabs-trigger--active {
+  background: var(--surface-1);
+  color: var(--text-primary);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
+}
+
+/* ── Underline variant triggers ── */
+
+.tabs-list--underline .tabs-trigger {
+  padding: var(--spacing-8) var(--spacing-16);
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+}
+
+.tabs-list--underline .tabs-trigger:hover:not(.tabs-trigger--disabled) {
+  color: var(--text-primary);
+}
+
+.tabs-list--underline .tabs-trigger--active {
+  color: var(--color-lochmara);
+  border-bottom-color: var(--color-lochmara);
+}
+
+/* ── Pills variant triggers ── */
+
+.tabs-list--pills .tabs-trigger {
+  border-radius: var(--radius-full);
+  padding: var(--spacing-8) var(--spacing-16);
+}
+
+.tabs-list--pills .tabs-trigger:hover:not(.tabs-trigger--disabled) {
+  background: var(--surface-2);
+  color: var(--text-primary);
+}
+
+.tabs-list--pills .tabs-trigger--active {
+  background: var(--color-lochmara);
+  color: white;
+}
+
+/* ── Styled variant triggers ── */
+
+.tabs-list--styled .tabs-trigger {
+  position: relative;
+  flex: 1;
+  padding: var(--spacing-16);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-cards);
+  text-align: left;
+  justify-content: flex-start;
+}
+
+.tabs-list--styled .tabs-trigger:hover:not(.tabs-trigger--disabled) {
+  border-color: color-mix(in srgb, var(--color-lochmara) 40%, var(--border-color));
+}
+
+.tabs-list--styled .tabs-trigger--active {
+  border-color: var(--color-lochmara);
+  color: var(--text-primary);
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--color-lochmara) 20%, transparent);
+}
+
+/* Checkmark overlay (styled variant, showCheckmark) */
+.tabs-trigger__check-overlay {
+  position: absolute;
+  inset: -1px;
+  border: 2px solid var(--color-lochmara);
+  border-radius: var(--radius-cards);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.tabs-trigger__check-badge {
+  position: absolute;
+  top: var(--spacing-8);
+  right: var(--spacing-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--color-lochmara);
+  color: white;
+}
+
+/* ── Content ── */
+
+.tabs-content {
+  outline: none;
+}

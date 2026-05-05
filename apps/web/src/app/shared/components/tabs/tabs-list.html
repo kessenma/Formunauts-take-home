@@ -1,0 +1,10 @@
+<div
+  class="tabs-list"
+  [class.tabs-list--default]="ctx.variant() === 'default'"
+  [class.tabs-list--underline]="ctx.variant() === 'underline'"
+  [class.tabs-list--pills]="ctx.variant() === 'pills'"
+  [class.tabs-list--styled]="ctx.variant() === 'styled'"
+  role="tablist"
+>
+  <ng-content />
+</div>

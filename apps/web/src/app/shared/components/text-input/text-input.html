@@ -1,0 +1,52 @@
+<div
+  class="text-input"
+  [class.text-input--focused]="isFocused()"
+  [class.text-input--filled]="hasValue()"
+  [class.text-input--error]="!!error()"
+  [class.text-input--disabled]="isDisabled()"
+  [class.text-input--readonly]="readOnly()"
+  [class.text-input--multiline]="multiline()"
+>
+  <div class="text-input__wrap">
+    @if (!multiline()) {
+      <input
+        class="text-input__field"
+        [id]="inputId"
+        [type]="type()"
+        [value]="value()"
+        [placeholder]="placeholder()"
+        [readOnly]="readOnly()"
+        [disabled]="isDisabled()"
+        (focus)="onFocus()"
+        (blur)="onBlur()"
+        (input)="onInput($event)"
+      />
+    } @else {
+      <textarea
+        #textareaEl
+        class="text-input__field"
+        [id]="inputId"
+        [value]="value()"
+        [rows]="rows()"
+        [placeholder]="placeholder()"
+        [readOnly]="readOnly()"
+        [disabled]="isDisabled()"
+        (focus)="onFocus()"
+        (blur)="onBlur()"
+        (input)="onInput($event)"
+      ></textarea>
+    }
+
+    @if (label()) {
+      <label
+        class="text-input__label"
+        [class.text-input__label--float]="labelFloats()"
+        [attr.for]="inputId"
+      >{{ label() }}</label>
+    }
+  </div>
+
+  @if (error()) {
+    <p class="text-input__error" role="alert">{{ error() }}</p>
+  }
+</div>

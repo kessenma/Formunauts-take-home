@@ -1,0 +1,72 @@
+/* ViewEncapsulation.None — scoped via .radio-card prefix */
+
+/* ── Group ── */
+
+.radio-card-group {
+  display: flex;
+  flex-direction: row;
+  gap: var(--spacing-16);
+  width: 100%;
+}
+
+.radio-card-group--column {
+  flex-direction: column;
+}
+
+/* ── Item ── */
+
+.radio-card-item {
+  position: relative;
+  flex: 1;
+  padding: var(--spacing-16);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-cards);
+  background: var(--surface-1);
+  color: var(--text-primary);
+  cursor: pointer;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    background 0.15s ease,
+    color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.radio-card-item:hover:not(.radio-card-item--disabled) {
+  border-color: var(--color-lochmara);
+}
+
+.radio-card-item:focus-visible:not(.radio-card-item--disabled) {
+  border-color: var(--color-lochmara);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-lochmara) 25%, transparent);
+}
+
+/* Selected */
+.radio-card-item--selected {
+  border-color: var(--color-lochmara);
+  background: var(--color-lochmara);
+  color: white;
+  box-shadow: 0 1px 4px color-mix(in srgb, var(--color-lochmara) 35%, transparent);
+}
+
+/* Disabled */
+.radio-card-item--disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* ── Check badge ── */
+
+.radio-card-item__check {
+  position: absolute;
+  top: var(--spacing-8);
+  right: var(--spacing-8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  border-radius: var(--radius-full);
+  background: white;
+  color: var(--color-lochmara);
+}

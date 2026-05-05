@@ -1,0 +1,11 @@
+[project]
+name = "llm-service"
+version = "0.1.0"
+requires-python = ">=3.11"
+dependencies = [
+    "fastapi>=0.111.0",
+    "uvicorn[standard]>=0.29.0",
+    "llama-cpp-python>=0.2.88",
+    "huggingface-hub>=0.23.4",
+    "requests>=2.31.0",
+]

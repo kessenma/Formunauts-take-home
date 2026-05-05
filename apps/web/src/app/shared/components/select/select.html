@@ -1,0 +1,72 @@
+<div
+  class="select"
+  [class.select--open]="isOpen()"
+  [class.select--filled]="hasValue()"
+  [class.select--error]="!!error()"
+  [class.select--disabled]="isDisabled()"
+>
+  <div class="select__wrap">
+    <button
+      class="select__trigger"
+      type="button"
+      [id]="triggerId"
+      [disabled]="isDisabled()"
+      [attr.aria-expanded]="isOpen()"
+      [attr.aria-haspopup]="'listbox'"
+      [attr.aria-controls]="panelId"
+      (click)="toggle()"
+      (keydown)="onTriggerKeydown($event)"
+    >
+      <span class="select__value" [class.select__value--placeholder]="!hasValue()">
+        {{ hasValue() ? selectedLabel() : placeholder() }}
+      </span>
+      <ng-icon
+        class="select__chevron"
+        name="solarAltArrowDownBoldDuotone"
+        size="14"
+        aria-hidden="true"
+      />
+    </button>
+
+    @if (label()) {
+      <label
+        class="select__label"
+        [class.select__label--float]="isOpen() || hasValue()"
+        [attr.for]="triggerId"
+      >{{ label() }}</label>
+    }
+
+    @if (isOpen()) {
+      <div
+        class="select__panel"
+        [id]="panelId"
+        role="listbox"
+        [attr.aria-label]="label() || placeholder()"
+      >
+        @for (opt of options(); track opt.value) {
+          <button
+            class="select__option"
+            [class.select__option--selected]="opt.value === value()"
+            [class.select__option--disabled]="!!opt.disabled"
+            type="button"
+            role="option"
+            [attr.aria-selected]="opt.value === value()"
+            [disabled]="opt.disabled"
+            (click)="selectOption(opt)"
+          >
+            <span>{{ opt.label }}</span>
+            @if (opt.value === value()) {
+              <ng-icon name="solarCheckCircleBoldDuotone" size="14" aria-hidden="true" />
+            }
+          </button>
+        } @empty {
+          <p class="select__empty">No options</p>
+        }
+      </div>
+    }
+  </div>
+
+  @if (error()) {
+    <p class="select__error" role="alert">{{ error() }}</p>
+  }
+</div>

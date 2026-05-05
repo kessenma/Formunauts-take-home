@@ -1,0 +1,75 @@
+<section class="form-card" aria-label="New donation">
+  <h3 class="form-card__title">Make a Donation</h3>
+
+  @if (successMessage()) {
+    <p class="form-msg form-msg--success" role="status">{{ successMessage() }}</p>
+  }
+  @if (errorMessage()) {
+    <p class="form-msg form-msg--error" role="alert">{{ errorMessage() }}</p>
+  }
+
+  <form [formGroup]="form" (ngSubmit)="submit()" novalidate class="donation-form">
+
+    <div class="form-row form-row--split">
+      <app-text-input
+        label="First name"
+        formControlName="firstName"
+        [error]="form.controls.firstName.invalid && form.controls.firstName.touched ? 'First name is required' : ''"
+      />
+      <app-text-input
+        label="Last name"
+        formControlName="lastName"
+        [error]="form.controls.lastName.invalid && form.controls.lastName.touched ? 'Last name is required' : ''"
+      />
+    </div>
+
+    <div class="form-row">
+      <app-text-input label="Email" formControlName="email" type="email" placeholder="optional" />
+    </div>
+
+    <div class="form-row">
+      <app-text-input label="Phone" formControlName="phone" type="tel" placeholder="optional" />
+    </div>
+
+    <div class="form-row">
+      <label class="form-label" for="amount">Amount (€) *</label>
+      <input
+        id="amount"
+        class="form-input"
+        [class.invalid]="form.controls.amount.invalid && form.controls.amount.touched"
+        type="number"
+        formControlName="amount"
+        min="1"
+        step="0.01"
+      />
+      @if (form.controls.amount.invalid && form.controls.amount.touched) {
+        <span class="form-error" role="alert">Amount must be at least €1</span>
+      }
+    </div>
+
+    <div class="form-row">
+      <label class="form-label" for="channel">Channel *</label>
+      <select id="channel" class="form-input" formControlName="channel">
+        @for (c of CHANNELS; track c.value) {
+          <option [value]="c.value">{{ c.label }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="form-row">
+      <label class="form-label" for="paymentMethod">Payment Method *</label>
+      <select id="paymentMethod" class="form-input" formControlName="paymentMethod">
+        @for (m of PAYMENT_METHODS; track m.value) {
+          <option [value]="m.value">{{ m.label }}</option>
+        }
+      </select>
+    </div>
+
+    <button class="form-submit" type="submit" [disabled]="form.invalid || isSubmitting()">
+      @if (!isSubmitting()) {
+        <ng-icon name="solarHeartBoldDuotone" size="16" aria-hidden="true"></ng-icon>
+      }
+      {{ isSubmitting() ? 'Submitting…' : 'Donate' }}
+    </button>
+  </form>
+</section>

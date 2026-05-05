@@ -1,0 +1,77 @@
+<h1 class="page-title">Donations</h1>
+
+<div class="donations-layout">
+  <div class="donations-main">
+    @if (isLoading() && donations().length === 0) {
+      <app-loading-spinner />
+    }
+
+    @if (error()) {
+      <app-error-banner [message]="error()?.message ?? 'Failed to load donations'" />
+    }
+
+    <div class="table-card">
+      <app-donation-filter-bar
+        [pagination]="pagination()"
+        [limit]="limit()"
+        [viewMode]="viewMode()"
+        [filter]="filterParams()"
+        [isLoading]="isLoading()"
+        (filterChange)="onFilterChange($event)"
+        (pageChange)="onPageChange($event)"
+        (limitChange)="onLimitChange($event)"
+        (viewModeChange)="onViewModeChange($event)"
+      />
+
+      <app-donation-table
+        [donations]="donations()"
+        [sortParams]="sortParams()"
+        (sortChange)="onSortChange($event)"
+      />
+
+      @if (viewMode() === 'infinite') {
+        @if (hasMore()) {
+          <div #scrollSentinel class="scroll-sentinel">
+            @if (isLoading()) {
+              <app-loading-spinner />
+            }
+          </div>
+        } @else if (donations().length > 0) {
+          <p class="all-loaded">All donations loaded</p>
+        }
+      }
+    </div>
+  </div>
+
+  <aside class="donations-sidebar">
+    <div class="donations-sidebar__tabs" role="tablist" aria-label="Donation entry mode">
+      <button
+        role="tab"
+        class="donations-sidebar__tab"
+        [class.active]="sidebarMode() === 'single'"
+        [attr.aria-selected]="sidebarMode() === 'single'"
+        type="button"
+        (click)="setSidebarMode('single')"
+      >
+        Single
+      </button>
+      <button
+        role="tab"
+        class="donations-sidebar__tab"
+        [class.active]="sidebarMode() === 'bulk'"
+        [attr.aria-selected]="sidebarMode() === 'bulk'"
+        type="button"
+        (click)="setSidebarMode('bulk')"
+      >
+        Bulk Upload
+      </button>
+    </div>
+    @if (sidebarMode() === 'single') {
+      @if (activeCampaignId(); as cid) {
+        <app-donation-form [campaignId]="cid" (submitted)="onDonationSubmitted($event)" />
+      }
+    } @else {
+      <app-bulk-donation-upload />
+    }
+  </aside>
+</div>

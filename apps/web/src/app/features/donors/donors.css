@@ -1,0 +1,80 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-16);
+  margin-bottom: var(--section-gap);
+  flex-wrap: wrap;
+}
+
+.page-title {
+  font-size: var(--text-heading-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.search-input {
+  padding: var(--spacing-8) var(--spacing-12);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  color: var(--text-primary);
+  font-size: var(--text-body-sm);
+  min-width: 200px;
+}
+
+.search-input::placeholder {
+  color: var(--text-muted);
+}
+
+.empty-state {
+  color: var(--text-muted);
+  font-size: var(--text-body-sm);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  margin-bottom: var(--section-gap);
+}
+
+.donor-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+}
+
+.donor-table th,
+.donor-table td {
+  padding: var(--spacing-12) var(--spacing-16);
+  text-align: left;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.donor-table th {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+  background: var(--surface-1);
+  white-space: nowrap;
+}
+
+.donor-table tbody tr:hover {
+  background: var(--surface-2);
+}
+
+.col-name {
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.col-number {
+  text-align: right;
+}
+
+.col-amount {
+  font-weight: var(--font-weight-semibold);
+}
+
+.col-muted {
+  color: var(--text-muted);
+}

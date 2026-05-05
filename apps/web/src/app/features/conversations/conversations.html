@@ -1,0 +1,35 @@
+<div class="conversations-page">
+  <header class="conversations-page__header">
+    <h1 class="conversations-page__title">All Conversations</h1>
+    <p class="conversations-page__subtitle">AI chat sessions from your team</p>
+  </header>
+
+  @if (isLoading()) {
+    <div class="conversations-page__loading">
+      <p>Loading conversations…</p>
+    </div>
+  } @else if (sessions().length === 0) {
+    <div class="conversations-page__empty">
+      <p>No conversations yet. Start one by clicking <strong>Ask AI</strong> in the bottom-right corner.</p>
+    </div>
+  } @else {
+    <ul class="conversations-list">
+      @for (s of sessions(); track s.id) {
+        <li>
+          <button class="conversations-item" type="button" (click)="openSession(s)">
+            <app-avatar [name]="s.userName" [size]="40" />
+            <div class="conversations-item__content">
+              <span class="conversations-item__title">{{ s.title }}</span>
+              <span class="conversations-item__meta">
+                {{ s.userName }} &middot; {{ s.createdAt | date: 'MMM d, y' }}
+              </span>
+            </div>
+            @if (s.shareToken) {
+              <span class="conversations-item__shared-badge">Shared</span>
+            }
+          </button>
+        </li>
+      }
+    </ul>
+  }
+</div>

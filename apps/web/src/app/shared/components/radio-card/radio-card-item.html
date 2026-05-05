@@ -1,0 +1,19 @@
+<div
+  class="radio-card-item"
+  [class.radio-card-item--selected]="isSelected()"
+  [class.radio-card-item--disabled]="disabled()"
+  role="radio"
+  [attr.aria-checked]="isSelected()"
+  [attr.tabindex]="disabled() ? -1 : 0"
+  (click)="select()"
+  (keydown.enter)="select()"
+  (keydown.space)="select(); $event.preventDefault()"
+>
+  <ng-content />
+
+  @if (isSelected()) {
+    <div class="radio-card-item__check" aria-hidden="true">
+      <ng-icon name="solarCheckCircleBoldDuotone" size="14" />
+    </div>
+  }
+</div>

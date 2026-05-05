@@ -1,0 +1,64 @@
+<div class="pagination-wrapper">
+  <nav class="pagination" aria-label="Pagination">
+    <button class="page-btn" (click)="go(1)" [disabled]="currentPage() === 1" aria-label="First page">«</button>
+    <button class="page-btn" (click)="go(currentPage() - 1)" [disabled]="currentPage() === 1" aria-label="Previous page">‹</button>
+
+    @for (p of pages(); track p) {
+      <button
+        class="page-btn"
+        [class.active]="p === currentPage()"
+        (click)="go(p)"
+        [attr.aria-current]="p === currentPage() ? 'page' : null"
+      >
+        {{ p }}
+      </button>
+    }
+
+    <button class="page-btn" (click)="go(currentPage() + 1)" [disabled]="currentPage() === totalPages()" aria-label="Next page">›</button>
+    <button class="page-btn" (click)="go(totalPages())" [disabled]="currentPage() === totalPages()" aria-label="Last page">»</button>
+  </nav>
+
+  <div class="pagination-controls">
+    <span class="pagination__info">
+      Showing {{ rangeStart() }}–{{ rangeEnd() }} of {{ total() }}
+    </span>
+
+    <label class="pagination-control">
+      <span class="control-label">Go to page</span>
+      <input
+        #pageInput
+        class="page-input"
+        type="number"
+        min="1"
+        [max]="totalPages()"
+        [placeholder]="currentPage()"
+        (keydown.enter)="goToPage(pageInput)"
+        aria-label="Go to page number"
+      />
+      <button class="page-go-btn" (click)="goToPage(pageInput)">Go</button>
+    </label>
+
+    <div class="pagination-control">
+      <span class="control-label">
+        <ng-icon name="solarSliderVerticalMinimalisticBoldDuotone" aria-hidden="true" />
+        Rows
+      </span>
+      <div class="limit-btn-group" role="group" aria-label="Rows per page">
+        @for (opt of LIMIT_OPTIONS; track opt) {
+          <button
+            class="limit-btn"
+            [class.active]="opt === limit()"
+            (click)="limitChange.emit(opt)"
+            [attr.aria-pressed]="opt === limit()"
+          >
+            @if (opt === 0) {
+              <ng-icon name="solarInfinityBoldDuotone" aria-label="All rows" />
+            } @else {
+              {{ opt }}
+            }
+          </button>
+        }
+      </div>
+    </div>
+  </div>
+</div>

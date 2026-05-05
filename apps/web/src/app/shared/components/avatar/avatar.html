@@ -1,0 +1,14 @@
+<div
+  [class]="classes()"
+  [style.width.px]="size()"
+  [style.height.px]="size()"
+  [style.font-size.px]="size() * 0.4"
+  [attr.aria-label]="name() || 'Avatar'"
+  role="img"
+>
+  @if (src()) {
+    <img class="avatar__img" [src]="src()!" [alt]="name()" />
+  } @else {
+    <span class="avatar__initials" aria-hidden="true">{{ initials() }}</span>
+  }
+</div>

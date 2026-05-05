@@ -1,0 +1,106 @@
+.form-card {
+  background: var(--surface-1);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+}
+
+.form-card__title {
+  margin: 0 0 var(--spacing-20);
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-heading-sm);
+  color: var(--text-primary);
+}
+
+.form-msg {
+  border-radius: var(--radius-general);
+  padding: var(--spacing-8) var(--spacing-12);
+  font-size: var(--text-body-sm);
+  margin-bottom: var(--spacing-16);
+}
+
+.form-msg--success {
+  background: var(--color-success-bg);
+  color: var(--color-success-text);
+}
+
+.form-msg--error {
+  background: var(--color-error-bg);
+  color: var(--color-error-text);
+}
+
+.donation-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+.form-row {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.form-label {
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--text-primary);
+}
+
+.form-input {
+  padding: var(--spacing-8) var(--spacing-12);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-inputs);
+  font-size: var(--text-body-sm);
+  font-family: var(--font-family-base);
+  background: var(--surface-1);
+  color: var(--text-primary);
+  transition: border-color 0.15s, box-shadow 0.15s;
+}
+
+.form-input::placeholder {
+  color: var(--text-muted);
+}
+
+.form-input:focus {
+  outline: none;
+  border-color: var(--color-lochmara);
+  box-shadow: 0 0 0 3px rgba(0, 116, 200, 0.14);
+}
+
+.form-input.invalid {
+  border-color: var(--color-danger);
+}
+
+.form-error {
+  font-size: var(--text-caption);
+  color: var(--color-danger);
+}
+
+/* Primary Action Button — DESIGN.md spec */
+.form-submit {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-12) var(--spacing-16);
+  background: var(--color-lochmara);
+  color: var(--color-paper-white);
+  border: none;
+  border-radius: var(--radius-buttons);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-normal);
+  font-family: var(--font-family-base);
+  cursor: pointer;
+  align-self: flex-start;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.form-submit:hover:not(:disabled) {
+  background: var(--color-prussian-blue);
+}
+
+.form-submit:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}

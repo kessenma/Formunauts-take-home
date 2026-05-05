@@ -1,0 +1,49 @@
+services:
+  api:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    environment:
+      DATABASE_URL: postgresql://app:secret@db:5432/formunauts
+      PORT: 3000
+      LLM_SERVICE_URL: http://llm-service:8082
+      BETTER_AUTH_SECRET: ${BETTER_AUTH_SECRET}
+      BETTER_AUTH_URL: http://localhost:3000
+      REDIS_URL: redis://redis:6379
+    ports:
+      - "3000:3000"
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      llm-service:
+        condition: service_started
+    networks:
+      - formunauts
+
+  llm-service:
+    build: ./apps/llm-service
+    ports:
+      - "8082:8082"
+    volumes:
+      - llm_models:/models
+    environment:
+      N_THREADS: "4"
+      MODEL_DIR: /models
+    healthcheck:
+      test: ["CMD-SHELL", "curl -sf http://localhost:8082/health || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+      # model download + load takes time on first run
+      start_period: 180s
+    networks:
+      - formunauts
+
+volumes:
+  llm_models:
+
+networks:
+  formunauts:
+    external: true

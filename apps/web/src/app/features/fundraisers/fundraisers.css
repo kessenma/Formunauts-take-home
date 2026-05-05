@@ -1,0 +1,88 @@
+.page-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-16);
+  margin-bottom: var(--section-gap);
+  flex-wrap: wrap;
+}
+
+.page-title {
+  font-size: var(--text-heading-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+  margin: 0;
+}
+
+.campaign-filter {
+  padding: var(--spacing-8) var(--spacing-12);
+  border: 1px solid var(--border-default);
+  border-radius: var(--radius-sm);
+  background: var(--surface-1);
+  color: var(--text-primary);
+  font-size: var(--text-body-sm);
+  cursor: pointer;
+}
+
+.empty-state {
+  color: var(--text-muted);
+  font-size: var(--text-body-sm);
+}
+
+.table-wrapper {
+  overflow-x: auto;
+}
+
+.fundraiser-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-body-sm);
+}
+
+.fundraiser-table th,
+.fundraiser-table td {
+  padding: var(--spacing-12) var(--spacing-16);
+  text-align: left;
+  border-bottom: 1px solid var(--border-default);
+}
+
+.fundraiser-table th {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-muted);
+  background: var(--surface-1);
+  white-space: nowrap;
+}
+
+.fundraiser-table tbody tr:hover {
+  background: var(--surface-2);
+}
+
+.col-rank {
+  color: var(--text-muted);
+  font-weight: var(--font-weight-semibold);
+  width: 40px;
+}
+
+.col-number {
+  text-align: right;
+}
+
+.col-amount {
+  font-weight: var(--font-weight-semibold);
+}
+
+.col-muted {
+  color: var(--text-muted);
+}
+
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 2px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-medium);
+}
+
+.status-badge--active   { background: #d1fae5; color: #065f46; }
+.status-badge--inactive { background: var(--surface-2); color: var(--text-muted); }

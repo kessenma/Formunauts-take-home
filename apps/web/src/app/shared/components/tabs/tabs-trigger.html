@@ -1,0 +1,21 @@
+<button
+  class="tabs-trigger"
+  [class.tabs-trigger--active]="isActive()"
+  [class.tabs-trigger--disabled]="disabled()"
+  type="button"
+  role="tab"
+  [attr.aria-selected]="isActive()"
+  [attr.tabindex]="isActive() ? 0 : -1"
+  [disabled]="disabled()"
+  (click)="select()"
+>
+  <ng-content />
+
+  @if (isStyled() && showCheckmark() && isActive()) {
+    <div class="tabs-trigger__check-overlay" aria-hidden="true">
+      <div class="tabs-trigger__check-badge">
+        <ng-icon name="solarCheckCircleBoldDuotone" size="12" />
+      </div>
+    </div>
+  }
+</button>

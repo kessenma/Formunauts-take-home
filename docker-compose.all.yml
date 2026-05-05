@@ -1,0 +1,3 @@
+# Reserved — full-stack prod orchestration
+# Will combine db + api + web once all services are stable
+# Run: docker compose -f docker-compose.all.yml up --build

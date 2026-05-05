@@ -1,0 +1,27 @@
+.page-title {
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-heading-sm);
+  color: var(--text-primary);
+  margin: 0 0 var(--section-gap);
+}
+
+.org-context {
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+  margin: 0 0 var(--spacing-8);
+}
+
+.chart-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--section-gap);
+  margin-bottom: var(--section-gap);
+}
+
+@media (max-width: 640px) {
+  .chart-grid {
+    grid-template-columns: 1fr;
+  }
+}

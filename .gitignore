@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Environment
+.env
+.env.*
+!.env.example
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+
+# pnpm
+.pnpm-store/
+.pnpm-debug.log
+
+# Logs
+*.log
+logs/
+
+# AI / IDE tooling
+.claude/
+.agents/
+.kiro/
+.trae/
+skills-lock.json
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo

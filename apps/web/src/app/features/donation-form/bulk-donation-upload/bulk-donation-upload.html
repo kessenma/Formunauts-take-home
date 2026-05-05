@@ -1,0 +1,411 @@
+<section class="bu" aria-label="Bulk donation upload">
+
+  <div class="bu__header">
+    <h3 class="bu__title">Bulk Upload</h3>
+    <button class="bu__btn bu__btn--outline" type="button" (click)="downloadTemplate()">
+      <ng-icon name="solarDownloadMinimalisticBoldDuotone" size="16" aria-hidden="true"></ng-icon>
+      Download Template
+    </button>
+  </div>
+
+  @if (showResults()) {
+
+    <div class="bu__results">
+      <p class="bu__results-summary">
+        {{ successCount() }} succeeded · {{ failCount() }} failed
+      </p>
+      <div class="bu__results-list">
+        @for (result of results(); track result.row) {
+          <div
+            class="bu__result-item"
+            [class.bu__result-item--success]="result.success"
+            [class.bu__result-item--fail]="!result.success"
+          >
+            <ng-icon
+              class="bu__result-icon"
+              [name]="result.success ? 'solarCheckCircleBoldDuotone' : 'solarCloseCircleBoldDuotone'"
+              size="16"
+              aria-hidden="true"
+            ></ng-icon>
+            <span>Row {{ result.row }}: {{ result.donorName }}</span>
+            @if (result.error) {
+              <span class="bu__result-error">— {{ result.error }}</span>
+            }
+          </div>
+        }
+      </div>
+      @if (failCount() > 0) {
+        <button class="bu__btn bu__btn--outline" type="button" (click)="startOver()">
+          Try Again
+        </button>
+      }
+    </div>
+
+  } @else {
+
+    @if (!file()) {
+      <label class="bu__dropzone" for="bu-file-input">
+        <span class="bu__dropzone-icon"><ng-icon name="solarCloudUploadBoldDuotone" size="28" aria-hidden="true"></ng-icon></span>
+        <span class="bu__dropzone-text">Click to upload a CSV file</span>
+        <input
+          id="bu-file-input"
+          type="file"
+          accept=".csv"
+          class="bu__file-input"
+          (change)="onFileSelected($event)"
+        />
+      </label>
+    } @else {
+      <div class="bu__file-bar">
+        <span class="bu__file-name">{{ file()!.name }}</span>
+        <button class="bu__clear-btn" type="button" (click)="clearFile()" aria-label="Remove file">
+          <ng-icon name="solarTrashBinMinimalisticBoldDuotone" size="16" aria-hidden="true"></ng-icon>
+        </button>
+      </div>
+    }
+
+    @if (parseError()) {
+      <p class="bu__parse-error" role="alert">{{ parseError() }}</p>
+    }
+
+    @if (correctedIssues().length > 0) {
+      <div class="bu__issues bu__issues--corrected">
+        <strong>{{ correctedIssues().length }} value(s) auto-corrected</strong>
+        <p>Case mismatches were automatically fixed:</p>
+        <ul>
+          @for (issue of correctedIssues(); track issue.row + issue.field) {
+            <li>Row {{ issue.row }}: <b>{{ issue.field }}</b> "{{ issue.originalValue }}" → "{{ issue.correctedValue }}"</li>
+          }
+        </ul>
+      </div>
+    }
+
+    @if (errorIssues().length > 0) {
+      <div class="bu__issues bu__issues--error">
+        <div class="bu__issues-header">
+          <strong>{{ errorIssues().length }} error(s) — upload blocked</strong>
+          @if (errorsWithFix().length > 0) {
+            <button class="bu__apply-btn" type="button" (click)="applyAllSuggestions()">
+              Apply All Fixes ({{ errorsWithFix().length }})
+            </button>
+          }
+        </div>
+        <p>These values don't match any allowed option:</p>
+        <ul>
+          @for (issue of errorIssues(); track issue.row + issue.field) {
+            <li>
+              Row {{ issue.row }}: <b>{{ issue.field }}</b> = "{{ issue.originalValue }}"
+              @if (issue.suggestedValue) {
+                <button class="bu__fix-btn" type="button" (click)="applySuggestion(issue)">
+                  Fix: "{{ issue.suggestedValue }}"
+                </button>
+              } @else {
+                <span class="bu__no-fix">(no suggestion — edit in table)</span>
+              }
+            </li>
+          }
+        </ul>
+      </div>
+    }
+
+    @if (rows().length > 0) {
+      <div class="bu__preview-header">
+        <p class="bu__preview-count">
+          Preview ({{ rows().length }} donation{{ rows().length !== 1 ? 's' : '' }})
+        </p>
+        <button
+          class="bu__expand-btn"
+          type="button"
+          (click)="previewExpanded.set(true)"
+          aria-label="Expand preview to full screen"
+        >
+          <ng-icon name="solarFullScreenBoldDuotone" size="14" aria-hidden="true"></ng-icon>
+          Expand
+        </button>
+      </div>
+
+      <app-table
+        class="bu__preview-table"
+        [columns]="compactColumns"
+        ariaLabel="Donation preview"
+      >
+        @for (row of rows(); track row.id) {
+          <tr [class.bu__row--has-error]="rowHasError(row.id)">
+            <td class="bu__cell bu__cell--num">{{ row.id }}</td>
+            <td
+              class="bu__cell"
+              [class.bu__cell--error]="getCellIssue(row.id, 'firstName')?.type === 'error'"
+            >
+              <input
+                class="bu__cell-input"
+                type="text"
+                [value]="row.firstName"
+                (change)="updateRow(row.id, 'firstName', $any($event).target.value)"
+                aria-label="First name row {{ row.id }}"
+              />
+            </td>
+            <td
+              class="bu__cell"
+              [class.bu__cell--error]="getCellIssue(row.id, 'lastName')?.type === 'error'"
+            >
+              <input
+                class="bu__cell-input"
+                type="text"
+                [value]="row.lastName"
+                (change)="updateRow(row.id, 'lastName', $any($event).target.value)"
+                aria-label="Last name row {{ row.id }}"
+              />
+            </td>
+            <td
+              class="bu__cell"
+              [class.bu__cell--error]="getCellIssue(row.id, 'email')?.type === 'error'"
+            >
+              <input
+                class="bu__cell-input"
+                type="email"
+                [value]="row.email"
+                (change)="updateRow(row.id, 'email', $any($event).target.value)"
+                aria-label="Email row {{ row.id }}"
+                placeholder="optional"
+              />
+            </td>
+            <td
+              class="bu__cell"
+              [class.bu__cell--error]="getCellIssue(row.id, 'amount')?.type === 'error'"
+            >
+              <input
+                class="bu__cell-input bu__cell-input--number"
+                type="number"
+                min="1"
+                step="0.01"
+                [value]="row.amount"
+                (change)="updateRow(row.id, 'amount', $any($event).target.value)"
+                aria-label="Amount row {{ row.id }}"
+              />
+            </td>
+            <td
+              class="bu__cell"
+              [class.bu__cell--error]="getCellIssue(row.id, 'paymentMethod')?.type === 'error'"
+              [class.bu__cell--corrected]="getCellIssue(row.id, 'paymentMethod')?.type === 'corrected'"
+            >
+              <select
+                class="bu__cell-select"
+                (change)="updateRow(row.id, 'paymentMethod', $any($event).target.value)"
+                aria-label="Payment method row {{ row.id }}"
+              >
+                @if (!isValidPaymentMethod(row.paymentMethod)) {
+                  <option [value]="row.paymentMethod" selected>{{ row.paymentMethod }} (invalid)</option>
+                }
+                @for (method of validPaymentMethods; track method) {
+                  <option [value]="method" [selected]="row.paymentMethod === method">{{ method }}</option>
+                }
+              </select>
+            </td>
+            <td
+              class="bu__cell"
+              [class.bu__cell--error]="getCellIssue(row.id, 'channel')?.type === 'error'"
+              [class.bu__cell--corrected]="getCellIssue(row.id, 'channel')?.type === 'corrected'"
+            >
+              <select
+                class="bu__cell-select"
+                (change)="updateRow(row.id, 'channel', $any($event).target.value)"
+                aria-label="Channel row {{ row.id }}"
+              >
+                @if (!isValidChannel(row.channel)) {
+                  <option [value]="row.channel" selected>{{ row.channel }} (invalid)</option>
+                }
+                @for (ch of validChannels; track ch) {
+                  <option [value]="ch" [selected]="row.channel === ch">{{ ch }}</option>
+                }
+              </select>
+            </td>
+          </tr>
+        }
+      </app-table>
+
+      <div class="bu__footer">
+        @if (hasErrors()) {
+          <p class="bu__error-hint">Fix all validation errors before uploading</p>
+        }
+        <button
+          class="bu__submit"
+          type="button"
+          [disabled]="!canUpload()"
+          (click)="uploadAll()"
+        >
+          {{ uploading()
+            ? 'Uploading…'
+            : 'Upload ' + rows().length + ' Donation' + (rows().length !== 1 ? 's' : '') }}
+        </button>
+      </div>
+
+      <!-- Expanded full-screen modal -->
+      <app-modal
+        [open]="previewExpanded()"
+        [title]="'Preview — ' + rows().length + ' donation' + (rows().length !== 1 ? 's' : '')"
+        [showFooter]="true"
+        (closed)="previewExpanded.set(false)"
+      >
+        <!-- Validation panels (same signals — reactive) -->
+        @if (correctedIssues().length > 0) {
+          <div class="bu__issues bu__issues--corrected">
+            <strong>{{ correctedIssues().length }} value(s) auto-corrected</strong>
+            <p>Case mismatches were automatically fixed:</p>
+            <ul>
+              @for (issue of correctedIssues(); track issue.row + issue.field) {
+                <li>Row {{ issue.row }}: <b>{{ issue.field }}</b> "{{ issue.originalValue }}" → "{{ issue.correctedValue }}"</li>
+              }
+            </ul>
+          </div>
+        }
+
+        @if (errorIssues().length > 0) {
+          <div class="bu__issues bu__issues--error">
+            <div class="bu__issues-header">
+              <strong>{{ errorIssues().length }} error(s) — upload blocked</strong>
+              @if (errorsWithFix().length > 0) {
+                <button class="bu__apply-btn" type="button" (click)="applyAllSuggestions()">
+                  Apply All Fixes ({{ errorsWithFix().length }})
+                </button>
+              }
+            </div>
+            <p>These values don't match any allowed option:</p>
+            <ul>
+              @for (issue of errorIssues(); track issue.row + issue.field) {
+                <li>
+                  Row {{ issue.row }}: <b>{{ issue.field }}</b> = "{{ issue.originalValue }}"
+                  @if (issue.suggestedValue) {
+                    <button class="bu__fix-btn" type="button" (click)="applySuggestion(issue)">
+                      Fix: "{{ issue.suggestedValue }}"
+                    </button>
+                  } @else {
+                    <span class="bu__no-fix">(no suggestion — edit in table)</span>
+                  }
+                </li>
+              }
+            </ul>
+          </div>
+        }
+
+        <!-- Wider table — comfortable editing at full modal width -->
+        <app-table
+          class="bu__preview-table bu__preview-table--modal"
+          [columns]="modalColumns"
+          ariaLabel="Donation preview (full screen)"
+        >
+          @for (row of rows(); track row.id) {
+            <tr [class.bu__row--has-error]="rowHasError(row.id)">
+              <td class="bu__cell bu__cell--num">{{ row.id }}</td>
+              <td
+                class="bu__cell"
+                [class.bu__cell--error]="getCellIssue(row.id, 'firstName')?.type === 'error'"
+              >
+                <input
+                  class="bu__cell-input"
+                  type="text"
+                  [value]="row.firstName"
+                  (change)="updateRow(row.id, 'firstName', $any($event).target.value)"
+                  aria-label="First name row {{ row.id }}"
+                />
+              </td>
+              <td
+                class="bu__cell"
+                [class.bu__cell--error]="getCellIssue(row.id, 'lastName')?.type === 'error'"
+              >
+                <input
+                  class="bu__cell-input"
+                  type="text"
+                  [value]="row.lastName"
+                  (change)="updateRow(row.id, 'lastName', $any($event).target.value)"
+                  aria-label="Last name row {{ row.id }}"
+                />
+              </td>
+              <td
+                class="bu__cell"
+                [class.bu__cell--error]="getCellIssue(row.id, 'email')?.type === 'error'"
+              >
+                <input
+                  class="bu__cell-input"
+                  type="email"
+                  [value]="row.email"
+                  (change)="updateRow(row.id, 'email', $any($event).target.value)"
+                  aria-label="Email row {{ row.id }}"
+                  placeholder="optional"
+                />
+              </td>
+              <td
+                class="bu__cell"
+                [class.bu__cell--error]="getCellIssue(row.id, 'amount')?.type === 'error'"
+              >
+                <input
+                  class="bu__cell-input bu__cell-input--number"
+                  type="number"
+                  min="1"
+                  step="0.01"
+                  [value]="row.amount"
+                  (change)="updateRow(row.id, 'amount', $any($event).target.value)"
+                  aria-label="Amount row {{ row.id }}"
+                />
+              </td>
+              <td
+                class="bu__cell"
+                [class.bu__cell--error]="getCellIssue(row.id, 'paymentMethod')?.type === 'error'"
+                [class.bu__cell--corrected]="getCellIssue(row.id, 'paymentMethod')?.type === 'corrected'"
+              >
+                <select
+                  class="bu__cell-select"
+                  (change)="updateRow(row.id, 'paymentMethod', $any($event).target.value)"
+                  aria-label="Payment method row {{ row.id }}"
+                >
+                  @if (!isValidPaymentMethod(row.paymentMethod)) {
+                    <option [value]="row.paymentMethod" selected>{{ row.paymentMethod }} (invalid)</option>
+                  }
+                  @for (method of validPaymentMethods; track method) {
+                    <option [value]="method" [selected]="row.paymentMethod === method">{{ method }}</option>
+                  }
+                </select>
+              </td>
+              <td
+                class="bu__cell"
+                [class.bu__cell--error]="getCellIssue(row.id, 'channel')?.type === 'error'"
+                [class.bu__cell--corrected]="getCellIssue(row.id, 'channel')?.type === 'corrected'"
+              >
+                <select
+                  class="bu__cell-select"
+                  (change)="updateRow(row.id, 'channel', $any($event).target.value)"
+                  aria-label="Channel row {{ row.id }}"
+                >
+                  @if (!isValidChannel(row.channel)) {
+                    <option [value]="row.channel" selected>{{ row.channel }} (invalid)</option>
+                  }
+                  @for (ch of validChannels; track ch) {
+                    <option [value]="ch" [selected]="row.channel === ch">{{ ch }}</option>
+                  }
+                </select>
+              </td>
+            </tr>
+          }
+        </app-table>
+
+        <!-- Modal footer: upload action -->
+        <div modal-footer>
+          @if (hasErrors()) {
+            <p class="bu__error-hint">Fix all validation errors before uploading</p>
+          }
+          <button
+            class="bu__submit"
+            type="button"
+            [disabled]="!canUpload()"
+            (click)="uploadAll(); previewExpanded.set(false)"
+          >
+            {{ uploading()
+              ? 'Uploading…'
+              : 'Upload ' + rows().length + ' Donation' + (rows().length !== 1 ? 's' : '') }}
+          </button>
+        </div>
+      </app-modal>
+    }
+
+  }
+
+</section>

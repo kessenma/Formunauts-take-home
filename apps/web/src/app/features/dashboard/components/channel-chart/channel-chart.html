@@ -1,0 +1,20 @@
+<section class="breakdown-card" aria-label="Donations by channel">
+  <h3 class="breakdown-card__title">By Channel</h3>
+
+  @if (items().length === 0) {
+    <p class="breakdown-card__empty">No data available.</p>
+  } @else {
+    <ul class="breakdown-list">
+      @for (item of items(); track item.label) {
+        <li class="breakdown-item">
+          <span class="breakdown-item__label">{{ item.label | titlecase }}</span>
+          <span class="breakdown-item__count">{{ item.count }}</span>
+          <span class="breakdown-item__value">{{ item.value | currency }}</span>
+          <span class="breakdown-item__pct">
+            {{ grandTotal() > 0 ? (item.value / grandTotal()) : 0 | percent:'1.0-0' }}
+          </span>
+        </li>
+      }
+    </ul>
+  }
+</section>

@@ -1,0 +1,55 @@
+.leaderboard-card {
+  background: var(--surface-1);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+}
+
+.leaderboard-card__title {
+  margin: 0 0 var(--spacing-12);
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.leaderboard-card__empty {
+  color: var(--text-muted);
+  font-size: var(--text-body-sm);
+}
+
+.leaderboard-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+}
+
+.leaderboard-item {
+  display: grid;
+  grid-template-columns: auto 1fr auto auto;
+  align-items: center;
+  gap: var(--spacing-12);
+  font-size: var(--text-body-sm);
+}
+
+.leaderboard-item__rank {
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-lochmara);
+  min-width: 28px;
+}
+
+.leaderboard-item__name {
+  color: var(--text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+.leaderboard-item__count {
+  color: var(--text-muted);
+  font-size: var(--text-caption);
+}
+
+.leaderboard-item__total {
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}

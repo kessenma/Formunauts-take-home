@@ -1,0 +1,57 @@
+<div class="page-header">
+  <h1 class="page-title">Donors</h1>
+  <input
+    class="search-input"
+    type="search"
+    placeholder="Search donors…"
+    aria-label="Search donors"
+    (input)="onSearch($event)"
+  />
+</div>
+
+@if (isLoading()) {
+  <app-loading-spinner />
+} @else if (error()) {
+  <app-error-banner [message]="error()?.message ?? 'Failed to load donors'" />
+} @else if (donors().length === 0) {
+  <p class="empty-state">No donors found.</p>
+} @else {
+  <div class="table-wrapper">
+    <table class="donor-table" aria-label="Donors">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Email</th>
+          <th>City</th>
+          <th>Country</th>
+          <th class="col-number"># Donations</th>
+          <th class="col-number">Total Donated</th>
+          <th>Last Donation</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (d of donors(); track d.id) {
+          <tr>
+            <td class="col-name">{{ d.firstName }} {{ d.lastName }}</td>
+            <td class="col-muted">{{ d.email ?? '—' }}</td>
+            <td class="col-muted">{{ d.city ?? '—' }}</td>
+            <td class="col-muted">{{ d.country ?? '—' }}</td>
+            <td class="col-number">{{ d.donationCount }}</td>
+            <td class="col-number col-amount">{{ d.totalDonated | currency }}</td>
+            <td class="col-muted">{{ d.lastDonationAt ? (d.lastDonationAt | date:'mediumDate') : '—' }}</td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+
+  @if (pagination(); as p) {
+    <app-pagination
+      [currentPage]="p.page"
+      [totalPages]="p.totalPages"
+      [total]="p.total"
+      [limit]="p.limit"
+      (pageChange)="onPageChange($event)"
+    />
+  }
+}

@@ -1,0 +1,68 @@
+.campaign-card {
+  background: var(--surface-1);
+  border-radius: var(--radius-cards);
+  padding: var(--card-padding);
+  margin-bottom: var(--section-gap);
+}
+
+.campaign-card__title {
+  margin: 0 0 var(--spacing-20);
+  font-size: var(--text-heading-sm);
+  line-height: var(--leading-heading-sm);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-heading-sm);
+  color: var(--text-primary);
+}
+
+.campaign-card__stats {
+  display: flex;
+  gap: var(--spacing-32);
+  margin-bottom: var(--section-gap);
+  flex-wrap: wrap;
+}
+
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.stat__label {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-4);
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-muted);
+}
+
+.stat__value {
+  font-size: var(--text-heading);
+  line-height: var(--leading-heading);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-heading);
+  color: var(--text-primary);
+}
+
+.campaign-card__progress-track {
+  height: 8px;
+  background: var(--border-color);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  margin-bottom: var(--spacing-8);
+}
+
+.campaign-card__progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--color-lochmara), var(--color-blue-frost));
+  border-radius: var(--radius-full);
+  transition: width 0.4s ease;
+}
+
+.campaign-card__progress-label {
+  font-size: var(--text-caption);
+  line-height: var(--leading-caption);
+  color: var(--text-muted);
+}

@@ -1,0 +1,31 @@
+<div class="table-wrap" role="region" [attr.aria-label]="ariaLabel()">
+  @if (isEmpty()) {
+    <p class="table__empty">{{ emptyMessage() }}</p>
+  } @else {
+    <table class="table">
+      <thead>
+        <tr>
+          @for (col of columns(); track col.key) {
+            <th scope="col">
+              @if (col.sortKey; as sk) {
+                <button
+                  class="table__sort-btn"
+                  (click)="sort(sk)"
+                  [attr.aria-sort]="sortParams()?.sort === sk ? sortParams()!.order + 'ending' : 'none'"
+                >
+                  {{ col.label }}
+                  <ng-icon [name]="sortIconName(sk)" size="12" aria-hidden="true" />
+                </button>
+              } @else {
+                {{ col.label }}
+              }
+            </th>
+          }
+        </tr>
+      </thead>
+      <tbody>
+        <ng-content />
+      </tbody>
+    </table>
+  }
+</div>

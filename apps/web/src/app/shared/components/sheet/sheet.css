@@ -1,0 +1,108 @@
+/* ViewEncapsulation.None — scoped via .sheet prefix */
+
+.sheet {
+  position: fixed;
+  inset: 0 0 0 auto;
+  margin: 0;
+  height: 100dvh;
+  max-height: 100dvh;
+  width: min(480px, 100vw);
+  border: none;
+  border-left: 1px solid var(--border-color);
+  border-radius: var(--radius-cards) 0 0 var(--radius-cards);
+  box-shadow: var(--shadow-lg);
+  background: var(--surface-1);
+  padding: 0;
+  overflow: hidden;
+  transform: translateX(100%);
+  transition: transform 0.25s ease;
+}
+
+.sheet[open] {
+  transform: translateX(0);
+}
+
+@starting-style {
+  .sheet[open] {
+    transform: translateX(100%);
+  }
+}
+
+.sheet--left {
+  inset: 0 auto 0 0;
+  border-left: none;
+  border-right: 1px solid var(--border-color);
+  border-radius: 0 var(--radius-cards) var(--radius-cards) 0;
+  transform: translateX(-100%);
+}
+
+@starting-style {
+  .sheet--left[open] {
+    transform: translateX(-100%);
+  }
+}
+
+.sheet::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.sheet__panel {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.sheet__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-16);
+  padding: var(--spacing-16) var(--spacing-24);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: var(--surface-0);
+}
+
+.sheet__title {
+  margin: 0;
+  font-size: var(--text-subheading);
+  line-height: var(--leading-subheading);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-subheading);
+  color: var(--text-primary);
+}
+
+.sheet__close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: var(--spacing-4) var(--spacing-8);
+  font-size: var(--text-body-sm);
+  line-height: 1;
+  border-radius: var(--radius-general);
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.sheet__close-btn:hover {
+  background: var(--border-color);
+  color: var(--text-primary);
+}
+
+.sheet__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--card-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+.sheet__footer {
+  border-top: 1px solid var(--border-color);
+  padding: var(--spacing-16) var(--spacing-24);
+  flex-shrink: 0;
+  background: var(--surface-0);
+}

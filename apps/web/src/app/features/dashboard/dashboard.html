@@ -1,0 +1,26 @@
+<h1 class="page-title">Campaign Dashboard</h1>
+
+<app-campaign-selector
+  [campaigns]="campaigns.value() ?? []"
+  [selectedId]="selectedId()"
+  (select)="onCampaignSelect($event)"
+/>
+
+@if (campaigns.isLoading()) {
+  <app-loading-spinner />
+} @else if (campaigns.error()) {
+  <app-error-banner [message]="campaigns.error()?.message ?? 'Failed to load campaigns'" />
+} @else if (selectedCampaign(); as campaign) {
+  <p class="org-context">{{ campaign.organizationName }}</p>
+  <app-campaign-card [campaign]="campaign" />
+
+  <div class="chart-grid">
+    <app-donations-chart [bars]="chartData.value()?.byDate ?? []" />
+    <app-channel-chart [items]="chartData.value()?.byChannel ?? []" />
+  </div>
+
+  <div class="chart-grid">
+    <app-payment-method-chart [items]="chartData.value()?.byPaymentMethod ?? []" />
+    <app-fundraiser-leaderboard [fundraisers]="topFundraisers()" />
+  </div>
+}

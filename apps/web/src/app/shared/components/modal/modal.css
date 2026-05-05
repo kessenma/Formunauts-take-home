@@ -1,0 +1,78 @@
+/* ViewEncapsulation.None — scoped via .modal prefix */
+
+.modal {
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-cards);
+  box-shadow: var(--shadow-lg);
+  background: var(--surface-1);
+  width: min(92vw, 1100px);
+  max-height: 90dvh;
+  overflow: hidden;
+  margin: auto;
+}
+
+.modal::backdrop {
+  background: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+}
+
+.modal__panel {
+  display: flex;
+  flex-direction: column;
+  max-height: 90dvh;
+}
+
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-16);
+  padding: var(--spacing-16) var(--spacing-24);
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0;
+  background: var(--surface-0);
+}
+
+.modal__title {
+  margin: 0;
+  font-size: var(--text-subheading);
+  line-height: var(--leading-subheading);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: var(--tracking-subheading);
+  color: var(--text-primary);
+}
+
+.modal__close-btn {
+  background: none;
+  border: none;
+  color: var(--text-muted);
+  cursor: pointer;
+  padding: var(--spacing-4) var(--spacing-8);
+  font-size: var(--text-body-sm);
+  line-height: 1;
+  border-radius: var(--radius-general);
+  flex-shrink: 0;
+  transition: background 0.15s, color 0.15s;
+}
+
+.modal__close-btn:hover {
+  background: var(--border-color);
+  color: var(--text-primary);
+}
+
+.modal__body {
+  flex: 1;
+  overflow-y: auto;
+  padding: var(--card-padding);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-16);
+}
+
+.modal__footer {
+  border-top: 1px solid var(--border-color);
+  padding: var(--spacing-16) var(--spacing-24);
+  flex-shrink: 0;
+  background: var(--surface-0);
+}

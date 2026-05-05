@@ -1,0 +1,18 @@
+<section class="leaderboard-card" aria-label="Fundraiser leaderboard">
+  <h3 class="leaderboard-card__title">Top Fundraisers</h3>
+
+  @if (fundraisers().length === 0) {
+    <p class="leaderboard-card__empty">No fundraiser data available.</p>
+  } @else {
+    <ol class="leaderboard-list">
+      @for (f of fundraisers(); track f.id; let i = $index) {
+        <li class="leaderboard-item">
+          <span class="leaderboard-item__rank">#{{ i + 1 }}</span>
+          <span class="leaderboard-item__name">{{ f.firstName }} {{ f.lastName }}</span>
+          <span class="leaderboard-item__count">{{ f.donationCount }} donations</span>
+          <span class="leaderboard-item__total">{{ f.totalRaised | currency }}</span>
+        </li>
+      }
+    </ol>
+  }
+</section>

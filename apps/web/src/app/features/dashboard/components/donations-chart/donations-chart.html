@@ -1,0 +1,16 @@
+<section class="chart-card" aria-label="Donations over time">
+  <h3 class="chart-card__title">Donations by Day (last 30 days)</h3>
+
+  @if (chartBars().length === 0) {
+    <p class="chart-card__empty">No donation data available.</p>
+  } @else {
+    <div class="chart-bars" role="img" aria-label="Bar chart of daily donations">
+      @for (bar of chartBars(); track bar.date) {
+        <div class="chart-bar-wrap" [title]="bar.date + ': ' + (bar.total | currency)">
+          <div class="chart-bar" [style.height.%]="bar.height"></div>
+          <span class="chart-bar__label">{{ bar.date.slice(5) }}</span>
+        </div>
+      }
+    </div>
+  }
+</section>

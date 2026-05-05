@@ -1,0 +1,228 @@
+/* Global styles — token values from DESIGN.md (Notion-style) */
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: var(--font-family-base);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--text-primary);
+  background-color: var(--surface-0);
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+/* ─── Light mode (default) ──────────────────────────────────────────────────── */
+:root {
+  /* ── Brand colors ── */
+  --color-prussian-blue: #00345A;
+  --color-lochmara:      #0074C8;
+  --color-canvas-dark:   #000000;
+  --color-ghost-white:   #f6f5f4;
+  --color-paper-white:   #ffffff;
+  --color-deep-graphite: #0b0b0b;
+  --color-blue-frost:    #62aef0;
+  --color-sky-surge:     #097fe8;
+  --color-alert-red:     #f77463;
+  --color-team-teal:     #2a9d99;
+  --color-sunny-yellow:  #ffc95e;
+  --color-warm-umber:    #b18164;
+  --color-coral-burst:   #ff8a33;
+  --color-fuchsia-flare: #ff83dd;
+  --color-grape-glow:    #ad6ded;
+  --color-harvest-gold:  #ffb110;
+  --color-hot-chili:     #f64932;
+  --color-forest-green:  #1aae39;
+  --color-cool-gray:     #c6c6c5;
+  --color-deep-slate:    #615d59;
+  --color-input-border-gray: #dddddd;
+  --color-off-white:     #f2f9ff;
+  --color-white:         #ffffff;
+
+  /* ── Semantic colors ── */
+  --color-success-bg:     #d1e7dd;
+  --color-success-text:   #0a3622;
+  --color-success-border: #badbcc;
+  --color-error-bg:       #f8d7da;
+  --color-error-text:     #842029;
+  --color-error-border:   #f5c2c7;
+  --color-warning-bg:     #fff3cd;
+  --color-warning-text:   #664d03;
+  --color-info-bg:        #cff4fc;
+  --color-info-text:      #055160;
+  --color-danger:         #dc3545;
+
+  /* ── Surface variables (flip in dark mode) ── */
+  --surface-0:    var(--color-ghost-white);   /* page background */
+  --surface-1:    var(--color-paper-white);   /* cards, panels */
+  --surface-2:    #f2f4f7;                    /* nested surfaces */
+  --text-primary: var(--color-deep-graphite);
+  --text-muted:   var(--color-deep-slate);
+  --border-color: var(--color-input-border-gray);
+
+  /* ── Typography — Font families ── */
+  --font-family-base: 'Figtree', ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-family-mono: ui-monospace, 'Cascadia Code', monospace;
+
+  /* ── Typography — Scale (DESIGN.md) ── */
+  --text-caption:        12px;
+  --leading-caption:     1.5;
+  --tracking-caption:    0.01px;
+
+  --text-body-sm:        14px;
+  --leading-body-sm:     1.43;
+  --tracking-body-sm:    -0.006px;
+
+  --text-subheading:     20px;
+  --leading-subheading:  1.35;
+  --tracking-subheading: -0.011px;
+
+  --text-heading-sm:        22px;
+  --leading-heading-sm:     1.33;
+  --tracking-heading-sm:    -0.024px;
+
+  --text-heading:        26px;
+  --leading-heading:     1.27;
+  --tracking-heading:    -0.033px;
+
+  --text-heading-lg:        40px;
+  --leading-heading-lg:     1.23;
+  --tracking-heading-lg:    -0.035px;
+
+  --text-display:        64px;
+  --leading-display:     0.83;
+  --tracking-display:    -0.036px;
+
+  /* ── Typography — Weights ── */
+  --font-weight-light:     300;
+  --font-weight-normal:    400;
+  --font-weight-medium:    500;
+  --font-weight-semibold:  600;
+  --font-weight-bold:      700;
+  --font-weight-extrabold: 800;
+
+  /* ── Spacing (DESIGN.md 4px base unit) ── */
+  --spacing-4:   4px;
+  --spacing-8:   8px;
+  --spacing-12:  12px;
+  --spacing-16:  16px;
+  --spacing-20:  20px;
+  --spacing-24:  24px;
+  --spacing-28:  28px;
+  --spacing-32:  32px;
+  --spacing-36:  36px;
+  --spacing-40:  40px;
+  --spacing-64:  64px;
+  --spacing-80:  80px;
+  --spacing-180: 180px;
+
+  /* Layout shorthands */
+  --section-gap:  32px;
+  --card-padding: 24px;
+  --element-gap:  8px;
+
+  /* Legacy aliases — keep existing component references compiling */
+  --space-1:  4px;
+  --space-2:  8px;
+  --space-3:  12px;
+  --space-4:  16px;
+  --space-5:  20px;
+  --space-6:  24px;
+  --space-8:  32px;
+  --space-10: 40px;
+  --space-12: 48px;
+  --space-16: 64px;
+
+  /* Legacy font-size aliases */
+  --font-size-xs:   12px;
+  --font-size-sm:   14px;
+  --font-size-base: 16px;
+  --font-size-lg:   18px;
+  --font-size-xl:   20px;
+  --font-size-2xl:  24px;
+  --font-size-3xl:  30px;
+
+  /* ── Border radius ── */
+  --radius-sm:      4px;
+  --radius-md:      5px;
+  --radius-lg:      8px;
+  --radius-xl:      12px;
+  --radius-full:    9999px;
+  /* Named semantic radii */
+  --radius-cards:   12px;
+  --radius-buttons: 8px;
+  --radius-inputs:  4px;
+  --radius-badges:  9999px;
+  --radius-general: 5px;
+
+  /* ── Shadows ── */
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.08);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.10);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.12);
+  --shadow-subtle:
+    rgba(0,0,0,0.01) 0px 1px 3px 0px,
+    rgba(0,0,0,0.02) 0px 3px 7px 0px,
+    rgba(0,0,0,0.02) 0px 7px 15px 0px,
+    rgba(0,0,0,0.04) 0px 14px 28px 0px,
+    rgba(0,0,0,0.05) 0px 23px 52px 0px;
+}
+
+/* ─── Dark mode ─────────────────────────────────────────────────────────────── */
+[data-theme="dark"] {
+  color-scheme: dark;
+
+  --surface-0:    var(--color-canvas-dark);   /* page background */
+  --surface-1:    var(--color-prussian-blue); /* elevated cards  */
+  --surface-2:    #00264a;                    /* nested surfaces */
+  --text-primary: var(--color-paper-white);
+  --text-muted:   rgba(255, 255, 255, 0.6);
+  --border-color: rgba(255, 255, 255, 0.12);
+
+  /* Semantic overrides for dark */
+  --color-success-bg:     #1e3a2f;
+  --color-success-text:   #75b798;
+  --color-success-border: #2d5a3d;
+  --color-error-bg:       #3d1a1d;
+  --color-error-text:     #f1aeb5;
+  --color-error-border:   #7d2330;
+  --color-warning-bg:     #332701;
+  --color-warning-text:   #ffca2c;
+  --color-info-bg:        #032d36;
+  --color-info-text:      #6edff6;
+
+  --shadow-sm: 0 1px 3px rgba(0,0,0,0.4);
+  --shadow-md: 0 4px 12px rgba(0,0,0,0.5);
+  --shadow-lg: 0 8px 24px rgba(0,0,0,0.6);
+}
+
+[data-theme="dark"] .app-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ─── ngx-sonner — design token overrides ───────────────────────────────────── */
+[data-sonner-toaster] {
+  --border-radius: var(--radius-lg);
+  font-family: var(--font-family-base);
+
+  /* default/normal toast */
+  --normal-bg:     var(--surface-1);
+  --normal-border: var(--border-color);
+  --normal-text:   var(--text-primary);
+
+  /* richColors semantic toasts */
+  --success-bg:     var(--color-success-bg);
+  --success-border: var(--color-success-border);
+  --success-text:   var(--color-success-text);
+
+  --error-bg:     var(--color-error-bg);
+  --error-border: var(--color-error-border);
+  --error-text:   var(--color-error-text);
+
+  --warning-bg:     var(--color-warning-bg);
+  --warning-border: #ffecb5;
+  --warning-text:   var(--color-warning-text);
+
+  --info-bg:     var(--color-info-bg);
+  --info-border: #b6effb;
+  --info-text:   var(--color-info-text);
+}

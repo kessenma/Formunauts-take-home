@@ -1,0 +1,49 @@
+<div class="page-header">
+  <h1 class="page-title">Fundraisers</h1>
+
+  <select class="campaign-filter" (change)="onCampaignFilter($event)" aria-label="Filter by campaign">
+    <option value="">All campaigns</option>
+    @for (c of campaigns.value() ?? []; track c.id) {
+      <option [value]="c.id">{{ c.name }}</option>
+    }
+  </select>
+</div>
+
+@if (isLoading()) {
+  <app-loading-spinner />
+} @else if (error()) {
+  <app-error-banner [message]="error()?.message ?? 'Failed to load fundraisers'" />
+} @else if (fundraisers().length === 0) {
+  <p class="empty-state">No fundraisers found.</p>
+} @else {
+  <div class="table-wrapper">
+    <table class="fundraiser-table" aria-label="Fundraisers">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Name</th>
+          <th>Email</th>
+          <th class="col-number">Donations</th>
+          <th class="col-number">Total Raised</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        @for (f of fundraisers(); track f.id; let i = $index) {
+          <tr>
+            <td class="col-rank">{{ i + 1 }}</td>
+            <td>{{ f.firstName }} {{ f.lastName }}</td>
+            <td class="col-muted">{{ f.email ?? '—' }}</td>
+            <td class="col-number">{{ f.donationCount }}</td>
+            <td class="col-number col-amount">{{ f.totalRaised | currency }}</td>
+            <td>
+              <span class="status-badge status-badge--{{ f.isActive ? 'active' : 'inactive' }}">
+                {{ f.isActive ? 'Active' : 'Inactive' }}
+              </span>
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+  </div>
+}

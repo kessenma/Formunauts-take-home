@@ -1,0 +1,135 @@
+/* ViewEncapsulation.None — scoped via .text-input prefix */
+
+.text-input {
+  /* override this variable to match a non-surface-1 parent background */
+  --_bg: var(--text-input-bg, var(--surface-1));
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+/* ── Field wrapper ── */
+
+.text-input__wrap {
+  position: relative;
+}
+
+/* ── Input / Textarea ── */
+
+.text-input__field {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--spacing-16) var(--spacing-12);
+  background: var(--_bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-general);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--text-primary);
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    border-width 0.15s ease,
+    background 0.15s ease;
+  font-family: inherit;
+}
+
+/* Textarea-specific */
+.text-input--multiline .text-input__field {
+  resize: none;
+  overflow: hidden;
+}
+
+/* Filled: subtle tinted border to signal content */
+.text-input--filled:not(.text-input--focused) .text-input__field {
+  border-color: color-mix(in srgb, var(--color-lochmara) 40%, var(--border-color));
+  background: var(--surface-0);
+}
+
+/* Focused: strong brand border */
+.text-input--focused .text-input__field {
+  border-color: var(--color-lochmara);
+  border-width: 2px;
+  background: var(--surface-0);
+}
+
+/* Error */
+.text-input--error .text-input__field {
+  border-color: var(--error-border);
+}
+
+.text-input--error.text-input--focused .text-input__field {
+  border-color: var(--color-danger);
+  border-width: 2px;
+}
+
+/* Read-only */
+.text-input--readonly .text-input__field {
+  background: var(--surface-2);
+  cursor: default;
+}
+
+.text-input--readonly .text-input__field:hover {
+  border-color: var(--border-color);
+}
+
+/* Disabled */
+.text-input--disabled .text-input__field {
+  background: var(--surface-2);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+/* ── Floating label ── */
+
+.text-input__label {
+  position: absolute;
+  left: var(--spacing-12);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--text-body-sm);
+  line-height: 1;
+  color: var(--text-muted);
+  pointer-events: none;
+  transition:
+    top 0.15s ease,
+    transform 0.15s ease,
+    font-size 0.15s ease,
+    color 0.15s ease;
+  background: transparent;
+  padding: 0 var(--spacing-4);
+  white-space: nowrap;
+}
+
+/* Multiline: anchor label to the top of the textarea */
+.text-input--multiline .text-input__label {
+  top: var(--spacing-16);
+  transform: none;
+}
+
+/* Floated: ride the top border */
+.text-input__label--float {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 11px;
+  background: var(--_bg);
+}
+
+.text-input--focused .text-input__label--float {
+  color: var(--color-lochmara);
+}
+
+.text-input--error .text-input__label--float {
+  color: var(--color-danger);
+}
+
+/* ── Error message ── */
+
+.text-input__error {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--error-text);
+}

@@ -1,0 +1,18 @@
+<div class="campaign-selector" role="list" aria-label="Campaign selector">
+  @for (campaign of campaigns(); track campaign.id) {
+    <button
+      class="campaign-chip"
+      [class.campaign-chip--active]="campaign.id === selectedId()"
+      type="button"
+      (click)="select.emit(campaign.id)"
+      role="listitem"
+    >
+      <span class="campaign-chip__name">{{ campaign.name }}</span>
+      <span class="campaign-chip__badge campaign-chip__badge--{{ campaign.status }}">{{ campaign.status }}</span>
+      <div class="campaign-chip__progress-track">
+        <div class="campaign-chip__progress-fill" [style.width.%]="progressPct(campaign)"></div>
+      </div>
+      <span class="campaign-chip__raised">{{ campaign.totalRaised | currency:campaign.currency }}</span>
+    </button>
+  }
+</div>

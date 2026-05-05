@@ -1,0 +1,25 @@
+<article class="campaign-card" aria-label="Campaign stats">
+  <h2 class="campaign-card__title">{{ campaign().name }}</h2>
+
+  <div class="campaign-card__stats">
+    <div class="stat">
+      <span class="stat__label"><ng-icon name="solarDollarBoldDuotone" size="14" aria-hidden="true"></ng-icon>Raised</span>
+      <span class="stat__value">{{ campaign().totalRaised | currency }}</span>
+    </div>
+    <div class="stat">
+      <span class="stat__label"><ng-icon name="solarTargetBoldDuotone" size="14" aria-hidden="true"></ng-icon>Goal</span>
+      <span class="stat__value">{{ campaign().goal | currency }}</span>
+    </div>
+    <div class="stat">
+      <span class="stat__label"><ng-icon name="solarUserBoldDuotone" size="14" aria-hidden="true"></ng-icon>Donors</span>
+      <span class="stat__value">{{ campaign().donorCount | number }}</span>
+    </div>
+  </div>
+
+  <div class="campaign-card__progress" role="progressbar" [attr.aria-valuenow]="progressPct()" aria-valuemin="0" aria-valuemax="100">
+    <div class="campaign-card__progress-track">
+      <div class="campaign-card__progress-fill" [style.width.%]="progressPct()"></div>
+    </div>
+    <span class="campaign-card__progress-label">{{ progressPct() }}% funded</span>
+  </div>
+</article>

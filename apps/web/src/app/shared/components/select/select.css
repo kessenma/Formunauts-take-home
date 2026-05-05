@@ -1,0 +1,201 @@
+/* ViewEncapsulation.None — scoped via .select prefix */
+
+.select {
+  --_bg: var(--select-bg, var(--surface-1));
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+/* ── Wrapper ── */
+
+.select__wrap {
+  position: relative;
+}
+
+/* ── Trigger ── */
+
+.select__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--spacing-16) var(--spacing-12);
+  background: var(--_bg);
+  border: 1.5px solid var(--border-color);
+  border-radius: var(--radius-general);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  gap: var(--spacing-8);
+  font-family: inherit;
+  outline: none;
+  transition:
+    border-color 0.15s ease,
+    border-width 0.15s ease,
+    background 0.15s ease;
+}
+
+.select__trigger:hover:not([disabled]) {
+  border-color: color-mix(in srgb, var(--color-lochmara) 40%, var(--border-color));
+}
+
+.select--filled .select__trigger {
+  border-color: color-mix(in srgb, var(--color-lochmara) 40%, var(--border-color));
+  background: var(--surface-0);
+}
+
+.select--open .select__trigger {
+  border-color: var(--color-lochmara);
+  border-width: 2px;
+  background: var(--surface-0);
+}
+
+.select--error .select__trigger {
+  border-color: var(--error-border);
+}
+
+.select--error.select--open .select__trigger {
+  border-color: var(--color-danger);
+  border-width: 2px;
+}
+
+.select--disabled .select__trigger {
+  background: var(--surface-2);
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.6;
+}
+
+.select__value {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.select__value--placeholder {
+  color: var(--text-muted);
+}
+
+.select__chevron {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  color: var(--text-muted);
+  transition: transform 0.15s ease;
+}
+
+.select--open .select__chevron {
+  transform: rotate(180deg);
+}
+
+/* ── Floating label (mirrors text-input) ── */
+
+.select__label {
+  position: absolute;
+  left: var(--spacing-12);
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: var(--text-body-sm);
+  line-height: 1;
+  color: var(--text-muted);
+  pointer-events: none;
+  background: transparent;
+  padding: 0 var(--spacing-4);
+  white-space: nowrap;
+  transition:
+    top 0.15s ease,
+    transform 0.15s ease,
+    font-size 0.15s ease,
+    color 0.15s ease;
+}
+
+.select__label--float {
+  top: 0;
+  transform: translateY(-50%);
+  font-size: 11px;
+  background: var(--_bg);
+}
+
+.select--open .select__label--float {
+  color: var(--color-lochmara);
+}
+
+.select--error .select__label--float {
+  color: var(--color-danger);
+}
+
+/* ── Dropdown panel ── */
+
+.select__panel {
+  position: absolute;
+  top: calc(100% + 4px);
+  left: 0;
+  right: 0;
+  z-index: 50;
+  background: var(--surface-1);
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-general);
+  box-shadow: var(--shadow-lg);
+  overflow-y: auto;
+  max-height: 240px;
+  padding: var(--spacing-4);
+}
+
+/* ── Option ── */
+
+.select__option {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--spacing-8) var(--spacing-12);
+  background: none;
+  border: none;
+  border-radius: var(--radius-general);
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  text-align: left;
+  font-family: inherit;
+  gap: var(--spacing-8);
+  transition: background 0.1s;
+}
+
+.select__option:hover:not([disabled]) {
+  background: var(--surface-2);
+}
+
+.select__option--selected {
+  color: var(--color-lochmara);
+  font-weight: var(--font-weight-medium);
+}
+
+.select__option--disabled {
+  color: var(--text-muted);
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.select__empty {
+  margin: 0;
+  padding: var(--spacing-8) var(--spacing-12);
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+  text-align: center;
+}
+
+/* ── Error message ── */
+
+.select__error {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  line-height: var(--leading-body-sm);
+  color: var(--error-text);
+}

@@ -1,0 +1,14 @@
+/* ViewEncapsulation.None — scoped via .accordion prefix */
+
+.accordion {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-cards);
+  background: var(--surface-1);
+  overflow: hidden;
+}
+
+.accordion > app-accordion-item + app-accordion-item {
+  border-top: 1px solid var(--border-color);
+}

@@ -1,0 +1,211 @@
+<div class="filter-bar">
+
+  <!-- ── Filter inputs ─────────────────────────── -->
+  <div class="filter-row">
+
+    <div class="filter-group filter-group--grow">
+      <label class="filter-label" for="filter-search">Donor name</label>
+      <input
+        id="filter-search"
+        class="filter-input"
+        [class.filter-input--active]="!!filter().search"
+        type="search"
+        placeholder="Search…"
+        [value]="filter().search ?? ''"
+        (input)="onSearchInput($any($event.target).value)"
+        autocomplete="off"
+        aria-label="Search by donor name"
+      />
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label" for="filter-method">Payment</label>
+      <select
+        id="filter-method"
+        class="filter-input filter-input--select"
+        [class.filter-input--active]="!!filter().paymentMethod"
+        [value]="filter().paymentMethod ?? ''"
+        (change)="onPaymentMethodChange($any($event.target).value)"
+        aria-label="Filter by payment method"
+      >
+        @for (m of PAYMENT_METHODS; track m.value) {
+          <option [value]="m.value">{{ m.label }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <label class="filter-label" for="filter-channel">Channel</label>
+      <select
+        id="filter-channel"
+        class="filter-input filter-input--select"
+        [class.filter-input--active]="!!filter().channel"
+        [value]="filter().channel ?? ''"
+        (change)="onChannelChange($any($event.target).value)"
+        aria-label="Filter by donation channel"
+      >
+        @for (c of CHANNELS; track c.value) {
+          <option [value]="c.value">{{ c.label }}</option>
+        }
+      </select>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Amount</span>
+      <div class="range-group">
+        <div class="amount-wrap">
+          <span class="amount-symbol">$</span>
+          <input
+            class="filter-input filter-input--amount"
+            [class.filter-input--active]="filter().minAmount != null"
+            type="number"
+            placeholder="Min"
+            min="0"
+            [value]="filter().minAmount ?? ''"
+            (change)="onMinAmountChange($any($event.target).value)"
+            aria-label="Minimum donation amount"
+          />
+        </div>
+        <span class="range-sep">–</span>
+        <div class="amount-wrap">
+          <span class="amount-symbol">$</span>
+          <input
+            class="filter-input filter-input--amount"
+            [class.filter-input--active]="filter().maxAmount != null"
+            type="number"
+            placeholder="Max"
+            min="0"
+            [value]="filter().maxAmount ?? ''"
+            (change)="onMaxAmountChange($any($event.target).value)"
+            aria-label="Maximum donation amount"
+          />
+        </div>
+      </div>
+    </div>
+
+    <div class="filter-group">
+      <span class="filter-label">Date range</span>
+      <div class="range-group">
+        <input
+          class="filter-input filter-input--date"
+          [class.filter-input--active]="!!filter().dateFrom"
+          type="date"
+          [value]="filter().dateFrom ?? ''"
+          (change)="onDateFromChange($any($event.target).value)"
+          aria-label="Date from"
+        />
+        <span class="range-sep">–</span>
+        <input
+          class="filter-input filter-input--date"
+          [class.filter-input--active]="!!filter().dateTo"
+          type="date"
+          [value]="filter().dateTo ?? ''"
+          (change)="onDateToChange($any($event.target).value)"
+          aria-label="Date to"
+        />
+      </div>
+    </div>
+
+    <!-- Always occupies space; invisible when no filters are active to prevent layout shift -->
+    <button
+      class="clear-btn"
+      [style.visibility]="hasActiveFilters() ? 'visible' : 'hidden'"
+      (click)="clearFilters()"
+      aria-label="Clear all filters"
+    >
+      Clear filters
+    </button>
+
+  </div>
+
+  <!-- ── Active filter chips ───────────────────── -->
+  @if (hasActiveFilters()) {
+    <div class="active-chips" role="status" aria-live="polite" aria-label="Active filters">
+      <span class="chips-label">Filtered by</span>
+      @for (chip of activeChips(); track chip.label) {
+        <span class="filter-chip">
+          {{ chip.label }}
+          <button
+            class="chip-remove"
+            (click)="chip.clear()"
+            [attr.aria-label]="'Remove filter: ' + chip.label"
+          ><ng-icon name="solarCloseCircleBoldDuotone" size="12" aria-hidden="true"></ng-icon></button>
+        </span>
+      }
+    </div>
+  }
+
+  <!-- ── Row 1: rows per page + infinite scroll ──── -->
+  <div class="controls-row">
+
+    <div class="control-group">
+      <span class="control-label">
+        <ng-icon name="solarSliderVerticalMinimalisticBoldDuotone" size="14" aria-hidden="true" />
+        Rows
+      </span>
+      <div class="limit-btn-group" role="group" aria-label="Rows per page">
+        @for (opt of LIMIT_OPTIONS; track opt) {
+          <button
+            class="limit-btn"
+            [class.active]="opt === 0 ? viewMode() === 'infinite' : viewMode() === 'pagination' && opt === limit()"
+            (click)="selectLimit(opt)"
+            [attr.aria-pressed]="opt === 0 ? viewMode() === 'infinite' : viewMode() === 'pagination' && opt === limit()"
+          >
+            @if (opt === 0) {
+              <ng-icon name="solarInfinityBoldDuotone" size="14" aria-label="Infinite scroll" />
+            } @else {
+              {{ opt }}
+            }
+          </button>
+        }
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Row 2: page navigation (pagination mode only) ── -->
+  @if (viewMode() === 'pagination' && pagination(); as p) {
+    <div class="pagination-nav-row">
+
+      <nav class="pagination" aria-label="Page navigation">
+        <button class="page-btn" (click)="go(1)" [disabled]="p.page === 1" aria-label="First page"><ng-icon name="solarDoubleAltArrowLeftBoldDuotone" size="14" aria-hidden="true"></ng-icon></button>
+        <button class="page-btn" (click)="go(p.page - 1)" [disabled]="p.page === 1" aria-label="Previous page"><ng-icon name="solarAltArrowLeftBoldDuotone" size="14" aria-hidden="true"></ng-icon></button>
+        @for (pg of pages(); track pg) {
+          <button
+            class="page-btn"
+            [class.active]="pg === p.page"
+            (click)="go(pg)"
+            [attr.aria-current]="pg === p.page ? 'page' : null"
+          >{{ pg }}</button>
+        }
+        <button class="page-btn" (click)="go(p.page + 1)" [disabled]="p.page === p.totalPages" aria-label="Next page"><ng-icon name="solarAltArrowRightBoldDuotone" size="14" aria-hidden="true"></ng-icon></button>
+        <button class="page-btn" (click)="go(p.totalPages)" [disabled]="p.page === p.totalPages" aria-label="Last page"><ng-icon name="solarDoubleAltArrowRightBoldDuotone" size="14" aria-hidden="true"></ng-icon></button>
+      </nav>
+
+      <div class="control-group">
+        <span class="control-label">Go to</span>
+        <input
+          #pageInput
+          class="filter-input filter-input--page"
+          type="number"
+          min="1"
+          [max]="p.totalPages"
+          [placeholder]="p.page"
+          (keydown.enter)="goToPage(pageInput)"
+          aria-label="Go to page number"
+        />
+        <button class="page-go-btn" (click)="goToPage(pageInput)">Go</button>
+      </div>
+
+      <span class="pagination-info" aria-live="polite">
+        @if (isLoading()) {
+          Loading…
+        } @else {
+          Showing {{ rangeStart() }}–{{ rangeEnd() }} of {{ p.total }}
+        }
+      </span>
+
+    </div>
+  }
+
+</div>

@@ -1,0 +1,302 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: var(--font-family-base);
+  background: var(--surface-0);
+  color: var(--text-primary);
+}
+
+.app-header {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: var(--color-prussian-blue);
+  color: var(--color-paper-white);
+  padding: 0 var(--spacing-24);
+}
+
+.app-nav {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-24);
+  height: 60px;
+}
+
+.app-nav__brand {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-body-sm);
+  letter-spacing: var(--tracking-body-sm);
+  color: var(--color-paper-white);
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.app-nav__logo {
+  display: block;
+  flex-shrink: 0;
+  filter: brightness(0) invert(1);
+}
+
+.app-nav__links {
+  display: flex;
+  gap: var(--spacing-4);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.app-nav__links a {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  padding: var(--spacing-8) var(--spacing-12);
+  color: rgba(255, 255, 255, 0.75);
+  text-decoration: none;
+  font-size: var(--text-body-sm);
+  border-radius: var(--radius-buttons);
+  transition: background 0.15s, color 0.15s;
+}
+
+.app-nav__links a:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: var(--color-paper-white);
+}
+
+.app-nav__links a.active {
+  color: var(--color-paper-white);
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.app-main {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--section-gap) var(--spacing-24);
+  min-height: calc(100dvh - 60px);
+}
+
+.app-nav__actions {
+  margin-inline-start: auto;
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-12);
+}
+
+.app-nav__user {
+  font-size: var(--text-body-sm);
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.app-nav__logout {
+  padding: var(--spacing-4) var(--spacing-12);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: var(--radius-buttons);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.75);
+  font-size: var(--text-caption);
+  font-family: var(--font-family-base);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+}
+
+.app-nav__logout:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--color-paper-white);
+}
+
+.app-nav__theme-toggle {
+  margin-inline-start: unset;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: var(--radius-buttons);
+  background: transparent;
+  color: rgba(255, 255, 255, 0.85);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  flex-shrink: 0;
+}
+
+.app-nav__theme-toggle:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: var(--color-paper-white);
+}
+
+.app-nav__theme-toggle:focus-visible {
+  outline: 2px solid var(--color-lochmara);
+  outline-offset: 2px;
+}
+
+.app-nav__avatar-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 2px;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  transition: box-shadow 0.15s;
+}
+
+.app-nav__avatar-btn:hover {
+  box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
+}
+
+.app-nav__avatar-btn:focus-visible {
+  outline: 2px solid var(--color-lochmara);
+  outline-offset: 2px;
+}
+
+.profile-info {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-16);
+}
+
+.profile-info__text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-4);
+}
+
+.profile-info__name {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-primary);
+}
+
+.profile-info__email {
+  margin: 0;
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+/* ── Profile sheet: conversations section ────────────────────────────────── */
+
+.profile-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-8);
+  padding-top: var(--spacing-16);
+  border-top: 1px solid var(--border-color);
+}
+
+.profile-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-8);
+}
+
+.profile-section__title {
+  margin: 0;
+  font-size: var(--text-caption);
+  font-weight: var(--font-weight-semibold);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+
+.profile-section__new-btn {
+  background: none;
+  border: none;
+  padding: var(--spacing-4) var(--spacing-8);
+  font-size: var(--text-caption);
+  font-family: var(--font-family-base);
+  color: var(--color-lochmara);
+  cursor: pointer;
+  border-radius: var(--radius-buttons);
+  transition: background 0.15s;
+}
+
+.profile-section__new-btn:hover {
+  background: var(--surface-0);
+}
+
+.profile-section__empty {
+  margin: 0;
+  font-size: var(--text-body-sm);
+  color: var(--text-muted);
+  text-align: center;
+  padding: var(--spacing-12) 0;
+}
+
+.chat-history-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+.chat-history-item {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-8);
+  width: 100%;
+  padding: var(--spacing-8) var(--spacing-12);
+  background: none;
+  border: none;
+  border-radius: var(--radius-buttons);
+  text-align: left;
+  font-family: var(--font-family-base);
+  font-size: var(--text-body-sm);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: background 0.12s;
+}
+
+.chat-history-item:hover {
+  background: var(--surface-0);
+}
+
+.chat-history-item--active {
+  color: var(--color-lochmara);
+  background: var(--surface-0);
+  font-weight: var(--font-weight-semibold);
+}
+
+.chat-history-item__title {
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.chat-history-item__shared {
+  flex-shrink: 0;
+  font-size: var(--text-caption);
+  color: var(--text-muted);
+}
+
+.profile-sign-out {
+  margin-top: auto;
+  background: none;
+  border: none;
+  padding: var(--spacing-8) var(--spacing-12);
+  font-size: var(--text-body-sm);
+  font-family: var(--font-family-base);
+  color: var(--color-danger, #dc2626);
+  cursor: pointer;
+  border-radius: var(--radius-buttons);
+  text-align: left;
+  transition: background 0.15s;
+}
+
+.profile-sign-out:hover {
+  background: var(--surface-0);
+}

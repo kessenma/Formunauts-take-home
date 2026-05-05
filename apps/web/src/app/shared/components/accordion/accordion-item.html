@@ -1,0 +1,27 @@
+<div class="accordion-item" [class.accordion-item--open]="isOpen()">
+  <button
+    class="accordion-item__trigger"
+    type="button"
+    [attr.aria-expanded]="isOpen()"
+    [attr.aria-controls]="panelId"
+    (click)="toggle()"
+  >
+    <span class="accordion-item__title">{{ title() }}</span>
+    <ng-icon
+      class="accordion-item__icon"
+      name="solarListDownMinimalisticBoldDuotone"
+      size="16"
+      aria-hidden="true"
+    />
+  </button>
+  <div
+    class="accordion-item__panel-wrapper"
+    [id]="panelId"
+    role="region"
+    [attr.aria-hidden]="!isOpen() || null"
+  >
+    <div class="accordion-item__panel">
+      <ng-content />
+    </div>
+  </div>
+</div>
